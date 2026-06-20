@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sano ryota works archive</title>
+<style>
+  :root{
+    --bg:#ffffff;--ink:#0a0a0a;--red:#ec3b27;
+    --fs:15px;
+    --sans:"Helvetica Neue",Arial,"Yu Gothic",YuGothic,"游ゴシック体","游ゴシック","Hiragino Kaku Gothic ProN",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);color:var(--ink);}
+  body{font-family:var(--sans);font-size:var(--fs);line-height:1.5;-webkit-font-smoothing:antialiased;letter-spacing:.01em;}
+  a{color:inherit;text-decoration:none;}
+
+  header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;
+    padding:20px 30px;z-index:60;pointer-events:none;mix-blend-mode:difference;color:#fff;}
+  header div{font-size:var(--fs);}
+  header .center{position:absolute;left:50%;top:20px;transform:translateX(-50%);pointer-events:auto;cursor:pointer;}
+  header .right{margin-left:auto;pointer-events:auto;cursor:pointer;}
+
+  /* archive : airy %-scatter, fixed font */
+  #stage{position:relative;width:100%;max-width:1500px;margin:0 auto;aspect-ratio:1600/4600;}
+  .work{position:absolute;width:19%;cursor:pointer;}
+  .thumb{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#0c0c0c;}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .thumb .field{width:100%;height:100%;background:linear-gradient(160deg,#1c1c1c,#080808);}
+  .thumb::after{content:"";position:absolute;inset:0;background:#000;opacity:0;transition:opacity .25s ease;}
+  .work:hover .thumb::after{opacity:1;}                 /* hover = 黒 */
+  .label{position:absolute;font-size:var(--fs);white-space:nowrap;color:var(--ink);--p:50%;--ph:20%;}
+  .label.e-top{top:-1.7em;left:var(--p);}
+  .label.e-bottom{top:calc(100% + .55em);left:var(--p);}
+  .label.e-left{right:calc(100% + .7em);left:auto;top:var(--p);}
+  .label.e-right{left:calc(100% + .7em);top:var(--p);}
+
+  /* overlays */
+  .overlay{position:fixed;inset:0;background:#000;z-index:100;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .3s ease;}
+  .overlay.open{opacity:1;visibility:visible;}
+  .closeX{position:fixed;top:24px;right:40px;width:190px;height:190px;z-index:130;cursor:pointer;background:none;border:0;}
+  .closeX:before,.closeX:after{content:"";position:absolute;left:50%;top:50%;width:235px;height:26px;background:var(--xc,#00DD58);}
+  .closeX:before{transform:translate(-50%,-50%) rotate(45deg);}
+  .closeX:after{transform:translate(-50%,-50%) rotate(-45deg);}
+  .closeX:hover:before,.closeX:hover:after{background:#fff;}
+
+  /* detail : video / title+meta / credit  = 3 separate columns (intentional) */
+  .sheet{background:#fff;color:#000;width:92%;max-width:1280px;margin:8vh auto;padding:56px 64px 60px;
+    display:grid;grid-template-columns:1.4fr .8fr .8fr;gap:36px 52px;align-items:start;--wc:#00DD58;}
+  .d-video{grid-column:1;grid-row:1 / span 2;}
+  .player{position:relative;width:100%;aspect-ratio:16/9;background:#111;overflow:hidden;}
+  .player img{width:100%;height:100%;object-fit:cover;display:block;}
+  .player .field{width:100%;height:100%;background:linear-gradient(160deg,#1c1c1c,#080808);}
+  .player iframe{width:100%;height:100%;border:0;display:block;}
+  .d-meta{grid-column:2;grid-row:1;}
+  .d-meta h1{color:var(--wc);font-size:36px;font-weight:700;line-height:1.05;}
+  .d-meta .sub{color:var(--wc);font-size:var(--fs);margin-top:6px;}
+  .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:1.55;letter-spacing:.02em;}
+  .d-credit h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}
+  .d-credit .role{color:var(--wc);margin-top:14px;}
+  .d-credit .role:first-of-type{margin-top:0;}
+  .d-credit .nm{color:#000;}
+  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:1.95;max-width:700px;margin-top:10px;}
+  .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border:0;border-radius:50%;background:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
+  .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
+  .playbtn:after{content:"";border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;}
+
+  /* profile : same manner as detail (white card, 'credit'-style colored lowercase headers) */
+  .p-sheet{background:#fff;color:#000;width:92%;max-width:1120px;margin:8vh auto;padding:60px 64px 80px;--wc:#00DD58;}
+  .p-name{color:var(--wc);font-size:40px;font-weight:700;letter-spacing:0;line-height:1.05;}
+  .p-role{color:var(--wc);font-size:var(--fs);margin-top:6px;}
+  .p-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:56px;margin-top:48px;align-items:start;}
+  .p-main section{margin-bottom:34px;}
+  .p-main h3{color:var(--wc);font-size:var(--fs);font-weight:400;margin-bottom:14px;}
+  .p-main p{font-size:var(--fs);line-height:2.05;max-width:620px;}
+  .p-row{display:flex;gap:18px;font-size:var(--fs);line-height:1.9;}
+  .p-row .k{min-width:92px;flex-shrink:0;}
+  .p-contact .p-row .k{min-width:150px;}
+  .p-main a{border-bottom:1px solid #000;}
+  .p-photo .ph{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#1c1c1c,#080808) center/cover no-repeat;}
+
+  @media (max-width:760px){
+    #stage{aspect-ratio:auto;max-width:none;padding:96px 20px 70px;}
+    .work{position:relative !important;left:auto !important;top:auto !important;width:80% !important;margin:0 0 74px;}
+    .work:nth-child(even){margin-left:20%;}
+    .work:nth-child(3n){margin-left:10%;}
+    .label{left:var(--ph) !important;right:auto !important;}
+    .label.year{top:-1.7em !important;bottom:auto !important;}
+    .label.cat{top:auto !important;bottom:-1.7em !important;}
+    .closeX{top:14px;right:16px;width:90px;height:90px;}
+    .closeX:before,.closeX:after{width:112px;height:15px;}
+    .sheet{grid-template-columns:1fr;width:auto;margin:54px 12px;padding:26px 20px 46px;gap:18px;}
+    .d-video,.d-meta,.d-credit,.d-body{grid-column:1 !important;grid-row:auto !important;}
+    .d-meta h1{font-size:28px;}
+    .p-sheet{width:auto;margin:54px 12px;padding:34px 22px 56px;}
+    .p-name{font-size:30px;}
+    .p-grid{grid-template-columns:1fr;gap:32px;margin-top:34px;}
+    .p-photo{order:-1;max-width:260px;}
+    header{padding:14px 16px;}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="center" id="hTitle" onclick="closeAll()">sano ryota works archive</div>
+  <div class="right" id="hProfile" onclick="openProfile()">profile here</div>
+</header>
+
+<main><div id="stage"></div></main>
+
+<section id="detail" class="overlay" aria-hidden="true">
+  <button class="closeX" id="dClose" aria-label="閉じる" onclick="closeAll()"></button>
+  <div class="sheet" id="sheet">
+    <div class="d-video"><div class="player" id="player"></div></div>
+    <div class="d-meta"><h1 id="dTitle"></h1><div class="sub" id="dSub"></div></div>
+    <div class="d-credit" id="dCredit"></div>
+    <div class="d-body" id="dBody"></div>
+  </div>
+</section>
+
+<section id="profile" class="overlay" aria-hidden="true">
+  <button class="closeX" aria-label="閉じる" style="--xc:#00DD58" onclick="closeAll()"></button>
+  <div class="p-sheet" id="pSheet"></div>
+</section>
+
+<script>
+/* ===== Google Sheet (col A = keyword, col B = value) ===== */
+const SHEET_ID="17Mr0nny6o7xyvlWwVxq5igLhsAcyoX_6pp3pkvKRhbA";
+const SHEET_CSV=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+
+/* ===== layout config (design only, not in sheet) ===== */
+const PALETTE=["#00DD58","#2E7BFF","#FF4D3D","#FFC400","#B16CFF","#FF7A00"];
+const layout=[
+ {x:12,top:3,  yr:{e:"left",p:40,ph:36}, ca:{e:"bottom",p:10,ph:10}},
+ {x:60,top:7,  yr:{e:"top",p:10,ph:10},  ca:{e:"bottom",p:55,ph:46}},
+ {x:34,top:15, yr:{e:"left",p:30,ph:30}, ca:{e:"top",p:55,ph:50}},
+ {x:6, top:23, yr:{e:"top",p:60,ph:46},  ca:{e:"bottom",p:10,ph:10}},
+ {x:64,top:25, yr:{e:"top",p:15,ph:8},   ca:{e:"bottom",p:45,ph:40}},
+ {x:28,top:34, yr:{e:"left",p:22,ph:24}, ca:{e:"bottom",p:50,ph:44}},
+ {x:56,top:42, yr:{e:"top",p:55,ph:46},  ca:{e:"bottom",p:8,ph:8}},
+ {x:10,top:48, yr:{e:"bottom",p:55,ph:46},ca:{e:"top",p:10,ph:10}},
+ {x:40,top:56, yr:{e:"left",p:36,ph:36}, ca:{e:"top",p:55,ph:50}},
+ {x:66,top:62, yr:{e:"top",p:15,ph:8},   ca:{e:"bottom",p:48,ph:42}},
+ {x:18,top:71, yr:{e:"right",p:38,ph:44},ca:{e:"bottom",p:6,ph:6}},
+ {x:46,top:80, yr:{e:"top",p:55,ph:44},  ca:{e:"left",p:30,ph:10}},
+];
+/* random color per work (from small palette), fixed for the session */
+const colors=layout.map((_,i)=>PALETTE[i%PALETTE.length]);
+for(let i=colors.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[colors[i],colors[j]]=[colors[j],colors[i]];}
+
+/* ===== default content (used until / unless the sheet provides a value) ===== */
+const sampleBody="サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。";
+const wd=[ /* title, category, year */
+ ["Threads of Life","projection mapping",2025],
+ ["残響","video installation",2025],
+ ["Drift","VJ / live visual",2024],
+ ["微熱","short film",2023],
+ ["Surface","3DCG",2025],
+ ["渚","music video",2024],
+ ["Static Field","VJ / live visual",2025],
+ ["余白","installation",2023],
+ ["Mirror Stage","projection mapping",2025],
+ ["夜光","3DCG",2024],
+ ["Loop","VJ / live visual",2025],
+ ["層","video installation",2024],
+];
+const threadsCredit=
+`DIRECTION /
+NAOKI SAKEGAWA
+HAYATO UBUKATA
+RYOTA SANO
+MANAMI KUMAGAI
+3DCG /
+NAOKI SAKEGAWA
+HAYATO UBUKATA
+RYOTA SANO
+RYO INABA
+AMAMI GUNJI
+HANA KIMURA
+YUINA MORI
+TAKUMI TAMURA
+MIO TAKAHASHI
+YAYOI IWASAKI
+FUMIKA URA
+KOTONE SAKAGUCHI
+MANAMI KUMAGAI
+OPENING SOUND DESIGN /
+SHOUTA TAKENOUCHI
+EDIT /
+RYOTA SANO
+TECHNICAL SUPPORT /
+SOLU MEDHIAGE inc.`;
+const soloCredit=
+`DIRECTION /
+RYOTA SANO
+PLANNING /
+RYOTA SANO
+3DCG /
+RYOTA SANO
+COMPOSITING /
+RYOTA SANO
+COLOR GRADING /
+RYOTA SANO
+SOUND DESIGN /
+RYOTA SANO
+EDIT /
+RYOTA SANO
+TECHNICAL DIRECTION /
+RYOTA SANO`;
+const DEMO_VIDEO="M7lc1UVf-VE"; /* 動作確認用の埋め込みサンプル（差し替え可） */
+
+const DEFAULTS={
+  site_title:"sano ryota works archive",
+  profile_label:"profile here",
+  profile_name:"sano ryota",
+  profile_role:"filmmaker / director",
+  profile_about:"実写映像からプロジェクションマッピング等のフル3DCGまで横断した幅広い映像制作を行う。企画・演出から、編集・カラーグレーディング・サウンドデザインなどポストプロダクションまで一貫して担当し、最終的な作品のクオリティ担保を行う。チーム制作ではディレクターとして、演出意図を具体的な制作工程へ落とし込み、プロジェクトを牽引する。",
+  profile_career:"2004.8  新潟県新潟市生まれ\n2020.4  万代高等学校 英語理数科 入学\n2023.4  長岡造形大学 デザイン学科 入学",
+  profile_awards:"2025.4  大阪・関西万博 シャインハットプロジェクションマッピング 上映作品選出\n2025.11  東京国際プロジェクションマッピングアワードVol.10 上映作品選出\n2025.11  にいがたデジコングランプリ 動画部門 グランプリ受賞\n2026.4  ACジャパン広告学生賞 CM映像部門 優秀賞受賞",
+  profile_skills:"DaVinci Resolve / Blender / Premiere Pro / Illustrator / Lightroom\nLanguage: English (TOEIC L&R 820, 英検 準1級)",
+  profile_mail:"sanoryootaa@gmail.com",
+  profile_instagram:"https://www.instagram.com/sanoryootaa/",
+  profile_youtube:"https://www.youtube.com/@sanoryootaa",
+  profile_photo:"",
+};
+wd.forEach((w,i)=>{const n=i+1;
+  DEFAULTS[`work${n}_title`]=w[0];
+  DEFAULTS[`work${n}_category`]=w[1];
+  DEFAULTS[`work${n}_year`]=w[2];
+  DEFAULTS[`work${n}_thumb`]="";
+  DEFAULTS[`work${n}_video`]=DEMO_VIDEO;
+  DEFAULTS[`work${n}_desc`]=sampleBody;
+  DEFAULTS[`work${n}_credit`]= n===1?threadsCredit:soloCredit;
+});
+
+/* ===== CSV ===== */
+function parseCSV(t){const rows=[];let row=[],cur="",q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){if(c==='"'){if(t[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}
+    else{if(c==='"')q=true;else if(c===','){row.push(cur);cur="";}
+      else if(c==='\n'){row.push(cur);rows.push(row);row=[];cur="";}
+      else if(c!=='\r')cur+=c;}}
+  if(cur!==""||row.length){row.push(cur);rows.push(row);}return rows;}
+
+async function loadSheet(){
+  try{
+    const r=await fetch(SHEET_CSV,{cache:"no-store"});
+    if(!r.ok)throw 0;
+    const rows=parseCSV(await r.text());const m={};
+    rows.forEach(row=>{const k=(row[0]||"").trim();const v=(row[1]||"").trim();if(k&&v)m[k]=v;});
+    return m;
+  }catch(e){return {};}
+}
+
+/* ===== helpers ===== */
+function ytId(s){if(!s)return DEMO_VIDEO;const m=s.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/);return m?m[1]:s.trim();}
+function creditHTML(txt){
+  return txt.split("\n").map(l=>{l=l.trim();if(!l)return "";
+    return l.endsWith("/")?`<div class="role">${l}</div>`:`<div class="nm">${l}</div>`;}).join("");
+}
+
+/* ===== render ===== */
+let DATA={};
+function g(k){return (DATA[k]!=null&&DATA[k]!=="")?DATA[k]:DEFAULTS[k];}
+
+function buildArchive(){
+  const stage=document.getElementById("stage");stage.innerHTML="";
+  layout.forEach((L,i)=>{
+    const n=i+1,col=colors[i];
+    const thumb=g(`work${n}_thumb`);
+    const el=document.createElement("div");el.className="work";
+    el.style.left=L.x+"%";el.style.top=L.top+"%";
+    const inner=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
+    el.innerHTML=`<div class="thumb">${inner}</div>`+
+      `<span class="label year e-${L.yr.e}" style="--p:${L.yr.p}%;--ph:${L.yr.ph}%">${g(`work${n}_year`)}</span>`+
+      `<span class="label cat e-${L.ca.e}" style="--p:${L.ca.p}%;--ph:${L.ca.ph}%">${g(`work${n}_category`)}</span>`;
+    el.addEventListener("click",()=>openDetail(n,col));
+    stage.appendChild(el);
+  });
+}
+function buildHeaderProfile(){
+  document.getElementById("hTitle").textContent=g("site_title");
+  document.getElementById("hProfile").textContent=g("profile_label");
+  const rows=s=>s.split("\n").filter(x=>x.trim()).map(line=>{
+    const m=line.split(/\s{2,}|\t/);
+    return m.length>1?`<div class="p-row"><span class="k">${m[0]}</span><span>${m.slice(1).join(" ")}</span></div>`
+                     :`<div class="p-row"><span>${line}</span></div>`;}).join("");
+  const photo=g("profile_photo");
+  document.getElementById("pSheet").innerHTML=
+    `<h1 class="p-name">${g("profile_name")}</h1>
+     <div class="p-role">${g("profile_role")}</div>
+     <div class="p-grid">
+       <div class="p-main">
+         <section><h3>about me</h3><p>${g("profile_about")}</p></section>
+         <section><h3>career</h3>${rows(g("profile_career"))}</section>
+         <section><h3>awards &amp; screenings</h3>${rows(g("profile_awards"))}</section>
+         <section><h3>skills</h3>${rows(g("profile_skills"))}</section>
+         <section class="p-contact"><h3>contact</h3>
+           <div class="p-row"><span class="k">mail</span><a href="mailto:${g("profile_mail")}">${g("profile_mail")}</a></div>
+           <div class="p-row"><span class="k">instagram</span><a href="${g("profile_instagram")}" target="_blank" rel="noopener">${g("profile_instagram").replace(/^https?:\/\/(www\.)?/,"")}</a></div>
+           <div class="p-row"><span class="k">youtube</span><a href="${g("profile_youtube")}" target="_blank" rel="noopener">${g("profile_youtube").replace(/^https?:\/\/(www\.)?/,"")}</a></div>
+         </section>
+       </div>
+       <div class="p-photo"><div class="ph" ${photo?`style="background-image:url('${photo}')"`:""}></div></div>
+     </div>`;
+}
+
+/* ===== detail ===== */
+const detail=document.getElementById("detail");
+function openDetail(n,col){
+  document.getElementById("sheet").style.setProperty("--wc",col);
+  document.getElementById("dClose").style.setProperty("--xc",col);
+  const thumb=g(`work${n}_thumb`);
+  const poster=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
+  document.getElementById("player").innerHTML=
+    poster+`<button class="playbtn" aria-label="再生" onclick="playVideo('${ytId(g(`work${n}_video`))}')"></button>`;
+  document.getElementById("dTitle").textContent=g(`work${n}_title`);
+  document.getElementById("dSub").textContent=`${g(`work${n}_category`)}, ${g(`work${n}_year`)}`;
+  document.getElementById("dCredit").innerHTML=`<h2>credit</h2>`+creditHTML(g(`work${n}_credit`));
+  document.getElementById("dBody").textContent=g(`work${n}_desc`);
+  show(detail);
+}
+function playVideo(id){
+  document.getElementById("player").innerHTML=
+    `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="video" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+}
+function openProfile(){show(document.getElementById("profile"));}
+function show(n){n.classList.add("open");n.setAttribute("aria-hidden","false");n.scrollTop=0;document.body.style.overflow="hidden";}
+function closeAll(){
+  document.querySelectorAll(".overlay").forEach(o=>{o.classList.remove("open");o.setAttribute("aria-hidden","true");});
+  document.getElementById("player").innerHTML="";document.body.style.overflow="";
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll();});
+
+/* ===== boot : render defaults, then overlay sheet values if available ===== */
+function renderAll(){buildArchive();buildHeaderProfile();}
+renderAll();
+loadSheet().then(m=>{if(Object.keys(m).length){DATA=m;renderAll();}});
+</script>
+</body>
+</html>
