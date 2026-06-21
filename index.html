@@ -154,14 +154,14 @@
     .work:nth-child(1){margin-left:18% !important;}  /* 1作目は年が左に付くので左余白を確保 */
     /* 上下ラベルは1行のまま（重なり防止）。横ラベルだけ収まらない時に折り返す */
     .label.e-left,.label.e-right{white-space:normal;max-width:22vw;}
-    /* スマホ：背景は透明、カード(白・全画面)を下からスライドさせるだけ（フェードしないので“バシュ”と消えない）*/
-    /* visibility はスライド完了後に遅延して隠す（即時に消えてアニメが見えないのを防ぐ）*/
-    .overlay{background:transparent;opacity:1;visibility:hidden;transition:visibility 0s .46s !important;}
-    .overlay.open{opacity:1;visibility:visible;transition:visibility 0s 0s !important;}
+    /* スマホ：visibilityを使わず、オーバーレイは常時表示・透明・クリック透過。
+       カードは閉じ位置(画面下)に常駐し、transform だけでスライド開閉（即時非表示が起きない）*/
+    .overlay{background:transparent !important;opacity:1 !important;visibility:visible !important;pointer-events:none;transition:none !important;}
+    .overlay.open{pointer-events:auto;}
     .sheet,.p-sheet{margin:0;width:100%;max-width:none;min-height:100vh;opacity:1 !important;
       transform:translateY(100vh);
       transition:transform .46s cubic-bezier(.32,.72,0,1) !important;}
-    .overlay.open .sheet,.overlay.open .p-sheet{transform:none;}
+    .overlay.open .sheet,.overlay.open .p-sheet{transform:none !important;}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
     .closeX:before,.closeX:after{width:132px;height:20px;}
     .sheet{grid-template-columns:1fr;padding:26px 20px 46px;gap:18px;}
