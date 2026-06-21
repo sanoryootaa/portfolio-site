@@ -151,14 +151,8 @@
     header .right{margin-left:auto;margin-top:0;}
     #stage{aspect-ratio:auto;max-width:none;padding:132px 20px 90px;}
     /* サムネはランダムに散らす（縦一列にしない）。端から端まで大きく振る */
+    /* 横位置(margin-left)はJSで毎回ランダムに付与（サイドのラベル分の余白は確保済み）*/
     .work{position:relative !important;left:auto !important;top:auto !important;width:54% !important;margin-top:0 !important;margin-right:0 !important;margin-bottom:108px !important;}
-    .work:nth-child(odd){margin-left:5% !important;}
-    .work:nth-child(even){margin-left:32% !important;}
-    .work:nth-child(3n){margin-left:20% !important;}  /* 年が左に付く作品(3,6,9,12)は左余白を確保 */
-    .work:nth-child(4n){margin-left:26% !important;}
-    .work:nth-child(5n){margin-left:12% !important;}
-    .work:nth-child(7n){margin-left:8% !important;}
-    .work:nth-child(1){margin-left:18% !important;}  /* 1作目は年が左に付くので左余白を確保 */
     /* 上下ラベルは1行のまま（重なり防止）。横ラベルだけ収まらない時に折り返す */
     .label.e-left,.label.e-right{white-space:normal;max-width:22vw;}
     /* スマホ：visibilityを使わず、オーバーレイは常時表示・透明・クリック透過。
@@ -494,6 +488,16 @@ function g(k){return (DATA[k]!=null&&DATA[k]!=="")?DATA[k]:DEFAULTS[k];}
 const WORK_W=19;
 const X_SHIFT=((100-Math.max(...layout.map(L=>L.x+WORK_W)))-Math.min(...layout.map(L=>L.x)))/2 + 4;
 
+/* スマホ用：毎回ランダムな横位置(margin-left%)。サイドにラベルが付く作品はその側に余白を確保し、画面外に出ないようにする */
+const MWORK_W=54;                 /* スマホの作品幅(%) CSSと一致させる */
+const M_SIDE=16;                  /* 左右ラベルに要る余白(%) */
+const mobileX=layout.map(L=>{
+  let lo=2, hi=100-MWORK_W-2;     /* 既定 2%〜44% */
+  if(L.yr.e==="left"||L.ca.e==="left")   lo=Math.max(lo,M_SIDE);
+  if(L.yr.e==="right"||L.ca.e==="right") hi=Math.min(hi,100-MWORK_W-M_SIDE);
+  return +(lo+Math.random()*(hi-lo)).toFixed(1);
+});
+
 function buildArchive(){
   const stage=document.getElementById("stage");stage.innerHTML="";
   const tSpeed=parseFloat(g("trophy_speed"))||1;   /* 大きいほど速い */
@@ -502,6 +506,7 @@ function buildArchive(){
     const thumb=imgURL(g(`work${n}_thumb`));
     const el=document.createElement("div");el.className="work";
     el.style.left=(L.x+X_SHIFT)+"%";el.style.top=L.top+"%";
+    el.style.marginLeft=mobileX[i]+"%";   /* スマホ時のランダム横位置（PCはabsoluteなので無視される）*/
     const inner=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
     const trophyHTML=g(`work${n}_award`)
       ?`<span class="label trophy" style="animation:t-roam-${i} ${(trophy[i].dur/tSpeed).toFixed(2)}s linear infinite;animation-delay:${(trophy[i].delay/tSpeed).toFixed(2)}s" title="${g(`work${n}_award`)}">🏆</span>`
