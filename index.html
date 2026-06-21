@@ -488,13 +488,26 @@ function g(k){return (DATA[k]!=null&&DATA[k]!=="")?DATA[k]:DEFAULTS[k];}
 const WORK_W=19;
 const X_SHIFT=((100-Math.max(...layout.map(L=>L.x+WORK_W)))-Math.min(...layout.map(L=>L.x)))/2 + 4;
 
+/* 年・カテゴリのラベル位置を毎回ランダムに。年とカテゴリは別の辺に置き、
+   画面端の作品では外側の辺(left/right)を避けて見切れを防ぐ */
+const labelCfg=layout.map(L=>{
+  const left=L.x+X_SHIFT;
+  let allow=["top","bottom","left","right"];
+  if(left<14) allow=allow.filter(e=>e!=="left");
+  if(left+WORK_W>86) allow=allow.filter(e=>e!=="right");
+  const pk=()=>allow[Math.floor(Math.random()*allow.length)];
+  const e1=pk(); let e2; do{e2=pk();}while(e2===e1);
+  const pp=()=>+(18+Math.random()*52).toFixed(0);   /* 辺上の位置 18〜70% */
+  return {yr:{e:e1,p:pp()}, ca:{e:e2,p:pp()}};
+});
+
 /* スマホ用：毎回ランダムな横位置(margin-left%)。サイドにラベルが付く作品はその側に余白を確保し、画面外に出ないようにする */
 const MWORK_W=54;                 /* スマホの作品幅(%) CSSと一致させる */
 const M_SIDE=16;                  /* 左右ラベルに要る余白(%) */
-const mobileX=layout.map(L=>{
+const mobileX=labelCfg.map(c=>{
   let lo=2, hi=100-MWORK_W-2;     /* 既定 2%〜44% */
-  if(L.yr.e==="left"||L.ca.e==="left")   lo=Math.max(lo,M_SIDE);
-  if(L.yr.e==="right"||L.ca.e==="right") hi=Math.min(hi,100-MWORK_W-M_SIDE);
+  if(c.yr.e==="left"||c.ca.e==="left")   lo=Math.max(lo,M_SIDE);
+  if(c.yr.e==="right"||c.ca.e==="right") hi=Math.min(hi,100-MWORK_W-M_SIDE);
   return +(lo+Math.random()*(hi-lo)).toFixed(1);
 });
 
@@ -511,9 +524,10 @@ function buildArchive(){
     const trophyHTML=g(`work${n}_award`)
       ?`<span class="label trophy" style="animation:t-roam-${i} ${(trophy[i].dur/tSpeed).toFixed(2)}s linear infinite;animation-delay:${(trophy[i].delay/tSpeed).toFixed(2)}s" title="${g(`work${n}_award`)}">🏆</span>`
       :"";
+    const lc=labelCfg[i];
     el.innerHTML=`<div class="thumb">${inner}</div>`+
-      `<span class="label year e-${L.yr.e}" style="--p:${L.yr.p}%;--ph:${L.yr.ph}%">${g(`work${n}_year`)}</span>`+
-      `<span class="label cat e-${L.ca.e}" style="--p:${L.ca.p}%;--ph:${L.ca.ph}%">${g(`work${n}_category`)}</span>`+
+      `<span class="label year e-${lc.yr.e}" style="--p:${lc.yr.p}%;--ph:${lc.yr.p}%">${g(`work${n}_year`)}</span>`+
+      `<span class="label cat e-${lc.ca.e}" style="--p:${lc.ca.p}%;--ph:${lc.ca.p}%">${g(`work${n}_category`)}</span>`+
       trophyHTML;
       el.addEventListener("click",()=>openDetail(n,col));
     stage.appendChild(el);
