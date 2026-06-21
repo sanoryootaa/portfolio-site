@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
 <title>sano ryota works archive</title>
 <!-- リンク共有時のプレビュー画像・タブのアイコン（site_image でシートから指定）-->
 <meta property="og:title" id="ogTitle" content="sano ryota works archive">
@@ -146,6 +147,8 @@
     .work:nth-child(7n){margin-left:6% !important;}
     /* 上下ラベルは1行のまま（重なり防止）。横ラベルだけ収まらない時に折り返す */
     .label.e-left,.label.e-right{white-space:normal;max-width:24vw;}
+    /* スマホはオーバーレイ背景をカードと同じ白に → 上下の黒/グレー帯を無くす */
+    .overlay{background:#fff;}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
     .closeX:before,.closeX:after{width:132px;height:20px;}
     .sheet{grid-template-columns:1fr;width:auto;margin:54px 12px;padding:26px 20px 46px;gap:18px;}
