@@ -82,8 +82,13 @@
   /* 閉じる時：その場で少し回転しつつ、今より少し早めにフェードアウト */
   .closeX{opacity:0;transform:rotate(-70deg);transition:opacity .3s ease .08s,transform .5s ease;}
   .overlay.open .closeX{opacity:1;transform:none;transition:opacity .3s ease,transform .85s ease .05s;}
-  .closeX{position:fixed;top:24px;right:40px;width:215px;height:215px;z-index:130;cursor:pointer;background:none;border:0;}
-  .closeX:before,.closeX:after{content:"";position:absolute;left:50%;top:50%;width:272px;height:34px;background:var(--xc,var(--accent));}
+  /* ✕：サイズは画面幅で可変。位置は各カードの右上角に追従（狭い画面で被らず、広い画面で離れすぎない）*/
+  #detail{--cw:min(95vw,1640px);}
+  #profile{--cw:min(92vw,1120px);}
+  .closeX{--x:clamp(104px,9vw,200px);position:fixed;top:clamp(14px,2vw,30px);
+    right:max(18px,calc((100vw - var(--cw,min(95vw,1640px)))/2 - var(--x)*0.28));
+    width:var(--x);height:var(--x);z-index:130;cursor:pointer;background:none;border:0;}
+  .closeX:before,.closeX:after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--x)*1.26);height:calc(var(--x)*0.158);background:var(--xc,var(--accent));}
   .closeX:before{transform:translate(-50%,-50%) rotate(45deg);}
   .closeX:after{transform:translate(-50%,-50%) rotate(-45deg);}
   .closeX:hover:before,.closeX:hover:after{background:#fff;}
