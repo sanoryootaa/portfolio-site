@@ -389,7 +389,7 @@ const trophy=layout.map((_,idx)=>{
     const jx=rnd(-6,6), jy=rnd(-6,6);
     pts.push([ +(50+Math.cos(ang)*rx*m+jx).toFixed(1), +(50+Math.sin(ang)*ry*m+jy).toFixed(1) ]);
   }
-  return {pts, dur:rnd(7,12), delay:rnd(-12,0)};  /* 一定速度・位相ばらし */
+  return {pts, dur:rnd(3.5,6), delay:rnd(-6,0)};  /* 一定速度・位相ばらし */
 });
 /* 上で作った各ループを @keyframes として注入 */
 (function injectTrophyKeyframes(){
