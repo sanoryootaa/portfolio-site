@@ -154,14 +154,18 @@
     .work:nth-child(1){margin-left:18% !important;}  /* 1作目は年が左に付くので左余白を確保 */
     /* 上下ラベルは1行のまま（重なり防止）。横ラベルだけ収まらない時に折り返す */
     .label.e-left,.label.e-right{white-space:normal;max-width:22vw;}
-    /* スマホはオーバーレイ背景をカードと同じ白に → 上下の黒/グレー帯を無くす */
+    /* スマホ：背景は白で帯を無くしつつ、カードを下からスライドさせて開閉（動きが見えてなめらか）*/
     .overlay{background:#fff;}
+    .sheet,.p-sheet{margin:0;width:100%;max-width:none;min-height:100vh;
+      transform:translateY(100%);
+      transition:transform .46s cubic-bezier(.32,.72,0,1),opacity .3s ease;}
+    .overlay.open .sheet,.overlay.open .p-sheet{transform:none;}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
     .closeX:before,.closeX:after{width:132px;height:20px;}
-    .sheet{grid-template-columns:1fr;width:auto;margin:54px 12px;padding:26px 20px 46px;gap:18px;}
+    .sheet{grid-template-columns:1fr;padding:26px 20px 46px;gap:18px;}
     .d-video,.d-meta,.d-credit,.d-body{grid-column:1 !important;grid-row:auto !important;}
     .d-meta h1{font-size:28px;}
-    .p-sheet{width:auto;margin:54px 12px;padding:34px 22px 56px;}
+    .p-sheet{padding:34px 22px 56px;}
     .p-name{font-size:30px;}
     .p-grid{grid-template-columns:1fr;gap:32px;margin-top:34px;}
     .p-photo{order:-1;max-width:260px;}
