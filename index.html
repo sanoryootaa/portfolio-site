@@ -64,7 +64,7 @@
   .sheet,.p-sheet{opacity:0;transform:translateY(34px) scale(.985);
     transition:opacity .45s ease,transform .6s cubic-bezier(.16,1,.3,1);}
   .overlay.open .sheet,.overlay.open .p-sheet{opacity:1;transform:none;}
-  .closeX{opacity:0;transform:rotate(-12deg) scale(.8);transition:opacity .4s ease .08s,transform .55s cubic-bezier(.16,1,.3,1) .08s;}
+  .closeX{opacity:0;transform:rotate(-160deg) scale(.6);transition:opacity .4s ease .08s,transform .6s cubic-bezier(.16,1,.3,1) .05s;}
   .overlay.open .closeX{opacity:1;transform:none;}
   .closeX{position:fixed;top:24px;right:40px;width:215px;height:215px;z-index:130;cursor:pointer;background:none;border:0;}
   .closeX:before,.closeX:after{content:"";position:absolute;left:50%;top:50%;width:272px;height:34px;background:var(--xc,#00DD58);}
@@ -98,23 +98,29 @@
   .p-name{color:var(--wc);font-size:40px;font-weight:700;letter-spacing:0;line-height:1.05;}
   .p-role{color:var(--wc);font-size:var(--fs);margin-top:6px;}
   .p-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:56px;margin-top:48px;align-items:start;}
+  .p-main{min-width:0;}                                  /* グリッド内のはみ出し防止 */
   .p-main section{margin-bottom:34px;}
   .p-main h3{color:var(--wc);font-size:var(--fs);font-weight:400;margin-bottom:14px;}
-  .p-main p{font-size:var(--fs);line-height:var(--profile-lh);font-weight:var(--profile-w);max-width:620px;}
+  .p-main p{font-size:var(--fs);line-height:var(--profile-lh);font-weight:var(--profile-w);max-width:620px;overflow-wrap:break-word;}
   .p-row{display:flex;gap:18px;font-size:var(--fs);line-height:1.9;}
+  .p-row span{min-width:0;overflow-wrap:break-word;}     /* 長文を折り返して右にはみ出さない */
   .p-row .k{min-width:92px;flex-shrink:0;}
   .p-contact .p-row .k{min-width:150px;}
   .p-main a{border-bottom:1px solid #000;}
   .p-photo .ph{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#1c1c1c,#080808) center/cover no-repeat;}
 
   @media (max-width:760px){
-    #stage{aspect-ratio:auto;max-width:none;padding:96px 20px 70px;}
-    .work{position:relative !important;left:auto !important;top:auto !important;width:80% !important;margin:0 0 74px;}
+    /* スマホ独立仕様：ヘッダーの上下を揃え、最初の作品まで余白を確保 */
+    header{padding:16px 18px;align-items:center;}
+    header .center{top:16px;}                 /* 中央タイトルと右ボタンの上端を揃える */
+    #stage{aspect-ratio:auto;max-width:none;padding:128px 20px 80px;}
+    /* 作品どうしは大きく離し、ラベル(年/カテゴリ)は自分のサムネに密着させる */
+    .work{position:relative !important;left:auto !important;top:auto !important;width:80% !important;margin:0 0 124px;}
     .work:nth-child(even){margin-left:20%;}
     .work:nth-child(3n){margin-left:10%;}
     .label{left:var(--ph) !important;right:auto !important;}
-    .label.year{bottom:calc(100% + var(--label-gap)) !important;top:auto !important;}
-    .label.cat{top:calc(100% + var(--label-gap)) !important;bottom:auto !important;}
+    .label.year{bottom:calc(100% + 4px) !important;top:auto !important;}
+    .label.cat{top:calc(100% + 4px) !important;bottom:auto !important;}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
     .closeX:before,.closeX:after{width:132px;height:20px;}
     .sheet{grid-template-columns:1fr;width:auto;margin:54px 12px;padding:26px 20px 46px;gap:18px;}
@@ -143,8 +149,8 @@
   <div class="sheet" id="sheet">
     <div class="d-video"><div class="player" id="player"></div></div>
     <div class="d-meta"><h1 id="dTitle"></h1><div class="sub" id="dSub"></div></div>
-    <div class="d-credit" id="dCredit"></div>
     <div class="d-body" id="dBody"></div>
+    <div class="d-credit" id="dCredit"></div>
   </div>
 </section>
 
