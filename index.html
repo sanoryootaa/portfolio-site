@@ -100,12 +100,9 @@
   .d-meta .award{color:var(--ink);font-size:var(--fs);margin-top:10px;line-height:1.5;}
   /* 絵文字は Apple のものを使う */
   .label.trophy,.tEmoji{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;}
-  /* トロフィー：X/Yを別周期で大きく揺らし、円にならず不規則に漂う */
-  .trophy-x{position:absolute;left:0;top:0;animation:t-x 6s ease-in-out infinite alternate;will-change:transform;}
-  .label.trophy{position:static;line-height:1;white-space:normal;animation:t-y 7s ease-in-out infinite alternate;will-change:transform;}
-  @keyframes t-x{from{transform:translateX(-34px);}to{transform:translateX(34px);}}
-  @keyframes t-y{from{transform:translateY(-28px) rotate(-11deg);}to{transform:translateY(28px) rotate(11deg);}}
-  @media (prefers-reduced-motion:reduce){.trophy-x,.label.trophy{animation:none;}}
+  /* トロフィー：作品ごとの歪んだループ(t-roam-i)に沿って一定速度で滑らかに進む */
+  .label.trophy{line-height:1;white-space:normal;will-change:left,top;}
+  @media (prefers-reduced-motion:reduce){.label.trophy{animation:none !important;}}
   .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:var(--credit-lh);letter-spacing:var(--credit-ls);font-weight:var(--credit-w);}
   .d-credit h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}
   .d-credit .role{color:var(--wc);margin-top:14px;}
@@ -377,20 +374,36 @@ wd.forEach((w,i)=>{const n=i+1;
   DEFAULTS[`work${n}_award`]="";   /* 受賞歴。書かれている作品だけサムネにトロフィーを付ける */
 });
 
-/* トロフィーはサムネの縁付近を起点に、X/Yを別周期で揺らして不規則に大きく漂う */
+/* トロフィー：作品ごとに「歪んだ閉ループ」を生成し、それに沿って一定速度で滑らかに進む（揺れない）。
+   円ではなく各々違う形なので色々な方向へ動き、端でふわっと折り返す。 */
 const rnd=(a,b)=>+(a+Math.random()*(b-a)).toFixed(1);
-const trophy=layout.map(()=>{
-  const anchors=[
-    {top:-6, left:rnd(6,80)},   /* 上 */
-    {top:100,left:rnd(6,80)},   /* 下 */
-    {top:rnd(6,80), left:-4},   /* 左 */
-    {top:rnd(6,80), left:94},   /* 右 */
-  ];
-  const a=anchors[Math.floor(Math.random()*4)];
-  return {top:a.top,left:a.left,
-    dx:rnd(4.5,7),  delayX:rnd(-7,0),   /* 横揺れの周期・位相 */
-    dy:rnd(5.5,8.5),delayY:rnd(-8,0)};  /* 縦揺れは別周期にして不規則化 */
+const trophy=layout.map((_,idx)=>{
+  const N=7;                                   /* ループの頂点数 */
+  const start=Math.random()*Math.PI*2;
+  const dir=Math.random()<.5?1:-1;             /* 回る向き */
+  const rx=rnd(40,64), ry=rnd(46,74);          /* ループ半径(%) サムネ縁あたり */
+  const pts=[];
+  for(let k=0;k<N;k++){
+    const ang=start+dir*(k/N)*Math.PI*2;
+    const m=0.7+Math.random()*0.6;             /* 各頂点で半径を乱して歪ませる */
+    const jx=rnd(-6,6), jy=rnd(-6,6);
+    pts.push([ +(50+Math.cos(ang)*rx*m+jx).toFixed(1), +(50+Math.sin(ang)*ry*m+jy).toFixed(1) ]);
+  }
+  return {pts, dur:rnd(13,22), delay:rnd(-22,0)};  /* ゆっくり一定速度・位相ばらし */
 });
+/* 上で作った各ループを @keyframes として注入 */
+(function injectTrophyKeyframes(){
+  let css="";
+  trophy.forEach((T,i)=>{
+    let frames="";
+    for(let k=0;k<=T.pts.length;k++){
+      const p=T.pts[k%T.pts.length];
+      frames+=`${(k/T.pts.length*100).toFixed(1)}%{left:${p[0]}%;top:${p[1]}%;}`;
+    }
+    css+=`@keyframes t-roam-${i}{${frames}}`;
+  });
+  const s=document.createElement("style");s.textContent=css;document.head.appendChild(s);
+})();
 
 /* ===== CSV ===== */
 function parseCSV(t){const rows=[];let row=[],cur="",q=false;
@@ -456,9 +469,9 @@ function creditHTML(txt){
 let DATA={};
 function g(k){return (DATA[k]!=null&&DATA[k]!=="")?DATA[k]:DEFAULTS[k];}
 
-/* 散らばりはそのまま、作品帯を左右中央に揃えるためのシフト量（左右の余白を均等化）*/
+/* 散らばりはそのまま、作品帯を左右中央に揃える（左右余白を均等化）＋もう少し右へ */
 const WORK_W=19;
-const X_SHIFT=((100-Math.max(...layout.map(L=>L.x+WORK_W)))-Math.min(...layout.map(L=>L.x)))/2;
+const X_SHIFT=((100-Math.max(...layout.map(L=>L.x+WORK_W)))-Math.min(...layout.map(L=>L.x)))/2 + 4;
 
 function buildArchive(){
   const stage=document.getElementById("stage");stage.innerHTML="";
@@ -468,9 +481,8 @@ function buildArchive(){
     const el=document.createElement("div");el.className="work";
     el.style.left=(L.x+X_SHIFT)+"%";el.style.top=L.top+"%";
     const inner=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
-    const T=trophy[i];
     const trophyHTML=g(`work${n}_award`)
-      ?`<span class="trophy-x" style="top:${T.top}%;left:${T.left}%;animation-duration:${T.dx}s;animation-delay:${T.delayX}s"><span class="label trophy" style="animation-duration:${T.dy}s;animation-delay:${T.delayY}s" title="${g(`work${n}_award`)}">🏆</span></span>`
+      ?`<span class="label trophy" style="animation:t-roam-${i} ${trophy[i].dur}s linear infinite;animation-delay:${trophy[i].delay}s" title="${g(`work${n}_award`)}">🏆</span>`
       :"";
     el.innerHTML=`<div class="thumb">${inner}</div>`+
       `<span class="label year e-${L.yr.e}" style="--p:${L.yr.p}%;--ph:${L.yr.ph}%">${g(`work${n}_year`)}</span>`+
