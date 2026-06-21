@@ -151,8 +151,8 @@
     header .right{margin-left:auto;margin-top:0;}
     #stage{aspect-ratio:auto;max-width:none;padding:132px 20px 90px;}
     /* サムネはランダムに散らす（縦一列にしない）。端から端まで大きく振る */
-    /* 横位置(margin-left)はJSで毎回ランダムに付与（サイドのラベル分の余白は確保済み）*/
-    .work{position:relative !important;left:auto !important;top:auto !important;width:54% !important;margin-top:0 !important;margin-right:0 !important;margin-bottom:108px !important;}
+    /* 横位置はJSが --mleft に入れた値を使う（モバイルのみ適用）*/
+    .work{position:relative !important;left:auto !important;top:auto !important;width:54% !important;margin:0 0 108px var(--mleft,0) !important;}
     /* 上下ラベルは1行のまま（重なり防止）。横ラベルだけ収まらない時に折り返す */
     .label.e-left,.label.e-right{white-space:normal;max-width:22vw;}
     /* スマホ：visibilityを使わず、オーバーレイは常時表示・透明・クリック透過。
@@ -524,7 +524,7 @@ function buildArchive(){
     const el=document.createElement("div");el.className="work";
     el.style.left=(L.x+X_SHIFT+jitter[i].dx)+"%";
     el.style.top=Math.max(3,L.top+jitter[i].dy)+"%";   /* 上はヘッダーに被らないよう最低3% */
-    el.style.marginLeft=mobileX[i]+"%";   /* スマホ時のランダム横位置（PCはabsoluteなので無視される）*/
+    el.style.setProperty("--mleft",mobileX[i]+"%");   /* スマホ時のランダム横位置（モバイルCSSでのみ適用。PCのabsoluteを右へずらさない）*/
     const inner=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
     const trophyHTML=g(`work${n}_award`)
       ?`<span class="label trophy" style="animation:t-roam-${i} ${(trophy[i].dur/tSpeed).toFixed(2)}s linear infinite;animation-delay:${(trophy[i].delay/tSpeed).toFixed(2)}s" title="${g(`work${n}_award`)}">🏆</span>`
