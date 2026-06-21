@@ -130,14 +130,14 @@
     header .center{position:static;left:auto;top:auto;transform:none;max-width:58%;}
     header .right{margin-left:auto;margin-top:26px;}
     #stage{aspect-ratio:auto;max-width:none;padding:132px 20px 90px;}
-    /* サムネはランダムに散らす（縦一列にしない）。margin-left を !important で確実に効かせる */
-    .work{position:relative !important;left:auto !important;top:auto !important;width:68% !important;margin-top:0 !important;margin-right:0 !important;margin-bottom:108px !important;}
-    .work:nth-child(odd){margin-left:3% !important;}
-    .work:nth-child(even){margin-left:20% !important;}
-    .work:nth-child(3n){margin-left:11% !important;}
-    .work:nth-child(5n){margin-left:0 !important;}
+    /* サムネはランダムに散らす（縦一列にしない）。帯を中央寄りにして左右どちらにもラベル用の余白を残す */
+    .work{position:relative !important;left:auto !important;top:auto !important;width:60% !important;margin-top:0 !important;margin-right:0 !important;margin-bottom:108px !important;}
+    .work:nth-child(odd){margin-left:14% !important;}
+    .work:nth-child(even){margin-left:26% !important;}
+    .work:nth-child(3n){margin-left:20% !important;}  /* 年が左に付く作品(3,6,9,12)に左余白を確保 */
+    .work:nth-child(5n){margin-left:12% !important;}
     /* 上下ラベルは1行のまま（重なり防止）。横ラベルだけ収まらない時に折り返す */
-    .label.e-left,.label.e-right{white-space:normal;max-width:30vw;}
+    .label.e-left,.label.e-right{white-space:normal;max-width:26vw;}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
     .closeX:before,.closeX:after{width:132px;height:20px;}
     .sheet{grid-template-columns:1fr;width:auto;margin:54px 12px;padding:26px 20px 46px;gap:18px;}
