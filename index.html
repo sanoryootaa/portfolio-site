@@ -8,11 +8,16 @@
   :root{
     --bg:#ffffff;--ink:#0a0a0a;--red:#ec3b27;
     --fs:15px;
+    /* 字詰め・行間（スプレッドシートで上書き可能）*/
+    --ls:.01em;   /* 全体の字詰め  letter_spacing / 字詰め */
+    --lh:1.5;     /* 全体の行間    line_height    / 行間   */
+    --tls:.01em;  /* 本文の字詰め  text_letter_spacing / 本文字詰め */
+    --tlh:1.95;   /* 本文の行間    text_line_height    / 本文行間   */
     --sans:"Helvetica Neue",Arial,"Yu Gothic",YuGothic,"游ゴシック体","游ゴシック","Hiragino Kaku Gothic ProN",sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{background:var(--bg);color:var(--ink);}
-  body{font-family:var(--sans);font-size:var(--fs);line-height:1.5;-webkit-font-smoothing:antialiased;letter-spacing:.01em;}
+  body{font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);-webkit-font-smoothing:antialiased;letter-spacing:var(--ls);}
   a{color:inherit;text-decoration:none;}
 
   header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;
@@ -60,7 +65,7 @@
   .d-credit .role{color:var(--wc);margin-top:14px;}
   .d-credit .role:first-of-type{margin-top:0;}
   .d-credit .nm{color:#000;}
-  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:1.95;max-width:700px;margin-top:10px;}
+  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--tlh);letter-spacing:var(--tls);max-width:700px;margin-top:10px;}
   .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border:0;border-radius:50%;background:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
   .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
   .playbtn:after{content:"";border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;}
@@ -72,7 +77,7 @@
   .p-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:56px;margin-top:48px;align-items:start;}
   .p-main section{margin-bottom:34px;}
   .p-main h3{color:var(--wc);font-size:var(--fs);font-weight:400;margin-bottom:14px;}
-  .p-main p{font-size:var(--fs);line-height:2.05;max-width:620px;}
+  .p-main p{font-size:var(--fs);line-height:var(--tlh);letter-spacing:var(--tls);max-width:620px;}
   .p-row{display:flex;gap:18px;font-size:var(--fs);line-height:1.9;}
   .p-row .k{min-width:92px;flex-shrink:0;}
   .p-contact .p-row .k{min-width:150px;}
@@ -224,6 +229,19 @@ const DEFAULTS={
   profile_instagram:"https://www.instagram.com/sanoryootaa/",
   profile_youtube:"https://www.youtube.com/@sanoryootaa",
   profile_photo:"",
+  /* design : 字詰め・行間（スプレッドシートで上書き可）*/
+  letter_spacing:".01em",
+  line_height:"1.5",
+  text_letter_spacing:".01em",
+  text_line_height:"1.95",
+};
+
+/* スプレッドシートで日本語キーでも書けるようにする別名 */
+const KEY_ALIASES={
+  "字詰め":"letter_spacing",
+  "行間":"line_height",
+  "本文字詰め":"text_letter_spacing",
+  "本文行間":"text_line_height",
 };
 wd.forEach((w,i)=>{const n=i+1;
   DEFAULTS[`work${n}_title`]=w[0];
@@ -248,8 +266,13 @@ async function loadSheet(){
   try{
     const r=await fetch(SHEET_CSV,{cache:"no-store"});
     if(!r.ok)throw 0;
-    const rows=parseCSV(await r.text());const m={};
-    rows.forEach(row=>{const k=(row[0]||"").trim();const v=(row[1]||"").trim();if(k&&v)m[k]=v;});
+    let text=await r.text();
+    text=text.replace(/^﻿/,""); /* 先頭セルの BOM を除去（最初のキーが反応しない原因）*/
+    const rows=parseCSV(text);const m={};
+    rows.forEach(row=>{
+      let k=(row[0]||"").trim();const v=(row[1]||"").trim();
+      if(KEY_ALIASES[k])k=KEY_ALIASES[k]; /* 日本語キーを正規キーへ */
+      if(k&&v)m[k]=v;});
     return m;
   }catch(e){return {};}
 }
@@ -334,8 +357,17 @@ function closeAll(){
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll();});
 
+/* ===== design : 字詰め・行間をスプレッドシート値で反映 ===== */
+function applyDesign(){
+  const r=document.documentElement.style;
+  r.setProperty("--ls", g("letter_spacing"));
+  r.setProperty("--lh", g("line_height"));
+  r.setProperty("--tls",g("text_letter_spacing"));
+  r.setProperty("--tlh",g("text_line_height"));
+}
+
 /* ===== boot : render defaults, then overlay sheet values if available ===== */
-function renderAll(){buildArchive();buildHeaderProfile();}
+function renderAll(){applyDesign();buildArchive();buildHeaderProfile();}
 renderAll();
 loadSheet().then(m=>{if(Object.keys(m).length){DATA=m;renderAll();}});
 </script>
