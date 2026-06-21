@@ -49,15 +49,11 @@
   .msg-trigger{cursor:pointer;display:inline-block;border-bottom:1px solid currentColor;}
   .msg-trigger::after{content:"✨";margin-left:.45em;border:0;animation:twinkle 1.3s steps(1,end) infinite;}
   @keyframes twinkle{50%{opacity:.15;}}
-  .msg-reveal{display:none;max-width:680px;white-space:pre-wrap;font-weight:600;
-    background:linear-gradient(90deg,#ff5e7a,#ffcf3a,#54e08a,#46c8ff,#b98cff,#ff5e7a);
-    background-size:280% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
-    filter:drop-shadow(0 0 6px rgba(255,210,90,.35));}
+  .msg-reveal{display:none;max-width:680px;white-space:pre-wrap;color:var(--ink);}
   .botmsg.show .msg-trigger{display:none;}
-  .botmsg.show .msg-reveal{display:block;animation:shimmer 4s linear infinite, reveal .8s cubic-bezier(.16,1,.3,1) both;}
-  @keyframes shimmer{to{background-position:280% 0;}}
-  @keyframes reveal{from{opacity:0;filter:blur(10px) drop-shadow(0 0 6px rgba(255,210,90,.35));transform:translateY(10px) scale(.97);}
-    to{opacity:1;filter:blur(0) drop-shadow(0 0 6px rgba(255,210,90,.35));transform:none;}}
+  .botmsg.show .msg-reveal{display:block;animation:reveal .8s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes reveal{from{opacity:0;filter:blur(10px);transform:translateY(10px) scale(.97);}
+    to{opacity:1;filter:blur(0);transform:none;}}
   .spark{position:absolute;pointer-events:none;will-change:transform,opacity;animation:spark 1.1s ease-out forwards;}
   @keyframes spark{0%{opacity:0;transform:translateY(0) scale(.3) rotate(0);}
     25%{opacity:1;}
