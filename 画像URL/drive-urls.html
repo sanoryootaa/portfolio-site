@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>drive → image urls</title>
+<style>
+  :root{--ink:#0a0a0a;--green:#00DD58;--line:#e6e6e6;--mut:#666;
+    --sans:"Helvetica Neue",Arial,"Yu Gothic",YuGothic,"游ゴシック体","Hiragino Kaku Gothic ProN",sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);color:var(--ink);background:#fff;font-size:15px;line-height:1.6;
+    max-width:1040px;margin:0 auto;padding:48px 28px 80px;-webkit-font-smoothing:antialiased;}
+  h1{font-size:24px;font-weight:700;letter-spacing:-.01em;}
+  .lead{color:var(--mut);margin-top:6px;}
+  .panel{border:1px solid var(--line);border-radius:12px;padding:22px;margin-top:26px;display:grid;gap:14px;}
+  label{display:block;font-size:13px;color:var(--mut);margin-bottom:5px;}
+  input,select{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;}
+  .row{display:grid;grid-template-columns:1fr 150px;gap:14px;}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:4px;}
+  button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:10px 16px;background:var(--ink);color:#fff;}
+  button.ghost{background:#fff;color:var(--ink);border:1px solid var(--ink);}
+  button:disabled{opacity:.4;cursor:default;}
+  .status{font-size:13px;color:var(--mut);min-height:18px;margin-top:4px;}
+  .status.err{color:#d23;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top:26px;}
+  .card{border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;}
+  .card .pic{aspect-ratio:16/10;background:#f3f3f3;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .card .pic img{width:100%;height:100%;object-fit:cover;display:block;}
+  .card .pic .ph{font-size:12px;color:#aaa;}
+  .card .meta{padding:11px 12px;display:grid;gap:8px;}
+  .card .name{font-size:13px;font-weight:700;word-break:break-all;}
+  .card .url{font-size:11.5px;color:var(--mut);border:1px solid var(--line);border-radius:6px;padding:7px 8px;word-break:break-all;background:#fafafa;}
+  .card .copy{padding:7px 10px;font-size:12px;background:var(--green);color:#04210f;justify-self:start;}
+  details{margin-top:30px;border-top:1px solid var(--line);padding-top:18px;}
+  summary{cursor:pointer;font-weight:700;}
+  details ol{margin:12px 0 0 20px;}details li{margin-bottom:6px;color:#333;}
+  code{background:#f3f3f3;padding:1px 5px;border-radius:4px;font-size:13px;}
+</style>
+</head>
+<body>
+  <h1>drive → image urls</h1>
+  <div class="lead">Googleドライブのフォルダ内の画像を、ファイル名つきで一覧＆URL化します。</div>
+
+  <div class="panel">
+    <div>
+      <label>ドライブのフォルダ URL（または フォルダID）</label>
+      <input id="folder" placeholder="https://drive.google.com/drive/folders/xxxxxxxx">
+    </div>
+    <div class="row">
+      <div>
+        <label>Google API キー</label>
+        <input id="key" placeholder="AIza...">
+      </div>
+      <div>
+        <label>画像サイズ(幅px)</label>
+        <select id="size">
+          <option>800</option><option selected>1600</option><option>2000</option><option>2600</option>
+        </select>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="go">取得する</button>
+      <button id="copyAll" class="ghost" disabled>全部コピー（名前 + URL）</button>
+      <button id="copyUrls" class="ghost" disabled>URLだけコピー</button>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <details>
+    <summary>準備（最初の1回だけ）</summary>
+    <ol>
+      <li>対象フォルダを右クリック →「共有」→「リンクを知っている全員」を<b>閲覧者</b>にする。</li>
+      <li><code>console.cloud.google.com</code> でプロジェクトを作成 →「APIとサービス」で <b>Google Drive API</b> を有効化。</li>
+      <li>「認証情報」→「APIキーを作成」。作ったキーをこの画面に貼る。</li>
+      <li>（任意）キーは「APIの制限＝Drive API」「アプリケーションの制限＝HTTPリファラー」で自分の公開ドメインに絞ると安全。</li>
+    </ol>
+    <div style="margin-top:10px;color:#555;">URLは <code>https://lh3.googleusercontent.com/d/ファイルID=w幅</code> 形式で出します。&lt;img&gt; にそのまま使えます。どれがどれか分かるよう、ドライブ側のファイル名を <code>work1.jpg</code> のように付けておくと、そのままスプレッドシートに流し込めます。</div>
+  </details>
+
+<script>
+const $=id=>document.getElementById(id);
+let items=[];
+
+function folderId(s){
+  s=s.trim();
+  const m=s.match(/\/folders\/([\w-]+)/)||s.match(/[?&]id=([\w-]+)/);
+  return m?m[1]:s;
+}
+function imgUrl(id,size){return `https://lh3.googleusercontent.com/d/${id}=w${size}`;}
+
+async function fetchAll(fid,key){
+  let files=[],token="";
+  do{
+    const q=encodeURIComponent(`'${fid}' in parents and mimeType contains 'image/' and trashed=false`);
+    let url=`https://www.googleapis.com/drive/v3/files?q=${q}&key=${encodeURIComponent(key)}`+
+            `&fields=nextPageToken,files(id,name,mimeType)&pageSize=1000&orderBy=name_natural`;
+    if(token)url+=`&pageToken=${token}`;
+    const r=await fetch(url);const j=await r.json();
+    if(j.error)throw new Error(j.error.message||"APIエラー");
+    files=files.concat(j.files||[]);token=j.nextPageToken||"";
+  }while(token);
+  return files;
+}
+
+function render(size){
+  const grid=$("grid");grid.innerHTML="";
+  items.forEach(f=>{
+    const url=imgUrl(f.id,size);f.url=url;
+    const c=document.createElement("div");c.className="card";
+    c.innerHTML=
+      `<div class="pic"><img loading="lazy" src="${url}" alt="" onerror="this.parentNode.innerHTML='<span class=ph>preview不可</span>'"></div>
+       <div class="meta">
+         <div class="name">${f.name}</div>
+         <div class="url">${url}</div>
+         <button class="copy">URLをコピー</button>
+       </div>`;
+    c.querySelector(".copy").addEventListener("click",e=>{
+      navigator.clipboard.writeText(url);e.target.textContent="コピー済み";setTimeout(()=>e.target.textContent="URLをコピー",1200);
+    });
+    grid.appendChild(c);
+  });
+}
+
+$("go").addEventListener("click",async()=>{
+  const fid=folderId($("folder").value), key=$("key").value.trim();
+  if(!fid||!key){setStatus("フォルダとAPIキーを入力してください。",true);return;}
+  setStatus("取得中…");$("go").disabled=true;
+  try{
+    items=await fetchAll(fid,key);
+    if(!items.length){setStatus("画像が見つかりませんでした（共有設定・フォルダIDを確認）。",true);}
+    else setStatus(`${items.length}件の画像を取得しました。`);
+    render($("size").value);
+    $("copyAll").disabled=$("copyUrls").disabled=!items.length;
+  }catch(e){setStatus("エラー: "+e.message,true);}
+  $("go").disabled=false;
+});
+$("size").addEventListener("change",()=>{if(items.length)render($("size").value);});
+$("copyAll").addEventListener("click",()=>{
+  const t=items.map(f=>`${f.name}\t${f.url}`).join("\n");
+  navigator.clipboard.writeText(t);setStatus("名前＋URLをコピーしました（タブ区切り）。");
+});
+$("copyUrls").addEventListener("click",()=>{
+  navigator.clipboard.writeText(items.map(f=>f.url).join("\n"));setStatus("URLをコピーしました。");
+});
+function setStatus(m,err){const s=$("status");s.textContent=m;s.className="status"+(err?" err":"");}
+</script>
+</body>
+</html>
