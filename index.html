@@ -93,6 +93,10 @@
   .d-meta{grid-column:2;grid-row:1;}
   .d-meta h1{color:var(--wc);font-size:36px;font-weight:var(--title-w);line-height:var(--title-lh);letter-spacing:var(--title-ls);}
   .d-meta .sub{color:var(--wc);font-size:var(--fs);margin-top:6px;}
+  .d-meta .award{color:var(--ink);font-size:var(--fs);margin-top:10px;line-height:1.5;}
+  /* 絵文字は Apple のものを使う */
+  .label.trophy,.tEmoji{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;}
+  .label.trophy{line-height:1;transform-origin:50% 50%;}
   .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:var(--credit-lh);letter-spacing:var(--credit-ls);font-weight:var(--credit-w);}
   .d-credit h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}
   .d-credit .role{color:var(--wc);margin-top:14px;}
@@ -116,6 +120,7 @@
   .p-list{display:grid;grid-template-columns:max-content 1fr;column-gap:18px;row-gap:7px;font-size:var(--fs);line-height:var(--profile-lh);}
   .p-list dt{white-space:nowrap;color:#000;}
   .p-list dd{min-width:0;overflow-wrap:anywhere;}
+  .p-list dd.full{grid-column:1/-1;}   /* 日付なし行は行頭(1列目左端)から */
   /* contact：横並び。下線=リンクが分かるよう維持 */
   .p-row{display:flex;gap:18px;font-size:var(--fs);line-height:var(--profile-lh);}
   .p-row span,.p-row a{min-width:0;overflow-wrap:anywhere;} /* 長文・長URLを折り返して右にはみ出さない */
@@ -130,14 +135,16 @@
     header .center{position:static;left:auto;top:auto;transform:none;max-width:58%;}
     header .right{margin-left:auto;margin-top:26px;}
     #stage{aspect-ratio:auto;max-width:none;padding:132px 20px 90px;}
-    /* サムネはランダムに散らす（縦一列にしない）。帯を中央寄りにして左右どちらにもラベル用の余白を残す */
-    .work{position:relative !important;left:auto !important;top:auto !important;width:60% !important;margin-top:0 !important;margin-right:0 !important;margin-bottom:108px !important;}
-    .work:nth-child(odd){margin-left:14% !important;}
-    .work:nth-child(even){margin-left:26% !important;}
-    .work:nth-child(3n){margin-left:20% !important;}  /* 年が左に付く作品(3,6,9,12)に左余白を確保 */
-    .work:nth-child(5n){margin-left:12% !important;}
+    /* サムネはランダムに散らす（縦一列にしない）。端から端まで大きく振る */
+    .work{position:relative !important;left:auto !important;top:auto !important;width:56% !important;margin-top:0 !important;margin-right:0 !important;margin-bottom:108px !important;}
+    .work:nth-child(odd){margin-left:3% !important;}
+    .work:nth-child(even){margin-left:40% !important;}
+    .work:nth-child(3n){margin-left:22% !important;}  /* 年が左に付く作品(3,6,9,12)は左余白を確保 */
+    .work:nth-child(4n){margin-left:32% !important;}
+    .work:nth-child(5n){margin-left:11% !important;}
+    .work:nth-child(7n){margin-left:6% !important;}
     /* 上下ラベルは1行のまま（重なり防止）。横ラベルだけ収まらない時に折り返す */
-    .label.e-left,.label.e-right{white-space:normal;max-width:26vw;}
+    .label.e-left,.label.e-right{white-space:normal;max-width:24vw;}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
     .closeX:before,.closeX:after{width:132px;height:20px;}
     .sheet{grid-template-columns:1fr;width:auto;margin:54px 12px;padding:26px 20px 46px;gap:18px;}
@@ -167,7 +174,7 @@
   <button class="closeX" id="dClose" aria-label="閉じる" onclick="closeAll()"></button>
   <div class="sheet" id="sheet">
     <div class="d-video"><div class="player" id="player"></div></div>
-    <div class="d-meta"><h1 id="dTitle"></h1><div class="sub" id="dSub"></div></div>
+    <div class="d-meta"><h1 id="dTitle"></h1><div class="sub" id="dSub"></div><div class="award" id="dAward"></div></div>
     <div class="d-body" id="dBody"></div>
     <div class="d-credit" id="dCredit"></div>
   </div>
@@ -352,7 +359,17 @@ wd.forEach((w,i)=>{const n=i+1;
   DEFAULTS[`work${n}_video`]=DEMO_VIDEO;
   DEFAULTS[`work${n}_desc`]=sampleBody;
   DEFAULTS[`work${n}_credit`]= n===1?threadsCredit:soloCredit;
+  DEFAULTS[`work${n}_award`]="";   /* 受賞歴。書かれている作品だけサムネにトロフィーを付ける */
 });
+
+/* トロフィーの配置（年/カテゴリと同様にランダム位置・わずかな傾き、正位置から外れすぎない）*/
+const T_EDGES=["top","bottom","left","right"];
+const trophy=layout.map(()=>({
+  e:T_EDGES[Math.floor(Math.random()*4)],
+  p:25+Math.floor(Math.random()*50),
+  ph:20+Math.floor(Math.random()*40),
+  rot:Math.floor(Math.random()*23)-11   /* -11〜+11度：トロフィーと分かる範囲 */
+}));
 
 /* ===== CSV ===== */
 function parseCSV(t){const rows=[];let row=[],cur="",q=false;
@@ -426,9 +443,14 @@ function buildArchive(){
     const el=document.createElement("div");el.className="work";
     el.style.left=L.x+"%";el.style.top=L.top+"%";
     const inner=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
+    const T=trophy[i];
+    const trophyHTML=g(`work${n}_award`)
+      ?`<span class="label trophy e-${T.e}" style="--p:${T.p}%;--ph:${T.ph}%;transform:rotate(${T.rot}deg)" title="${g(`work${n}_award`)}">🏆</span>`
+      :"";
     el.innerHTML=`<div class="thumb">${inner}</div>`+
       `<span class="label year e-${L.yr.e}" style="--p:${L.yr.p}%;--ph:${L.yr.ph}%">${g(`work${n}_year`)}</span>`+
-      `<span class="label cat e-${L.ca.e}" style="--p:${L.ca.p}%;--ph:${L.ca.ph}%">${g(`work${n}_category`)}</span>`;
+      `<span class="label cat e-${L.ca.e}" style="--p:${L.ca.p}%;--ph:${L.ca.ph}%">${g(`work${n}_category`)}</span>`+
+      trophyHTML;
       el.addEventListener("click",()=>openDetail(n,col));
     stage.appendChild(el);
   });
@@ -452,7 +474,7 @@ function buildHeaderProfile(){
       const m=line.match(/^([0-9][0-9.\/-]*)[\s　]+([\s\S]+)$/);
       if(m){const body=m[2].replace(/[\s　]+/g," ").trim();
         return `<dt>${m[1]}</dt><dd>${body}</dd>`;}
-      return `<dt></dt><dd>${line}</dd>`;
+      return `<dd class="full">${line}</dd>`; /* 日付なしは2列ぶち抜きで行頭から */
     }).join("");
     return `<div class="p-list">${items}</div>`;
   };
@@ -487,6 +509,8 @@ function openDetail(n,col){
     poster+`<button class="playbtn" aria-label="再生" onclick="playVideo('${ytId(g(`work${n}_video`))}')"></button>`;
   document.getElementById("dTitle").textContent=g(`work${n}_title`);
   document.getElementById("dSub").textContent=`${g(`work${n}_category`)}, ${g(`work${n}_year`)}`;
+  const aw=g(`work${n}_award`);
+  document.getElementById("dAward").innerHTML=aw?`<span class="tEmoji">🏆</span> ${aw}`:"";
   document.getElementById("dCredit").innerHTML=`<h2>credit</h2>`+creditHTML(g(`work${n}_credit`));
   document.getElementById("dBody").textContent=g(`work${n}_desc`);
   show(detail);
