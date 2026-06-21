@@ -100,7 +100,16 @@
   .d-meta .award{color:var(--ink);font-size:var(--fs);margin-top:10px;line-height:1.5;}
   /* 絵文字は Apple のものを使う */
   .label.trophy,.tEmoji{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;}
-  .label.trophy{line-height:1;transform-origin:50% 50%;}
+  /* トロフィーはサムネ外周を楕円軌道で周遊しつつ、軽く上下＆傾きでふわふわ */
+  .label.trophy{
+    left:0;top:0;line-height:1;white-space:normal;
+    offset-path:ellipse(54% 58% at 50% 50%);offset-rotate:0deg;
+    animation:t-orbit 14s linear infinite, t-bob 3.2s ease-in-out infinite alternate;
+    will-change:offset-distance,transform;
+  }
+  @keyframes t-orbit{to{offset-distance:100%;}}
+  @keyframes t-bob{from{transform:translateY(-2px) rotate(-7deg);}to{transform:translateY(2px) rotate(7deg);}}
+  @media (prefers-reduced-motion:reduce){.label.trophy{animation:none;offset-distance:8%;}}
   .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:var(--credit-lh);letter-spacing:var(--credit-ls);font-weight:var(--credit-w);}
   .d-credit h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}
   .d-credit .role{color:var(--wc);margin-top:14px;}
@@ -372,13 +381,11 @@ wd.forEach((w,i)=>{const n=i+1;
   DEFAULTS[`work${n}_award`]="";   /* 受賞歴。書かれている作品だけサムネにトロフィーを付ける */
 });
 
-/* トロフィーの配置（年/カテゴリと同様にランダム位置・わずかな傾き、正位置から外れすぎない）*/
-const T_EDGES=["top","bottom","left","right"];
+/* トロフィーはサムネ周りをふわふわ周遊。スピード・向き・開始位置を作品ごとにランダム */
 const trophy=layout.map(()=>({
-  e:T_EDGES[Math.floor(Math.random()*4)],
-  p:25+Math.floor(Math.random()*50),
-  ph:20+Math.floor(Math.random()*40),
-  rot:Math.floor(Math.random()*23)-11   /* -11〜+11度：トロフィーと分かる範囲 */
+  dur:(11+Math.random()*8).toFixed(1),     /* 周回1周 11〜19秒 */
+  delay:-(Math.random()*19).toFixed(1),    /* 開始位置をばらす */
+  dir:Math.random()<.5?"normal":"reverse"  /* 回る向き */
 }));
 
 /* ===== CSV ===== */
@@ -455,7 +462,7 @@ function buildArchive(){
     const inner=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
     const T=trophy[i];
     const trophyHTML=g(`work${n}_award`)
-      ?`<span class="label trophy e-${T.e}" style="--p:${T.p}%;--ph:${T.ph}%;transform:rotate(${T.rot}deg)" title="${g(`work${n}_award`)}">🏆</span>`
+      ?`<span class="label trophy" style="animation-duration:${T.dur}s,3.2s;animation-delay:${T.delay}s,0s;animation-direction:${T.dir},alternate" title="${g(`work${n}_award`)}">🏆</span>`
       :"";
     el.innerHTML=`<div class="thumb">${inner}</div>`+
       `<span class="label year e-${L.yr.e}" style="--p:${L.yr.p}%;--ph:${L.yr.ph}%">${g(`work${n}_year`)}</span>`+
