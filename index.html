@@ -44,6 +44,8 @@
   html,body{background:var(--bg);color:var(--ink);overflow-x:hidden;}
   body{font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);-webkit-font-smoothing:antialiased;letter-spacing:var(--ls);}
   a{color:inherit;text-decoration:none;}
+  /* スクロール最下部・左下のメッセージ（サイトタイトルと同じフォント・サイズ）*/
+  .botmsg{padding:24px 30px 30px;font-family:var(--sans);font-size:var(--fs);line-height:1.5;color:var(--ink);white-space:pre-wrap;}
 
   header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;
     padding:30px 30px;z-index:60;pointer-events:none;mix-blend-mode:difference;color:#fff;}
@@ -181,6 +183,7 @@
     /* コンタクト：横並びのまま詰めて、リンク(下線)が区切り線と紛れないようにする */
     .p-contact .p-row .k{min-width:84px;}
     .p-row{gap:12px;}
+    .botmsg{padding:16px 18px 26px;}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
 </style>
@@ -194,6 +197,7 @@
 <img class="favico" id="favicoTop" src="https://lh3.googleusercontent.com/d/1UZ0m5Xl32j_JGDwNCfEBV87hP9CirErM=w1600" alt="" onclick="openProfile()">
 
 <main><div id="stage"></div></main>
+<footer id="bottomMsg" class="botmsg"></footer>
 
 <section id="detail" class="overlay" aria-hidden="true">
   <button class="closeX" id="dClose" aria-label="閉じる" onclick="closeAll()"></button>
@@ -343,6 +347,7 @@ const DEFAULTS={
   work_colors:"",          /* 作品アクセント候補（カンマ区切り）空なら既定6色 */
   site_image:"",           /* リンク共有時のプレビュー画像・タブのアイコン */
   trophy_speed:"1",        /* トロフィーの速さ（大きいほど速い。1=標準）*/
+  message:"",              /* 最下部・左下に出すメッセージ */
   /* design : ウェイト（400=標準, 700=太字）セクション別 */
   title_weight:"700",
   credit_weight:"400",
@@ -372,6 +377,7 @@ const KEY_ALIASES={
   "サイト画像":"site_image",
   "OGP画像":"site_image",
   "トロフィー速度":"trophy_speed",
+  "メッセージ":"message",
   "タイトルウェイト":"title_weight",
   "クレジットウェイト":"credit_weight",
   "プロフィールウェイト":"profile_weight",
@@ -497,13 +503,13 @@ const labelCfg=layout.map(L=>{
   if(left+WORK_W>86) allow=allow.filter(e=>e!=="right");
   const pk=()=>allow[Math.floor(Math.random()*allow.length)];
   const e1=pk(); let e2; do{e2=pk();}while(e2===e1);
-  const pp=()=>+(18+Math.random()*52).toFixed(0);   /* 辺上の位置 18〜70% */
+  const pp=()=>+(16+Math.random()*58).toFixed(0);   /* 辺上の位置 16〜74% */
   return {yr:{e:e1,p:pp()}, ca:{e:e2,p:pp()}};
 });
 
 /* PC：作品位置を毎回わずかに揺らす（順番・全体配置はそのまま）。
    縦はステージが非常に高いので小さめ＆やや下方向寄りにし、上はヘッダーに被らないようクランプ */
-const jitter=layout.map(()=>({dx:rnd(-4,4), dy:rnd(-0.4,1)}));
+const jitter=layout.map(()=>({dx:rnd(-6,6), dy:rnd(-0.7,1.4)}));
 
 /* スマホ用：毎回ランダムな横位置(margin-left%)。サイドにラベルが付く作品はその側に余白を確保し、画面外に出ないようにする */
 const MWORK_W=54;                 /* スマホの作品幅(%) CSSと一致させる */
@@ -541,6 +547,7 @@ function buildArchive(){
 function buildHeaderProfile(){
   document.getElementById("hTitle").textContent=g("site_title");
   document.getElementById("hProfileText").textContent=g("profile_label");
+  document.getElementById("bottomMsg").textContent=g("message");
   placeFavico();
   /* タブ名・リンクプレビュー画像・アイコン */
   document.title=g("site_title");
