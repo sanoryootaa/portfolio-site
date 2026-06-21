@@ -45,7 +45,23 @@
   body{font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);-webkit-font-smoothing:antialiased;letter-spacing:var(--ls);}
   a{color:inherit;text-decoration:none;}
   /* スクロール最下部・左下のメッセージ（サイトタイトルと同じフォント・サイズ）*/
-  .botmsg{padding:24px 30px 30px;font-family:var(--sans);font-size:var(--fs);line-height:1.5;color:var(--ink);white-space:pre-wrap;}
+  .botmsg{position:relative;padding:24px 30px 30px;font-family:var(--sans);font-size:var(--fs);line-height:1.5;color:var(--ink);}
+  .msg-trigger{cursor:pointer;display:inline-block;border-bottom:1px solid currentColor;}
+  .msg-trigger::after{content:"✨";margin-left:.45em;border:0;animation:twinkle 1.3s steps(1,end) infinite;}
+  @keyframes twinkle{50%{opacity:.15;}}
+  .msg-reveal{display:none;max-width:680px;white-space:pre-wrap;font-weight:600;
+    background:linear-gradient(90deg,#ff5e7a,#ffcf3a,#54e08a,#46c8ff,#b98cff,#ff5e7a);
+    background-size:280% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 6px rgba(255,210,90,.35));}
+  .botmsg.show .msg-trigger{display:none;}
+  .botmsg.show .msg-reveal{display:block;animation:shimmer 4s linear infinite, reveal .8s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes shimmer{to{background-position:280% 0;}}
+  @keyframes reveal{from{opacity:0;filter:blur(10px) drop-shadow(0 0 6px rgba(255,210,90,.35));transform:translateY(10px) scale(.97);}
+    to{opacity:1;filter:blur(0) drop-shadow(0 0 6px rgba(255,210,90,.35));transform:none;}}
+  .spark{position:absolute;pointer-events:none;will-change:transform,opacity;animation:spark 1.1s ease-out forwards;}
+  @keyframes spark{0%{opacity:0;transform:translateY(0) scale(.3) rotate(0);}
+    25%{opacity:1;}
+    100%{opacity:0;transform:translateY(-46px) scale(1.25) rotate(45deg);}}
 
   header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;
     padding:30px 30px;z-index:60;pointer-events:none;mix-blend-mode:difference;color:#fff;}
@@ -197,7 +213,10 @@
 <img class="favico" id="favicoTop" src="https://lh3.googleusercontent.com/d/1UZ0m5Xl32j_JGDwNCfEBV87hP9CirErM=w1600" alt="" onclick="openProfile()">
 
 <main><div id="stage"></div></main>
-<footer id="bottomMsg" class="botmsg"></footer>
+<footer class="botmsg" id="botmsg">
+  <span class="msg-trigger" id="msgTrigger" onclick="showMessage()">watch message from ryota sano</span>
+  <div class="msg-reveal" id="bottomMsg"></div>
+</footer>
 
 <section id="detail" class="overlay" aria-hidden="true">
   <button class="closeX" id="dClose" aria-label="閉じる" onclick="closeAll()"></button>
@@ -547,7 +566,9 @@ function buildArchive(){
 function buildHeaderProfile(){
   document.getElementById("hTitle").textContent=g("site_title");
   document.getElementById("hProfileText").textContent=g("profile_label");
-  document.getElementById("bottomMsg").textContent=g("message");
+  const msg=g("message");
+  document.getElementById("bottomMsg").textContent=msg;
+  document.getElementById("botmsg").style.display=msg?"":"none";   /* メッセージが無ければ非表示 */
   placeFavico();
   /* タブ名・リンクプレビュー画像・アイコン */
   document.title=g("site_title");
@@ -614,6 +635,20 @@ function playVideo(id){
 function openProfile(){show(document.getElementById("profile"));setState("#profile");}
 /* サイトタイトル：全て閉じてトップへスクロール */
 function goHome(){closeAll();window.scrollTo({top:0,behavior:"smooth"});}
+/* メッセージを開く＋無駄にキラキラ */
+function showMessage(){
+  const f=document.getElementById("botmsg");if(!f)return;
+  f.classList.add("show");
+  for(let i=0;i<18;i++){
+    const s=document.createElement("span");s.className="spark";s.textContent="✨";
+    s.style.left=(20+Math.random()*300)+"px";
+    s.style.top=(16+Math.random()*52)+"px";
+    s.style.fontSize=(9+Math.random()*15)+"px";
+    s.style.animationDelay=(Math.random()*0.55).toFixed(2)+"s";
+    f.appendChild(s);
+    setTimeout(()=>s.remove(),2200);
+  }
+}
 /* 点滅アイコンを「profile here」テキストの直前に配置（小文字に合わせ少し下げる）*/
 function placeFavico(){
   const t=document.getElementById("hProfileText"),ic=document.getElementById("favicoTop");
