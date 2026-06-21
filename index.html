@@ -7,6 +7,7 @@
 <style>
   :root{
     --bg:#ffffff;--ink:#0a0a0a;--red:#ec3b27;
+    --accent:#00DD58;  /* プロフィール/✕印/作品見出しの基調色 accent_color / 基調色 */
     --fs:15px;
     /* === 字詰め・行間・ウェイト（スプレッドシートで上書き可能 / イラレ感覚の数値）=== */
     /* 行間（行送り％：150 = 1.5倍）をセクション別に */
@@ -64,17 +65,18 @@
   .sheet,.p-sheet{opacity:0;transform:translateY(34px) scale(.985);
     transition:opacity .45s ease,transform .6s cubic-bezier(.16,1,.3,1);}
   .overlay.open .sheet,.overlay.open .p-sheet{opacity:1;transform:none;}
-  .closeX{opacity:0;transform:rotate(-160deg) scale(.6);transition:opacity .4s ease .08s,transform .6s cubic-bezier(.16,1,.3,1) .05s;}
-  .overlay.open .closeX{opacity:1;transform:none;}
+  /* ✕印：開くときは回りながら出現。閉じるときは先に回り始めてから回転しつつ消える */
+  .closeX{opacity:0;transform:rotate(-200deg) scale(.55);transition:opacity .3s ease .22s,transform .62s cubic-bezier(.16,1,.3,1);}
+  .overlay.open .closeX{opacity:1;transform:none;transition:opacity .35s ease .1s,transform .6s cubic-bezier(.16,1,.3,1) .08s;}
   .closeX{position:fixed;top:24px;right:40px;width:215px;height:215px;z-index:130;cursor:pointer;background:none;border:0;}
-  .closeX:before,.closeX:after{content:"";position:absolute;left:50%;top:50%;width:272px;height:34px;background:var(--xc,#00DD58);}
+  .closeX:before,.closeX:after{content:"";position:absolute;left:50%;top:50%;width:272px;height:34px;background:var(--xc,var(--accent));}
   .closeX:before{transform:translate(-50%,-50%) rotate(45deg);}
   .closeX:after{transform:translate(-50%,-50%) rotate(-45deg);}
   .closeX:hover:before,.closeX:hover:after{background:#fff;}
 
   /* detail : video / title+meta / credit  = 3 separate columns (intentional) */
   .sheet{background:#fff;color:#000;width:94%;max-width:1480px;margin:8vh auto;padding:56px 64px 60px;
-    display:grid;grid-template-columns:2fr .7fr .7fr;gap:36px 52px;align-items:start;--wc:#00DD58;}
+    display:grid;grid-template-columns:2fr .7fr .7fr;gap:36px 52px;align-items:start;--wc:var(--accent);}
   .d-video{grid-column:1;grid-row:1 / span 2;}
   .player{position:relative;width:100%;aspect-ratio:16/9;background:#111;overflow:hidden;}
   .player img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -94,7 +96,7 @@
   .playbtn:after{content:"";border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;}
 
   /* profile : same manner as detail (white card, 'credit'-style colored lowercase headers) */
-  .p-sheet{background:#fff;color:#000;width:92%;max-width:1120px;margin:8vh auto;padding:60px 64px 80px;letter-spacing:var(--profile-ls);--wc:#00DD58;}
+  .p-sheet{background:#fff;color:#000;width:92%;max-width:1120px;margin:8vh auto;padding:60px 64px 80px;letter-spacing:var(--profile-ls);--wc:var(--accent);}
   .p-name{color:var(--wc);font-size:40px;font-weight:700;letter-spacing:0;line-height:1.05;}
   .p-role{color:var(--wc);font-size:var(--fs);margin-top:6px;}
   .p-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:56px;margin-top:48px;align-items:start;}
@@ -102,25 +104,23 @@
   .p-main section{margin-bottom:34px;}
   .p-main h3{color:var(--wc);font-size:var(--fs);font-weight:400;margin-bottom:14px;}
   .p-main p{font-size:var(--fs);line-height:var(--profile-lh);font-weight:var(--profile-w);max-width:620px;overflow-wrap:break-word;}
-  .p-row{display:flex;gap:18px;font-size:var(--fs);line-height:1.9;}
-  .p-row span{min-width:0;overflow-wrap:break-word;}     /* 長文を折り返して右にはみ出さない */
+  .p-row{display:flex;gap:18px;font-size:var(--fs);line-height:var(--profile-lh);}
+  .p-row span,.p-row a{min-width:0;overflow-wrap:anywhere;} /* 長文・長URLを折り返して右にはみ出さない */
   .p-row .k{min-width:92px;flex-shrink:0;}
   .p-contact .p-row .k{min-width:150px;}
   .p-main a{border-bottom:1px solid #000;}
   .p-photo .ph{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#1c1c1c,#080808) center/cover no-repeat;}
 
   @media (max-width:760px){
-    /* スマホ独立仕様：ヘッダーの上下を揃え、最初の作品まで余白を確保 */
-    header{padding:16px 18px;align-items:center;}
-    header .center{top:16px;}                 /* 中央タイトルと右ボタンの上端を揃える */
-    #stage{aspect-ratio:auto;max-width:none;padding:128px 20px 80px;}
-    /* 作品どうしは大きく離し、ラベル(年/カテゴリ)は自分のサムネに密着させる */
-    .work{position:relative !important;left:auto !important;top:auto !important;width:80% !important;margin:0 0 124px;}
-    .work:nth-child(even){margin-left:20%;}
-    .work:nth-child(3n){margin-left:10%;}
-    .label{left:var(--ph) !important;right:auto !important;}
-    .label.year{bottom:calc(100% + 4px) !important;top:auto !important;}
-    .label.cat{top:calc(100% + 4px) !important;bottom:auto !important;}
+    /* スマホ独立仕様：タイトルとプロフィールを縦に積み、左揃えで段差をつけて揃える */
+    header{flex-direction:column;align-items:flex-start;gap:10px;padding:16px 18px;}
+    header .center{position:static;left:auto;top:auto;transform:none;}
+    header .right{margin-left:0;}
+    #stage{aspect-ratio:auto;max-width:none;padding:138px 20px 80px;}
+    /* 作品は中央寄せで左右に余白を作り、ラベルは layout 由来の上下左右パターンを維持（ワンパターン回避）*/
+    .work{position:relative !important;left:auto !important;top:auto !important;width:64% !important;margin:0 auto 116px !important;}
+    .label{white-space:normal;}                 /* 長いラベルは折り返して画面内に収める */
+    .label.e-left,.label.e-right{max-width:30vw;}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
     .closeX:before,.closeX:after{width:132px;height:20px;}
     .sheet{grid-template-columns:1fr;width:auto;margin:54px 12px;padding:26px 20px 46px;gap:18px;}
@@ -130,7 +130,9 @@
     .p-name{font-size:30px;}
     .p-grid{grid-template-columns:1fr;gap:32px;margin-top:34px;}
     .p-photo{order:-1;max-width:260px;}
-    header{padding:14px 16px;}
+    /* コンタクト：ラベルの上にリンクを置いて画面内に収める */
+    .p-contact .p-row{flex-direction:column;gap:2px;}
+    .p-contact .p-row .k{min-width:0;}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
 </style>
@@ -155,7 +157,7 @@
 </section>
 
 <section id="profile" class="overlay" aria-hidden="true">
-  <button class="closeX" aria-label="閉じる" style="--xc:#00DD58" onclick="closeAll()"></button>
+  <button class="closeX" aria-label="閉じる" style="--xc:var(--accent)" onclick="closeAll()"></button>
   <div class="p-sheet" id="pSheet"></div>
 </section>
 
@@ -173,7 +175,7 @@ function tabCSV(name){
 }
 
 /* ===== layout config (design only, not in sheet) ===== */
-const PALETTE=["#00DD58","#2E7BFF","#FF4D3D","#FFC400","#B16CFF","#FF7A00"];
+let PALETTE=["#00DD58","#2E7BFF","#FF4D3D","#FFC400","#B16CFF","#FF7A00"];
 const layout=[
  {x:12,top:3,  yr:{e:"left",p:40,ph:36}, ca:{e:"bottom",p:10,ph:10}},
  {x:60,top:7,  yr:{e:"top",p:10,ph:10},  ca:{e:"bottom",p:55,ph:46}},
@@ -189,8 +191,12 @@ const layout=[
  {x:46,top:80, yr:{e:"top",p:55,ph:44},  ca:{e:"left",p:30,ph:10}},
 ];
 /* random color per work (from small palette), fixed for the session */
-const colors=layout.map((_,i)=>PALETTE[i%PALETTE.length]);
-for(let i=colors.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[colors[i],colors[j]]=[colors[j],colors[i]];}
+let colors=[];
+function recolor(){
+  colors=layout.map((_,i)=>PALETTE[i%PALETTE.length]);
+  for(let i=colors.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[colors[i],colors[j]]=[colors[j],colors[i]];}
+}
+recolor();
 
 /* ===== default content (used until / unless the sheet provides a value) ===== */
 const sampleBody="サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。";
@@ -281,6 +287,11 @@ const DEFAULTS={
   label_letter_spacing:"10",
   /* 年/カテゴリのサムネ端からの距離（px）*/
   label_gap:"8",
+  /* 色（プロフィールシートで変更可）*/
+  bg_color:"#ffffff",      /* 背景色 */
+  text_color:"#0a0a0a",    /* 文字色 */
+  accent_color:"#00DD58",  /* プロフィール/✕印/作品見出しの基調色 */
+  work_colors:"",          /* 作品アクセント候補（カンマ区切り）空なら既定6色 */
   /* design : ウェイト（400=標準, 700=太字）セクション別 */
   title_weight:"700",
   credit_weight:"400",
@@ -303,6 +314,10 @@ const KEY_ALIASES={
   "説明字詰め":"desc_letter_spacing",
   "ラベル字詰め":"label_letter_spacing",
   "ラベル距離":"label_gap",
+  "背景色":"bg_color",
+  "文字色":"text_color",
+  "基調色":"accent_color",
+  "作品色":"work_colors",
   "タイトルウェイト":"title_weight",
   "クレジットウェイト":"credit_weight",
   "プロフィールウェイト":"profile_weight",
@@ -483,6 +498,10 @@ function applyDesign(){
   ls("--label-ls",  "label_letter_spacing");
   /* ラベル距離（px）*/
   r.setProperty("--label-gap",toPX(g("label_gap")));
+  /* 色 */
+  r.setProperty("--bg",    g("bg_color"));
+  r.setProperty("--ink",   g("text_color"));
+  r.setProperty("--accent",g("accent_color"));
   /* ウェイト */
   r.setProperty("--title-w",  g("title_weight"));
   r.setProperty("--credit-w", g("credit_weight"));
@@ -495,7 +514,15 @@ function applyDesign(){
 function renderAll(){applyDesign();buildArchive();buildHeaderProfile();}
 renderAll();
 restoreState();
-loadSheet().then(m=>{if(Object.keys(m).length){DATA=m;renderAll();}restoreState();});
+loadSheet().then(m=>{
+  if(Object.keys(m).length){
+    DATA=m;
+    const wc=(m.work_colors||"").split(",").map(s=>s.trim()).filter(Boolean);
+    if(wc.length){PALETTE=wc;recolor();}   /* 作品アクセント色をシートで上書き */
+    renderAll();
+  }
+  restoreState();
+});
 </script>
 </body>
 </html>
