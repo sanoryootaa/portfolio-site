@@ -72,7 +72,7 @@
   .label.e-right{left:calc(100% + var(--label-gap));top:var(--p);}
 
   /* overlays */
-  .overlay{position:fixed;inset:0;background:#000;z-index:100;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .5s ease .16s,visibility .5s ease;}
+  .overlay{position:fixed;inset:0;background:#000;z-index:100;overflow-y:auto;display:flex;opacity:0;visibility:hidden;transition:opacity .5s ease .16s,visibility .5s ease;}
   .overlay.open{opacity:1;visibility:visible;transition:opacity .4s ease,visibility .4s ease;}
   /* 開閉アニメ：カードがふわっと上下しながらフェード。閉じる時もなめらかに */
   .sheet,.p-sheet{opacity:0;transform:translateY(28px) scale(.99);
@@ -89,7 +89,7 @@
   .closeX:hover:before,.closeX:hover:after{background:#fff;}
 
   /* detail : video / title+meta / credit  = 3 separate columns (intentional) */
-  .sheet{background:#fff;color:#000;width:95%;max-width:1640px;margin:7vh auto;padding:56px 60px 60px;
+  .sheet{background:#fff;color:#000;width:95%;max-width:1640px;margin:auto;padding:56px 60px 60px;
     display:grid;grid-template-columns:2.5fr .62fr .62fr;gap:34px 46px;align-items:start;--wc:var(--accent);}
   .d-video{grid-column:1;grid-row:1 / span 2;}
   .player{position:relative;width:100%;aspect-ratio:16/9;background:#111;overflow:hidden;}
@@ -116,7 +116,7 @@
   .playbtn:after{content:"";border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;}
 
   /* profile : same manner as detail (white card, 'credit'-style colored lowercase headers) */
-  .p-sheet{background:#fff;color:#000;width:92%;max-width:1120px;margin:8vh auto;padding:60px 64px 80px;letter-spacing:var(--profile-ls);--wc:var(--accent);}
+  .p-sheet{background:#fff;color:#000;width:92%;max-width:1120px;margin:auto;padding:60px 64px 80px;letter-spacing:var(--profile-ls);--wc:var(--accent);}
   .p-name{color:var(--wc);font-size:40px;font-weight:700;letter-spacing:0;line-height:1.05;}
   .p-role{color:var(--wc);font-size:var(--fs);margin-top:6px;}
   .p-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:56px;margin-top:48px;align-items:start;}
@@ -159,12 +159,12 @@
     /* スマホ：visibilityを使わず、オーバーレイは常時表示・透明・クリック透過。
        カードは閉じ位置(画面下)に常駐し、transform だけでスライド開閉（即時非表示が起きない）*/
     /* 閉じ/閉じ中は透明(ホームが見える)、開いている間は白で全面カバー(ホームを隠す) */
-    .overlay{background:transparent !important;opacity:1 !important;visibility:visible !important;pointer-events:none;transition:none !important;}
+    .overlay{background:transparent !important;opacity:1 !important;visibility:visible !important;pointer-events:none;display:block !important;transition:none !important;}
     .overlay.open{background:#fff !important;pointer-events:auto;}
     /* 閉じ：✕の回転を先に見せるため少し遅らせ、ゆっくりスライドダウン＋後半でフェードアウト */
     .sheet,.p-sheet{margin:0;width:100%;max-width:none;min-height:100vh;min-height:100dvh;
       opacity:0;transform:translateY(100vh);
-      transition:transform 1s cubic-bezier(.4,0,.2,1) .16s, opacity .42s ease .6s !important;}
+      transition:transform 1s cubic-bezier(.4,0,.2,1) .16s, opacity 1s ease .16s !important;}
     /* 開く：遅延なしでスッと上がる（不透明はすぐ） */
     .overlay.open .sheet,.overlay.open .p-sheet{opacity:1 !important;transform:none !important;
       transition:transform .72s cubic-bezier(.32,.72,0,1), opacity .28s ease !important;}
