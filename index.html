@@ -8,11 +8,22 @@
   :root{
     --bg:#ffffff;--ink:#0a0a0a;--red:#ec3b27;
     --fs:15px;
-    /* 字詰め・行間（スプレッドシートで上書き可能）*/
-    --ls:.01em;   /* 全体の字詰め  letter_spacing / 字詰め */
-    --lh:1.5;     /* 全体の行間    line_height    / 行間   */
-    --tls:.01em;  /* 本文の字詰め  text_letter_spacing / 本文字詰め */
-    --tlh:1.95;   /* 本文の行間    text_line_height    / 本文行間   */
+    /* === 字詰め・行間・ウェイト（スプレッドシートで上書き可能）=== */
+    --lh:1.5;     /* 全体の行間    line_height / 行間 */
+    --tlh:1.95;   /* 本文の行間    text_line_height / 本文行間 */
+    /* 字詰め（letter-spacing）をセクション別に */
+    --ls:.01em;        /* 全体        letter_spacing       / 字詰め */
+    --title-ls:0;      /* 作品タイトル  title_letter_spacing  / タイトル字詰め */
+    --credit-ls:.02em; /* クレジット    credit_letter_spacing / クレジット字詰め */
+    --profile-ls:.01em;/* プロフィール  profile_letter_spacing/ プロフィール字詰め */
+    --desc-ls:.01em;   /* 作品説明文    desc_letter_spacing   / 説明字詰め */
+    --label-ls:.01em;  /* 年/カテゴリ   label_letter_spacing  / ラベル字詰め */
+    /* ウェイト（font-weight）をセクション別に */
+    --title-w:700;     /* 作品タイトル  title_weight   / タイトルウェイト */
+    --credit-w:400;    /* クレジット    credit_weight  / クレジットウェイト */
+    --profile-w:400;   /* プロフィール本文 profile_weight / プロフィールウェイト */
+    --desc-w:400;      /* 作品説明文    desc_weight    / 説明ウェイト */
+    --label-w:400;     /* 年/カテゴリ   label_weight   / ラベルウェイト */
     --sans:"Helvetica Neue",Arial,"Yu Gothic",YuGothic,"游ゴシック体","游ゴシック","Hiragino Kaku Gothic ProN",sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -34,7 +45,7 @@
   .thumb .field{width:100%;height:100%;background:linear-gradient(160deg,#1c1c1c,#080808);}
   .thumb::after{content:"";position:absolute;inset:0;background:#000;opacity:0;transition:opacity .25s ease;}
   .work:hover .thumb::after{opacity:1;}                 /* hover = 黒 */
-  .label{position:absolute;font-size:var(--fs);white-space:nowrap;color:var(--ink);--p:50%;--ph:20%;}
+  .label{position:absolute;font-size:var(--fs);white-space:nowrap;color:var(--ink);letter-spacing:var(--label-ls);font-weight:var(--label-w);--p:50%;--ph:20%;}
   .label.e-top{top:-1.7em;left:var(--p);}
   .label.e-bottom{top:calc(100% + .55em);left:var(--p);}
   .label.e-left{right:calc(100% + .7em);left:auto;top:var(--p);}
@@ -43,41 +54,41 @@
   /* overlays */
   .overlay{position:fixed;inset:0;background:#000;z-index:100;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .3s ease;}
   .overlay.open{opacity:1;visibility:visible;}
-  .closeX{position:fixed;top:24px;right:40px;width:190px;height:190px;z-index:130;cursor:pointer;background:none;border:0;}
-  .closeX:before,.closeX:after{content:"";position:absolute;left:50%;top:50%;width:235px;height:26px;background:var(--xc,#00DD58);}
+  .closeX{position:fixed;top:24px;right:40px;width:215px;height:215px;z-index:130;cursor:pointer;background:none;border:0;}
+  .closeX:before,.closeX:after{content:"";position:absolute;left:50%;top:50%;width:272px;height:34px;background:var(--xc,#00DD58);}
   .closeX:before{transform:translate(-50%,-50%) rotate(45deg);}
   .closeX:after{transform:translate(-50%,-50%) rotate(-45deg);}
   .closeX:hover:before,.closeX:hover:after{background:#fff;}
 
   /* detail : video / title+meta / credit  = 3 separate columns (intentional) */
-  .sheet{background:#fff;color:#000;width:92%;max-width:1280px;margin:8vh auto;padding:56px 64px 60px;
-    display:grid;grid-template-columns:1.4fr .8fr .8fr;gap:36px 52px;align-items:start;--wc:#00DD58;}
+  .sheet{background:#fff;color:#000;width:94%;max-width:1480px;margin:8vh auto;padding:56px 64px 60px;
+    display:grid;grid-template-columns:2fr .7fr .7fr;gap:36px 52px;align-items:start;--wc:#00DD58;}
   .d-video{grid-column:1;grid-row:1 / span 2;}
   .player{position:relative;width:100%;aspect-ratio:16/9;background:#111;overflow:hidden;}
   .player img{width:100%;height:100%;object-fit:cover;display:block;}
   .player .field{width:100%;height:100%;background:linear-gradient(160deg,#1c1c1c,#080808);}
   .player iframe{width:100%;height:100%;border:0;display:block;}
   .d-meta{grid-column:2;grid-row:1;}
-  .d-meta h1{color:var(--wc);font-size:36px;font-weight:700;line-height:1.05;}
+  .d-meta h1{color:var(--wc);font-size:36px;font-weight:var(--title-w);line-height:1.05;letter-spacing:var(--title-ls);}
   .d-meta .sub{color:var(--wc);font-size:var(--fs);margin-top:6px;}
-  .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:1.55;letter-spacing:.02em;}
+  .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:1.55;letter-spacing:var(--credit-ls);font-weight:var(--credit-w);}
   .d-credit h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}
   .d-credit .role{color:var(--wc);margin-top:14px;}
   .d-credit .role:first-of-type{margin-top:0;}
   .d-credit .nm{color:#000;}
-  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--tlh);letter-spacing:var(--tls);max-width:700px;margin-top:10px;}
-  .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border:0;border-radius:50%;background:var(--red);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
+  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--tlh);letter-spacing:var(--desc-ls);font-weight:var(--desc-w);max-width:700px;margin-top:10px;}
+  .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border:0;border-radius:50%;background:var(--wc,var(--red));cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
   .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
   .playbtn:after{content:"";border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;}
 
   /* profile : same manner as detail (white card, 'credit'-style colored lowercase headers) */
-  .p-sheet{background:#fff;color:#000;width:92%;max-width:1120px;margin:8vh auto;padding:60px 64px 80px;--wc:#00DD58;}
+  .p-sheet{background:#fff;color:#000;width:92%;max-width:1120px;margin:8vh auto;padding:60px 64px 80px;letter-spacing:var(--profile-ls);--wc:#00DD58;}
   .p-name{color:var(--wc);font-size:40px;font-weight:700;letter-spacing:0;line-height:1.05;}
   .p-role{color:var(--wc);font-size:var(--fs);margin-top:6px;}
   .p-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:56px;margin-top:48px;align-items:start;}
   .p-main section{margin-bottom:34px;}
   .p-main h3{color:var(--wc);font-size:var(--fs);font-weight:400;margin-bottom:14px;}
-  .p-main p{font-size:var(--fs);line-height:var(--tlh);letter-spacing:var(--tls);max-width:620px;}
+  .p-main p{font-size:var(--fs);line-height:var(--tlh);font-weight:var(--profile-w);max-width:620px;}
   .p-row{display:flex;gap:18px;font-size:var(--fs);line-height:1.9;}
   .p-row .k{min-width:92px;flex-shrink:0;}
   .p-contact .p-row .k{min-width:150px;}
@@ -92,8 +103,8 @@
     .label{left:var(--ph) !important;right:auto !important;}
     .label.year{top:-1.7em !important;bottom:auto !important;}
     .label.cat{top:auto !important;bottom:-1.7em !important;}
-    .closeX{top:14px;right:16px;width:90px;height:90px;}
-    .closeX:before,.closeX:after{width:112px;height:15px;}
+    .closeX{top:14px;right:16px;width:104px;height:104px;}
+    .closeX:before,.closeX:after{width:132px;height:20px;}
     .sheet{grid-template-columns:1fr;width:auto;margin:54px 12px;padding:26px 20px 46px;gap:18px;}
     .d-video,.d-meta,.d-credit,.d-body{grid-column:1 !important;grid-row:auto !important;}
     .d-meta h1{font-size:28px;}
@@ -229,19 +240,39 @@ const DEFAULTS={
   profile_instagram:"https://www.instagram.com/sanoryootaa/",
   profile_youtube:"https://www.youtube.com/@sanoryootaa",
   profile_photo:"",
-  /* design : 字詰め・行間（スプレッドシートで上書き可）*/
-  letter_spacing:".01em",
+  /* design : 行間（スプレッドシートで上書き可）*/
   line_height:"1.5",
-  text_letter_spacing:".01em",
   text_line_height:"1.95",
+  /* design : 字詰め（letter-spacing）セクション別 */
+  letter_spacing:".01em",
+  title_letter_spacing:"0",
+  credit_letter_spacing:".02em",
+  profile_letter_spacing:".01em",
+  desc_letter_spacing:".01em",
+  label_letter_spacing:".01em",
+  /* design : ウェイト（font-weight）セクション別 */
+  title_weight:"700",
+  credit_weight:"400",
+  profile_weight:"400",
+  desc_weight:"400",
+  label_weight:"400",
 };
 
 /* スプレッドシートで日本語キーでも書けるようにする別名 */
 const KEY_ALIASES={
-  "字詰め":"letter_spacing",
   "行間":"line_height",
-  "本文字詰め":"text_letter_spacing",
   "本文行間":"text_line_height",
+  "字詰め":"letter_spacing",
+  "タイトル字詰め":"title_letter_spacing",
+  "クレジット字詰め":"credit_letter_spacing",
+  "プロフィール字詰め":"profile_letter_spacing",
+  "説明字詰め":"desc_letter_spacing",
+  "ラベル字詰め":"label_letter_spacing",
+  "タイトルウェイト":"title_weight",
+  "クレジットウェイト":"credit_weight",
+  "プロフィールウェイト":"profile_weight",
+  "説明ウェイト":"desc_weight",
+  "ラベルウェイト":"label_weight",
 };
 wd.forEach((w,i)=>{const n=i+1;
   DEFAULTS[`work${n}_title`]=w[0];
@@ -279,6 +310,14 @@ async function loadSheet(){
 
 /* ===== helpers ===== */
 function ytId(s){if(!s)return DEMO_VIDEO;const m=s.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/);return m?m[1]:s.trim();}
+/* Google Drive 等の共有リンクを <img> で表示できる直リンクへ変換 */
+function imgURL(s){
+  if(!s)return "";
+  s=s.trim();
+  const m=s.match(/\/d\/([\w-]+)/)||s.match(/[?&]id=([\w-]+)/);
+  if(m)return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w2000`;
+  return s;
+}
 function creditHTML(txt){
   return txt.split("\n").map(l=>{l=l.trim();if(!l)return "";
     return l.endsWith("/")?`<div class="role">${l}</div>`:`<div class="nm">${l}</div>`;}).join("");
@@ -292,7 +331,7 @@ function buildArchive(){
   const stage=document.getElementById("stage");stage.innerHTML="";
   layout.forEach((L,i)=>{
     const n=i+1,col=colors[i];
-    const thumb=g(`work${n}_thumb`);
+    const thumb=imgURL(g(`work${n}_thumb`));
     const el=document.createElement("div");el.className="work";
     el.style.left=L.x+"%";el.style.top=L.top+"%";
     const inner=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
@@ -310,7 +349,7 @@ function buildHeaderProfile(){
     const m=line.split(/\s{2,}|\t/);
     return m.length>1?`<div class="p-row"><span class="k">${m[0]}</span><span>${m.slice(1).join(" ")}</span></div>`
                      :`<div class="p-row"><span>${line}</span></div>`;}).join("");
-  const photo=g("profile_photo");
+  const photo=imgURL(g("profile_photo"));
   document.getElementById("pSheet").innerHTML=
     `<h1 class="p-name">${g("profile_name")}</h1>
      <div class="p-role">${g("profile_role")}</div>
@@ -335,7 +374,7 @@ const detail=document.getElementById("detail");
 function openDetail(n,col){
   document.getElementById("sheet").style.setProperty("--wc",col);
   document.getElementById("dClose").style.setProperty("--xc",col);
-  const thumb=g(`work${n}_thumb`);
+  const thumb=imgURL(g(`work${n}_thumb`));
   const poster=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
   document.getElementById("player").innerHTML=
     poster+`<button class="playbtn" aria-label="再生" onclick="playVideo('${ytId(g(`work${n}_video`))}')"></button>`;
@@ -360,10 +399,22 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll();});
 /* ===== design : 字詰め・行間をスプレッドシート値で反映 ===== */
 function applyDesign(){
   const r=document.documentElement.style;
-  r.setProperty("--ls", g("letter_spacing"));
+  /* 行間 */
   r.setProperty("--lh", g("line_height"));
-  r.setProperty("--tls",g("text_letter_spacing"));
   r.setProperty("--tlh",g("text_line_height"));
+  /* 字詰め */
+  r.setProperty("--ls",        g("letter_spacing"));
+  r.setProperty("--title-ls",  g("title_letter_spacing"));
+  r.setProperty("--credit-ls", g("credit_letter_spacing"));
+  r.setProperty("--profile-ls",g("profile_letter_spacing"));
+  r.setProperty("--desc-ls",   g("desc_letter_spacing"));
+  r.setProperty("--label-ls",  g("label_letter_spacing"));
+  /* ウェイト */
+  r.setProperty("--title-w",  g("title_weight"));
+  r.setProperty("--credit-w", g("credit_weight"));
+  r.setProperty("--profile-w",g("profile_weight"));
+  r.setProperty("--desc-w",   g("desc_weight"));
+  r.setProperty("--label-w",  g("label_weight"));
 }
 
 /* ===== boot : render defaults, then overlay sheet values if available ===== */
