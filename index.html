@@ -100,16 +100,17 @@
   .d-meta .award{color:var(--ink);font-size:var(--fs);margin-top:10px;line-height:1.5;}
   /* 絵文字は Apple のものを使う */
   .label.trophy,.tEmoji{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;}
-  /* トロフィーはサムネ外周を楕円軌道で周遊しつつ、軽く上下＆傾きでふわふわ */
-  .label.trophy{
-    left:0;top:0;line-height:1;white-space:normal;
-    offset-path:ellipse(54% 58% at 50% 50%);offset-rotate:0deg;
-    animation:t-orbit 14s linear infinite, t-bob 3.2s ease-in-out infinite alternate;
-    will-change:offset-distance,transform;
+  /* トロフィーはサムネの縁付近で、ぷかぷか不規則に漂う */
+  .label.trophy{line-height:1;white-space:normal;animation:t-float 5s ease-in-out infinite;will-change:transform;}
+  @keyframes t-float{
+    0%  {transform:translate(0,0) rotate(-6deg);}
+    20% {transform:translate(9px,-7px) rotate(5deg);}
+    40% {transform:translate(-5px,-11px) rotate(-3deg);}
+    60% {transform:translate(7px,4px) rotate(7deg);}
+    80% {transform:translate(-8px,8px) rotate(-5deg);}
+    100%{transform:translate(0,0) rotate(-6deg);}
   }
-  @keyframes t-orbit{to{offset-distance:100%;}}
-  @keyframes t-bob{from{transform:translateY(-2px) rotate(-7deg);}to{transform:translateY(2px) rotate(7deg);}}
-  @media (prefers-reduced-motion:reduce){.label.trophy{animation:none;offset-distance:8%;}}
+  @media (prefers-reduced-motion:reduce){.label.trophy{animation:none;}}
   .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:var(--credit-lh);letter-spacing:var(--credit-ls);font-weight:var(--credit-w);}
   .d-credit h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}
   .d-credit .role{color:var(--wc);margin-top:14px;}
@@ -381,12 +382,21 @@ wd.forEach((w,i)=>{const n=i+1;
   DEFAULTS[`work${n}_award`]="";   /* 受賞歴。書かれている作品だけサムネにトロフィーを付ける */
 });
 
-/* トロフィーはサムネ周りをふわふわ周遊。スピード・向き・開始位置を作品ごとにランダム */
-const trophy=layout.map(()=>({
-  dur:(11+Math.random()*8).toFixed(1),     /* 周回1周 11〜19秒 */
-  delay:-(Math.random()*19).toFixed(1),    /* 開始位置をばらす */
-  dir:Math.random()<.5?"normal":"reverse"  /* 回る向き */
-}));
+/* トロフィーはサムネの縁付近を起点に、ぷかぷか不規則に漂う */
+const rnd=(a,b)=>+(a+Math.random()*(b-a)).toFixed(1);
+const trophy=layout.map(()=>{
+  const anchors=[
+    {top:-8, left:rnd(2,86)},   /* 上 */
+    {top:102,left:rnd(2,86)},   /* 下 */
+    {top:rnd(2,86), left:-6},   /* 左 */
+    {top:rnd(2,86), left:96},   /* 右 */
+  ];
+  const a=anchors[Math.floor(Math.random()*4)];
+  return {top:a.top,left:a.left,
+    dur:rnd(4,7),                          /* 漂う周期 4〜7秒 */
+    delay:rnd(-7,0),                        /* 位相をばらす */
+    dir:Math.random()<.5?"normal":"reverse"};
+});
 
 /* ===== CSV ===== */
 function parseCSV(t){const rows=[];let row=[],cur="",q=false;
@@ -462,7 +472,7 @@ function buildArchive(){
     const inner=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
     const T=trophy[i];
     const trophyHTML=g(`work${n}_award`)
-      ?`<span class="label trophy" style="animation-duration:${T.dur}s,3.2s;animation-delay:${T.delay}s,0s;animation-direction:${T.dir},alternate" title="${g(`work${n}_award`)}">🏆</span>`
+      ?`<span class="label trophy" style="top:${T.top}%;left:${T.left}%;animation-duration:${T.dur}s;animation-delay:${T.delay}s;animation-direction:${T.dir}" title="${g(`work${n}_award`)}">🏆</span>`
       :"";
     el.innerHTML=`<div class="thumb">${inner}</div>`+
       `<span class="label year e-${L.yr.e}" style="--p:${L.yr.p}%;--ph:${L.yr.ph}%">${g(`work${n}_year`)}</span>`+
