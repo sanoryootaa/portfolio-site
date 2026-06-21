@@ -160,7 +160,9 @@
     .overlay.open{pointer-events:auto;}
     .sheet,.p-sheet{margin:0;width:100%;max-width:none;min-height:100vh;opacity:1 !important;
       transform:translateY(100vh);
-      transition:transform .46s cubic-bezier(.32,.72,0,1) !important;}
+      transition:transform .72s cubic-bezier(.32,.72,0,1) !important;}
+    /* スマホでは✕ホバーで白くしない（タッチで張り付くため）*/
+    .closeX:hover:before,.closeX:hover:after{background:var(--xc,var(--accent));}
     .overlay.open .sheet,.overlay.open .p-sheet{transform:none !important;}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
     .closeX:before,.closeX:after{width:132px;height:20px;}
