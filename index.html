@@ -593,7 +593,24 @@ function placeFavico(){
 }
 window.addEventListener("resize",placeFavico);
 window.addEventListener("load",placeFavico);
-function show(n){n.classList.add("open");n.setAttribute("aria-hidden","false");n.scrollTop=0;document.body.style.overflow="hidden";}
+function show(n){n.classList.add("open");n.setAttribute("aria-hidden","false");n.scrollTop=0;document.body.style.overflow="hidden";placeCloseX();}
+/* ✕をカードの右上角に合わせる（広い画面=中央寄りのカード角へ、背の高い内容=上端付近へ）。
+   スマホは固定配置のままにするため何もしない（CSSに任せる）。*/
+function placeCloseX(){
+  const mobile=window.innerWidth<=760;
+  document.querySelectorAll(".overlay").forEach(ov=>{
+    const x=ov.querySelector(".closeX");if(!x)return;
+    if(mobile||!ov.classList.contains("open")){x.style.top=x.style.left=x.style.right="";return;}
+    const card=ov.querySelector(".sheet,.p-sheet");if(!card)return;
+    const xw=x.offsetWidth;
+    const cardTop=card.offsetTop-ov.scrollTop;                 /* transformの影響を受けない実位置 */
+    const cardRight=card.offsetLeft+card.offsetWidth;
+    x.style.top=Math.max(14,cardTop-xw*0.30)+"px";
+    x.style.left=Math.min(window.innerWidth-xw,cardRight-xw*0.72)+"px";
+    x.style.right="auto";
+  });
+}
+window.addEventListener("resize",placeCloseX);
 function closeAll(){
   document.querySelectorAll(".overlay").forEach(o=>{o.classList.remove("open");o.setAttribute("aria-hidden","true");});
   document.getElementById("player").innerHTML="";document.body.style.overflow="";
