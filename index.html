@@ -117,7 +117,8 @@
   .p-main h3{color:var(--wc);font-size:var(--fs);font-weight:400;margin-bottom:14px;}
   .p-main p{font-size:var(--fs);line-height:var(--profile-lh);font-weight:var(--profile-w);max-width:620px;overflow-wrap:break-word;}
   /* career / awards / skills：日付列＋内容列の2カラムグリッドで左右を揃える */
-  .p-list{display:grid;grid-template-columns:max-content 1fr;column-gap:18px;row-gap:7px;font-size:var(--fs);line-height:var(--profile-lh);}
+  /* row-gap は使わず行間(profile_line_height)で項目間隔を決める → セクション全体に効く */
+  .p-list{display:grid;grid-template-columns:max-content 1fr;column-gap:18px;row-gap:0;font-size:var(--fs);line-height:var(--profile-lh);}
   .p-list dt{white-space:nowrap;color:#000;}
   .p-list dd{min-width:0;overflow-wrap:anywhere;}
   .p-list dd.full{grid-column:1/-1;}   /* 日付なし行は行頭(1列目左端)から */
