@@ -380,16 +380,16 @@ wd.forEach((w,i)=>{const n=i+1;
    円ではなく各々違う形なので色々な方向へ動き、端でふわっと折り返す。 */
 const rnd=(a,b)=>+(a+Math.random()*(b-a)).toFixed(1);
 const trophy=layout.map((_,idx)=>{
-  const N=7;                                   /* ループの頂点数 */
+  const N=14;                                  /* 頂点を増やして滑らかな円軌道に（跳ね返り感を消す）*/
   const start=Math.random()*Math.PI*2;
   const dir=Math.random()<.5?1:-1;             /* 回る向き */
-  const rx=rnd(40,64), ry=rnd(46,74);          /* ループ半径(%) サムネ縁あたり */
+  const rx=rnd(54,74), ry=rnd(60,84);          /* ループ半径(%) 少し外側へ */
+  const wob=rnd(0.06,0.16), wph=Math.random()*Math.PI*2, wn=2+Math.floor(Math.random()*2); /* ゆるい楕円のうねり */
   const pts=[];
   for(let k=0;k<N;k++){
     const ang=start+dir*(k/N)*Math.PI*2;
-    const m=0.7+Math.random()*0.6;             /* 各頂点で半径を乱して歪ませる */
-    const jx=rnd(-6,6), jy=rnd(-6,6);
-    pts.push([ +(50+Math.cos(ang)*rx*m+jx).toFixed(1), +(50+Math.sin(ang)*ry*m+jy).toFixed(1) ]);
+    const m=1+wob*Math.sin(wn*ang+wph);        /* なだらかに半径を変化（カクつかない）*/
+    pts.push([ +(50+Math.cos(ang)*rx*m).toFixed(1), +(50+Math.sin(ang)*ry*m).toFixed(1) ]);
   }
   return {pts, dur:rnd(3.5,6), delay:rnd(-6,0)};  /* 一定速度・位相ばらし */
 });
