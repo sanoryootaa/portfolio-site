@@ -50,7 +50,8 @@
   .msg-trigger::after{content:"✨";margin-left:.45em;border:0;animation:twinkle 1.3s steps(1,end) infinite;}
   @keyframes twinkle{50%{opacity:.15;}}
   .msg-reveal{display:none;max-width:680px;white-space:pre-wrap;color:var(--ink);}
-  .botmsg.no-spark .msg-trigger::after{display:none;}   /* キラキラOFF時は✨を出さない */
+  .botmsg.no-spark .msg-trigger{display:none;}          /* キラキラOFF時はトリガーごと無し（丸出し）*/
+  .botmsg.no-spark .msg-reveal{animation:none;}         /* OFFはアニメ無しでプレーン表示 */
   .botmsg.show .msg-trigger{display:none;}
   .botmsg.show .msg-reveal{display:block;animation:reveal .8s cubic-bezier(.16,1,.3,1) both;}
   @keyframes reveal{from{opacity:0;filter:blur(10px);transform:translateY(10px) scale(.97);}
@@ -569,7 +570,9 @@ function buildHeaderProfile(){
   document.getElementById("bottomMsg").textContent=msg;
   const fb=document.getElementById("botmsg");
   fb.style.display=msg?"":"none";                          /* メッセージが無ければ非表示 */
-  fb.classList.toggle("no-spark",!sparkleOn());            /* キラキラ on/off */
+  const on=sparkleOn();
+  fb.classList.toggle("no-spark",!on);                     /* キラキラ on/off */
+  if(!on)fb.classList.add("show");                         /* OFFはトリガー無しで丸出し */
   placeFavico();
   /* タブ名・リンクプレビュー画像・アイコン */
   document.title=g("site_title");
