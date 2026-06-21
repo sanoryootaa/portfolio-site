@@ -45,13 +45,12 @@
   a{color:inherit;text-decoration:none;}
 
   header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;
-    padding:20px 30px;z-index:60;pointer-events:none;}
-  /* 反転合成はテキストだけに（アイコンは素の色のまま）*/
-  header .center,#hProfileText{mix-blend-mode:difference;color:#fff;}
+    padding:20px 30px;z-index:60;pointer-events:none;mix-blend-mode:difference;color:#fff;}
   header div{font-size:var(--fs);}
   header .center{position:absolute;left:50%;top:20px;transform:translateX(-50%);pointer-events:auto;cursor:pointer;}
   header .right{margin-left:auto;pointer-events:auto;cursor:pointer;display:inline-flex;align-items:center;}
-  .favico{width:1em;height:1em;object-fit:contain;margin-right:.45em;transform:translateY(.12em);mix-blend-mode:normal;animation:blink 1s steps(1,end) infinite;}
+  /* アイコンはヘッダー(反転合成)の外の別レイヤー。素の色のまま点滅 */
+  .favico{position:fixed;width:var(--fs);height:var(--fs);object-fit:contain;z-index:61;cursor:pointer;animation:blink 1s steps(1,end) infinite;}
   @keyframes blink{50%{opacity:0;}}
 
   /* archive : airy %-scatter, fixed font */
@@ -174,8 +173,9 @@
 
 <header>
   <div class="center" id="hTitle" onclick="goHome()">sano ryota works archive</div>
-  <div class="right" id="hProfile" onclick="openProfile()"><img class="favico" src="https://lh3.googleusercontent.com/d/1UZ0m5Xl32j_JGDwNCfEBV87hP9CirErM=w1600" alt=""><span id="hProfileText">profile here</span></div>
+  <div class="right" id="hProfile" onclick="openProfile()"><span id="hProfileText">profile here</span></div>
 </header>
+<img class="favico" id="favicoTop" src="https://lh3.googleusercontent.com/d/1UZ0m5Xl32j_JGDwNCfEBV87hP9CirErM=w1600" alt="" onclick="openProfile()">
 
 <main><div id="stage"></div></main>
 
@@ -467,6 +467,7 @@ function buildArchive(){
 function buildHeaderProfile(){
   document.getElementById("hTitle").textContent=g("site_title");
   document.getElementById("hProfileText").textContent=g("profile_label");
+  placeFavico();
   /* タブ名・リンクプレビュー画像・アイコン */
   document.title=g("site_title");
   const sImg=imgURL(g("site_image"));
@@ -532,6 +533,16 @@ function playVideo(id){
 function openProfile(){show(document.getElementById("profile"));setState("#profile");}
 /* サイトタイトル：全て閉じてトップへスクロール */
 function goHome(){closeAll();window.scrollTo({top:0,behavior:"smooth"});}
+/* 点滅アイコンを「profile here」テキストの直前に配置（小文字に合わせ少し下げる）*/
+function placeFavico(){
+  const t=document.getElementById("hProfileText"),ic=document.getElementById("favicoTop");
+  if(!t||!ic)return;
+  const r=t.getBoundingClientRect();
+  ic.style.top=(r.top+r.height*0.5-ic.offsetHeight/2+2)+"px";
+  ic.style.left=(r.left-ic.offsetWidth-7)+"px";
+}
+window.addEventListener("resize",placeFavico);
+window.addEventListener("load",placeFavico);
 function show(n){n.classList.add("open");n.setAttribute("aria-hidden","false");n.scrollTop=0;document.body.style.overflow="hidden";}
 function closeAll(){
   document.querySelectorAll(".overlay").forEach(o=>{o.classList.remove("open");o.setAttribute("aria-hidden","true");});
