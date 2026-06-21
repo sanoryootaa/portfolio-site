@@ -329,6 +329,7 @@ const DEFAULTS={
   accent_color:"#00DD58",  /* プロフィール/✕印/作品見出しの基調色 */
   work_colors:"",          /* 作品アクセント候補（カンマ区切り）空なら既定6色 */
   site_image:"",           /* リンク共有時のプレビュー画像・タブのアイコン */
+  trophy_speed:"1",        /* トロフィーの速さ（大きいほど速い。1=標準）*/
   /* design : ウェイト（400=標準, 700=太字）セクション別 */
   title_weight:"700",
   credit_weight:"400",
@@ -357,6 +358,7 @@ const KEY_ALIASES={
   "作品色":"work_colors",
   "サイト画像":"site_image",
   "OGP画像":"site_image",
+  "トロフィー速度":"trophy_speed",
   "タイトルウェイト":"title_weight",
   "クレジットウェイト":"credit_weight",
   "プロフィールウェイト":"profile_weight",
@@ -475,6 +477,7 @@ const X_SHIFT=((100-Math.max(...layout.map(L=>L.x+WORK_W)))-Math.min(...layout.m
 
 function buildArchive(){
   const stage=document.getElementById("stage");stage.innerHTML="";
+  const tSpeed=parseFloat(g("trophy_speed"))||1;   /* 大きいほど速い */
   layout.forEach((L,i)=>{
     const n=i+1,col=colors[i];
     const thumb=imgURL(g(`work${n}_thumb`));
@@ -482,7 +485,7 @@ function buildArchive(){
     el.style.left=(L.x+X_SHIFT)+"%";el.style.top=L.top+"%";
     const inner=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
     const trophyHTML=g(`work${n}_award`)
-      ?`<span class="label trophy" style="animation:t-roam-${i} ${trophy[i].dur}s linear infinite;animation-delay:${trophy[i].delay}s" title="${g(`work${n}_award`)}">🏆</span>`
+      ?`<span class="label trophy" style="animation:t-roam-${i} ${(trophy[i].dur/tSpeed).toFixed(2)}s linear infinite;animation-delay:${(trophy[i].delay/tSpeed).toFixed(2)}s" title="${g(`work${n}_award`)}">🏆</span>`
       :"";
     el.innerHTML=`<div class="thumb">${inner}</div>`+
       `<span class="label year e-${L.yr.e}" style="--p:${L.yr.p}%;--ph:${L.yr.ph}%">${g(`work${n}_year`)}</span>`+
