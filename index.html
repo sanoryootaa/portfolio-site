@@ -68,11 +68,11 @@
   .label.e-right{left:calc(100% + var(--label-gap));top:var(--p);}
 
   /* overlays */
-  .overlay{position:fixed;inset:0;background:#000;z-index:100;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease;}
+  .overlay{position:fixed;inset:0;background:#000;z-index:100;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .5s ease,visibility .5s ease;}
   .overlay.open{opacity:1;visibility:visible;}
-  /* 開閉アニメ：カードがふわっと上がりながらフェードイン */
-  .sheet,.p-sheet{opacity:0;transform:translateY(34px) scale(.985);
-    transition:opacity .45s ease,transform .6s cubic-bezier(.16,1,.3,1);}
+  /* 開閉アニメ：カードがふわっと上下しながらフェード。閉じる時もなめらかに */
+  .sheet,.p-sheet{opacity:0;transform:translateY(28px) scale(.99);
+    transition:opacity .5s ease,transform .55s cubic-bezier(.22,1,.36,1);}
   .overlay.open .sheet,.overlay.open .p-sheet{opacity:1;transform:none;}
   /* ✕印：開くときは回りながら出現。閉じるときは先に回転し始めてからゆっくり回って消える（回転は控えめ）*/
   .closeX{opacity:0;transform:rotate(-90deg);transition:opacity .35s ease .4s,transform .9s ease;}
@@ -138,15 +138,15 @@
     header .right{margin-left:auto;margin-top:26px;}
     #stage{aspect-ratio:auto;max-width:none;padding:132px 20px 90px;}
     /* サムネはランダムに散らす（縦一列にしない）。端から端まで大きく振る */
-    .work{position:relative !important;left:auto !important;top:auto !important;width:56% !important;margin-top:0 !important;margin-right:0 !important;margin-bottom:108px !important;}
-    .work:nth-child(odd){margin-left:3% !important;}
-    .work:nth-child(even){margin-left:40% !important;}
-    .work:nth-child(3n){margin-left:22% !important;}  /* 年が左に付く作品(3,6,9,12)は左余白を確保 */
-    .work:nth-child(4n){margin-left:32% !important;}
-    .work:nth-child(5n){margin-left:11% !important;}
-    .work:nth-child(7n){margin-left:6% !important;}
+    .work{position:relative !important;left:auto !important;top:auto !important;width:54% !important;margin-top:0 !important;margin-right:0 !important;margin-bottom:108px !important;}
+    .work:nth-child(odd){margin-left:5% !important;}
+    .work:nth-child(even){margin-left:32% !important;}
+    .work:nth-child(3n){margin-left:20% !important;}  /* 年が左に付く作品(3,6,9,12)は左余白を確保 */
+    .work:nth-child(4n){margin-left:26% !important;}
+    .work:nth-child(5n){margin-left:12% !important;}
+    .work:nth-child(7n){margin-left:8% !important;}
     /* 上下ラベルは1行のまま（重なり防止）。横ラベルだけ収まらない時に折り返す */
-    .label.e-left,.label.e-right{white-space:normal;max-width:24vw;}
+    .label.e-left,.label.e-right{white-space:normal;max-width:22vw;}
     /* スマホはオーバーレイ背景をカードと同じ白に → 上下の黒/グレー帯を無くす */
     .overlay{background:#fff;}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
