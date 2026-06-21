@@ -8,10 +8,14 @@
   :root{
     --bg:#ffffff;--ink:#0a0a0a;--red:#ec3b27;
     --fs:15px;
-    /* === 字詰め・行間・ウェイト（スプレッドシートで上書き可能）=== */
-    --lh:1.5;     /* 全体の行間    line_height / 行間 */
-    --tlh:1.95;   /* 本文の行間    text_line_height / 本文行間 */
-    /* 字詰め（letter-spacing）をセクション別に */
+    /* === 字詰め・行間・ウェイト（スプレッドシートで上書き可能 / イラレ感覚の数値）=== */
+    /* 行間（行送り％：150 = 1.5倍）をセクション別に */
+    --lh:1.5;          /* 全体        line_height         / 行間 */
+    --title-lh:1.05;   /* 作品タイトル  title_line_height   / タイトル行間 */
+    --credit-lh:1.55;  /* クレジット    credit_line_height  / クレジット行間 */
+    --profile-lh:1.95; /* プロフィール本文 profile_line_height / プロフィール行間 */
+    --desc-lh:1.95;    /* 作品説明文    desc_line_height    / 説明行間 */
+    /* 字詰め（トラッキング 1/1000em：50 = 0.05em）をセクション別に */
     --ls:.01em;        /* 全体        letter_spacing       / 字詰め */
     --title-ls:0;      /* 作品タイトル  title_letter_spacing  / タイトル字詰め */
     --credit-ls:.02em; /* クレジット    credit_letter_spacing / クレジット字詰め */
@@ -69,14 +73,14 @@
   .player .field{width:100%;height:100%;background:linear-gradient(160deg,#1c1c1c,#080808);}
   .player iframe{width:100%;height:100%;border:0;display:block;}
   .d-meta{grid-column:2;grid-row:1;}
-  .d-meta h1{color:var(--wc);font-size:36px;font-weight:var(--title-w);line-height:1.05;letter-spacing:var(--title-ls);}
+  .d-meta h1{color:var(--wc);font-size:36px;font-weight:var(--title-w);line-height:var(--title-lh);letter-spacing:var(--title-ls);}
   .d-meta .sub{color:var(--wc);font-size:var(--fs);margin-top:6px;}
-  .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:1.55;letter-spacing:var(--credit-ls);font-weight:var(--credit-w);}
+  .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:var(--credit-lh);letter-spacing:var(--credit-ls);font-weight:var(--credit-w);}
   .d-credit h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}
   .d-credit .role{color:var(--wc);margin-top:14px;}
   .d-credit .role:first-of-type{margin-top:0;}
   .d-credit .nm{color:#000;}
-  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--tlh);letter-spacing:var(--desc-ls);font-weight:var(--desc-w);max-width:700px;margin-top:10px;}
+  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--desc-lh);letter-spacing:var(--desc-ls);font-weight:var(--desc-w);max-width:700px;margin-top:10px;}
   .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border:0;border-radius:50%;background:var(--wc,var(--red));cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
   .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
   .playbtn:after{content:"";border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;}
@@ -88,7 +92,7 @@
   .p-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:56px;margin-top:48px;align-items:start;}
   .p-main section{margin-bottom:34px;}
   .p-main h3{color:var(--wc);font-size:var(--fs);font-weight:400;margin-bottom:14px;}
-  .p-main p{font-size:var(--fs);line-height:var(--tlh);font-weight:var(--profile-w);max-width:620px;}
+  .p-main p{font-size:var(--fs);line-height:var(--profile-lh);font-weight:var(--profile-w);max-width:620px;}
   .p-row{display:flex;gap:18px;font-size:var(--fs);line-height:1.9;}
   .p-row .k{min-width:92px;flex-shrink:0;}
   .p-contact .p-row .k{min-width:150px;}
@@ -144,7 +148,13 @@
 <script>
 /* ===== Google Sheet (col A = keyword, col B = value) ===== */
 const SHEET_ID="17Mr0nny6o7xyvlWwVxq5igLhsAcyoX_6pp3pkvKRhbA";
-const SHEET_CSV=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+/* 読み込むタブ（シート）名。""=一番左のシート。
+   タブを分けたいときはここに名前を足す。後ろのタブが前のタブを上書き。 */
+const SHEET_TABS=["", "profile", "works"];
+function tabCSV(name){
+  const base=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+  return name?`${base}&sheet=${encodeURIComponent(name)}`:base;
+}
 
 /* ===== layout config (design only, not in sheet) ===== */
 const PALETTE=["#00DD58","#2E7BFF","#FF4D3D","#FFC400","#B16CFF","#FF7A00"];
@@ -240,17 +250,20 @@ const DEFAULTS={
   profile_instagram:"https://www.instagram.com/sanoryootaa/",
   profile_youtube:"https://www.youtube.com/@sanoryootaa",
   profile_photo:"",
-  /* design : 行間（スプレッドシートで上書き可）*/
-  line_height:"1.5",
-  text_line_height:"1.95",
-  /* design : 字詰め（letter-spacing）セクション別 */
-  letter_spacing:".01em",
+  /* design : 行間（行送り％ 150=1.5倍）セクション別 */
+  line_height:"150",
+  title_line_height:"105",
+  credit_line_height:"155",
+  profile_line_height:"195",
+  desc_line_height:"195",
+  /* design : 字詰め（トラッキング 1/1000em 50=0.05em）セクション別 */
+  letter_spacing:"10",
   title_letter_spacing:"0",
-  credit_letter_spacing:".02em",
-  profile_letter_spacing:".01em",
-  desc_letter_spacing:".01em",
-  label_letter_spacing:".01em",
-  /* design : ウェイト（font-weight）セクション別 */
+  credit_letter_spacing:"20",
+  profile_letter_spacing:"10",
+  desc_letter_spacing:"10",
+  label_letter_spacing:"10",
+  /* design : ウェイト（400=標準, 700=太字）セクション別 */
   title_weight:"700",
   credit_weight:"400",
   profile_weight:"400",
@@ -261,7 +274,10 @@ const DEFAULTS={
 /* スプレッドシートで日本語キーでも書けるようにする別名 */
 const KEY_ALIASES={
   "行間":"line_height",
-  "本文行間":"text_line_height",
+  "タイトル行間":"title_line_height",
+  "クレジット行間":"credit_line_height",
+  "プロフィール行間":"profile_line_height",
+  "説明行間":"desc_line_height",
   "字詰め":"letter_spacing",
   "タイトル字詰め":"title_letter_spacing",
   "クレジット字詰め":"credit_letter_spacing",
@@ -293,10 +309,10 @@ function parseCSV(t){const rows=[];let row=[],cur="",q=false;
       else if(c!=='\r')cur+=c;}}
   if(cur!==""||row.length){row.push(cur);rows.push(row);}return rows;}
 
-async function loadSheet(){
+async function loadTab(name){
   try{
-    const r=await fetch(SHEET_CSV,{cache:"no-store"});
-    if(!r.ok)throw 0;
+    const r=await fetch(tabCSV(name),{cache:"no-store"});
+    if(!r.ok)return {};
     let text=await r.text();
     text=text.replace(/^﻿/,""); /* 先頭セルの BOM を除去（最初のキーが反応しない原因）*/
     const rows=parseCSV(text);const m={};
@@ -306,6 +322,11 @@ async function loadSheet(){
       if(k&&v)m[k]=v;});
     return m;
   }catch(e){return {};}
+}
+/* 複数タブを読み込んで結合（後ろのタブが優先）*/
+async function loadSheet(){
+  const maps=await Promise.all(SHEET_TABS.map(loadTab));
+  return Object.assign({},...maps);
 }
 
 /* ===== helpers ===== */
@@ -317,6 +338,18 @@ function imgURL(s){
   const m=s.match(/\/d\/([\w-]+)/)||s.match(/[?&]id=([\w-]+)/);
   if(m)return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w2000`;
   return s;
+}
+/* イラレ感覚の数値を CSS 値へ変換 */
+function toLS(v){ /* 字詰め：トラッキング 1/1000em（50→0.05em）。単位付きはそのまま */
+  v=(v+"").trim(); if(v==="")return "0";
+  if(/[a-z%]/i.test(v))return v;
+  const n=parseFloat(v); return isNaN(n)?"0":(n/1000)+"em";
+}
+function toLH(v){ /* 行間：行送り％（150→1.5）。1.5 のような倍率もそのまま受ける */
+  v=(v+"").trim(); if(v==="")return "normal";
+  if(v.endsWith("%"))return (parseFloat(v)/100)||"normal";
+  const n=parseFloat(v); if(isNaN(n))return v;
+  return n>=10 ? n/100 : n;
 }
 function creditHTML(txt){
   return txt.split("\n").map(l=>{l=l.trim();if(!l)return "";
@@ -399,16 +432,21 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll();});
 /* ===== design : 字詰め・行間をスプレッドシート値で反映 ===== */
 function applyDesign(){
   const r=document.documentElement.style;
-  /* 行間 */
-  r.setProperty("--lh", g("line_height"));
-  r.setProperty("--tlh",g("text_line_height"));
-  /* 字詰め */
-  r.setProperty("--ls",        g("letter_spacing"));
-  r.setProperty("--title-ls",  g("title_letter_spacing"));
-  r.setProperty("--credit-ls", g("credit_letter_spacing"));
-  r.setProperty("--profile-ls",g("profile_letter_spacing"));
-  r.setProperty("--desc-ls",   g("desc_letter_spacing"));
-  r.setProperty("--label-ls",  g("label_letter_spacing"));
+  const lh=(v,k)=>r.setProperty(v,toLH(g(k)));
+  const ls=(v,k)=>r.setProperty(v,toLS(g(k)));
+  /* 行間（行送り％）*/
+  lh("--lh",        "line_height");
+  lh("--title-lh",  "title_line_height");
+  lh("--credit-lh", "credit_line_height");
+  lh("--profile-lh","profile_line_height");
+  lh("--desc-lh",   "desc_line_height");
+  /* 字詰め（トラッキング 1/1000em）*/
+  ls("--ls",        "letter_spacing");
+  ls("--title-ls",  "title_letter_spacing");
+  ls("--credit-ls", "credit_letter_spacing");
+  ls("--profile-ls","profile_letter_spacing");
+  ls("--desc-ls",   "desc_letter_spacing");
+  ls("--label-ls",  "label_letter_spacing");
   /* ウェイト */
   r.setProperty("--title-w",  g("title_weight"));
   r.setProperty("--credit-w", g("credit_weight"));
