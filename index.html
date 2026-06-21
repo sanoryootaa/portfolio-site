@@ -50,6 +50,7 @@
   .msg-trigger::after{content:"✨";margin-left:.45em;border:0;animation:twinkle 1.3s steps(1,end) infinite;}
   @keyframes twinkle{50%{opacity:.15;}}
   .msg-reveal{display:none;max-width:680px;white-space:pre-wrap;color:var(--ink);}
+  .botmsg.no-spark .msg-trigger::after{display:none;}   /* キラキラOFF時は✨を出さない */
   .botmsg.show .msg-trigger{display:none;}
   .botmsg.show .msg-reveal{display:block;animation:reveal .8s cubic-bezier(.16,1,.3,1) both;}
   @keyframes reveal{from{opacity:0;filter:blur(10px);transform:translateY(10px) scale(.97);}
@@ -363,6 +364,7 @@ const DEFAULTS={
   site_image:"",           /* リンク共有時のプレビュー画像・タブのアイコン */
   trophy_speed:"1",        /* トロフィーの速さ（大きいほど速い。1=標準）*/
   message:"",              /* 最下部・左下に出すメッセージ */
+  message_sparkle:"on",    /* メッセージのキラキラ演出 on/off */
   /* design : ウェイト（400=標準, 700=太字）セクション別 */
   title_weight:"700",
   credit_weight:"400",
@@ -393,6 +395,7 @@ const KEY_ALIASES={
   "OGP画像":"site_image",
   "トロフィー速度":"trophy_speed",
   "メッセージ":"message",
+  "キラキラ":"message_sparkle",
   "タイトルウェイト":"title_weight",
   "クレジットウェイト":"credit_weight",
   "プロフィールウェイト":"profile_weight",
@@ -564,7 +567,9 @@ function buildHeaderProfile(){
   document.getElementById("hProfileText").textContent=g("profile_label");
   const msg=g("message");
   document.getElementById("bottomMsg").textContent=msg;
-  document.getElementById("botmsg").style.display=msg?"":"none";   /* メッセージが無ければ非表示 */
+  const fb=document.getElementById("botmsg");
+  fb.style.display=msg?"":"none";                          /* メッセージが無ければ非表示 */
+  fb.classList.toggle("no-spark",!sparkleOn());            /* キラキラ on/off */
   placeFavico();
   /* タブ名・リンクプレビュー画像・アイコン */
   document.title=g("site_title");
@@ -631,10 +636,13 @@ function playVideo(id){
 function openProfile(){show(document.getElementById("profile"));setState("#profile");}
 /* サイトタイトル：全て閉じてトップへスクロール */
 function goHome(){closeAll();window.scrollTo({top:0,behavior:"smooth"});}
+/* キラキラ演出のon/off（off,0,false,no,オフ,なし でOFF）*/
+function sparkleOn(){return !/^(off|0|false|no|オフ|なし)$/i.test((g("message_sparkle")||"").trim());}
 /* メッセージを開く＋無駄にキラキラ */
 function showMessage(){
   const f=document.getElementById("botmsg");if(!f)return;
   f.classList.add("show");
+  if(!sparkleOn())return;                 /* OFFならスパークルを出さない */
   for(let i=0;i<18;i++){
     const s=document.createElement("span");s.className="spark";s.textContent="✨";
     s.style.left=(20+Math.random()*300)+"px";
