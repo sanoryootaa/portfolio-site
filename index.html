@@ -501,6 +501,9 @@ const labelCfg=layout.map(L=>{
   return {yr:{e:e1,p:pp()}, ca:{e:e2,p:pp()}};
 });
 
+/* PC：作品位置を毎回わずかに揺らす（順番・全体配置はそのまま）*/
+const jitter=layout.map(()=>({dx:rnd(-3,3), dy:rnd(-1.6,1.6)}));
+
 /* スマホ用：毎回ランダムな横位置(margin-left%)。サイドにラベルが付く作品はその側に余白を確保し、画面外に出ないようにする */
 const MWORK_W=54;                 /* スマホの作品幅(%) CSSと一致させる */
 const M_SIDE=16;                  /* 左右ラベルに要る余白(%) */
@@ -518,7 +521,7 @@ function buildArchive(){
     const n=i+1,col=colors[i];
     const thumb=imgURL(g(`work${n}_thumb`));
     const el=document.createElement("div");el.className="work";
-    el.style.left=(L.x+X_SHIFT)+"%";el.style.top=L.top+"%";
+    el.style.left=(L.x+X_SHIFT+jitter[i].dx)+"%";el.style.top=(L.top+jitter[i].dy)+"%";
     el.style.marginLeft=mobileX[i]+"%";   /* スマホ時のランダム横位置（PCはabsoluteなので無視される）*/
     const inner=thumb?`<img src="${thumb}" alt="">`:`<div class="field"></div>`;
     const trophyHTML=g(`work${n}_award`)
