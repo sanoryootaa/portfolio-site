@@ -72,12 +72,12 @@
   .label.e-right{left:calc(100% + var(--label-gap));top:var(--p);}
 
   /* overlays */
-  .overlay{position:fixed;inset:0;background:#000;z-index:100;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .5s ease,visibility .5s ease;}
-  .overlay.open{opacity:1;visibility:visible;}
+  .overlay{position:fixed;inset:0;background:#000;z-index:100;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .5s ease .16s,visibility .5s ease;}
+  .overlay.open{opacity:1;visibility:visible;transition:opacity .4s ease,visibility .4s ease;}
   /* 開閉アニメ：カードがふわっと上下しながらフェード。閉じる時もなめらかに */
   .sheet,.p-sheet{opacity:0;transform:translateY(28px) scale(.99);
-    transition:opacity .5s ease,transform .55s cubic-bezier(.22,1,.36,1);}
-  .overlay.open .sheet,.overlay.open .p-sheet{opacity:1;transform:none;}
+    transition:opacity .5s ease .16s,transform .55s cubic-bezier(.22,1,.36,1) .16s;}
+  .overlay.open .sheet,.overlay.open .p-sheet{opacity:1;transform:none;transition:opacity .45s ease,transform .55s cubic-bezier(.22,1,.36,1);}
   /* ✕印：開くときは回りながら出現。閉じるときは先に回転し始めてからゆっくり回って消える（回転は控えめ）*/
   /* 閉じる時：その場で少し回転しつつ、今より少し早めにフェードアウト */
   .closeX{opacity:0;transform:rotate(-70deg);transition:opacity .3s ease .08s,transform .5s ease;}
@@ -161,12 +161,13 @@
     /* 閉じ/閉じ中は透明(ホームが見える)、開いている間は白で全面カバー(ホームを隠す) */
     .overlay{background:transparent !important;opacity:1 !important;visibility:visible !important;pointer-events:none;transition:none !important;}
     .overlay.open{background:#fff !important;pointer-events:auto;}
-    /* 閉じ：✕の回転を先に見せるため少し遅らせ、ゆっくりスライドダウン */
-    .sheet,.p-sheet{margin:0;width:100%;max-width:none;min-height:100vh;min-height:100dvh;opacity:1 !important;
-      transform:translateY(100vh);
-      transition:transform 1s cubic-bezier(.4,0,.2,1) .16s !important;}
-    /* 開く：遅延なしでスッと上がる */
-    .overlay.open .sheet,.overlay.open .p-sheet{transform:none !important;transition:transform .72s cubic-bezier(.32,.72,0,1) !important;}
+    /* 閉じ：✕の回転を先に見せるため少し遅らせ、ゆっくりスライドダウン＋後半でフェードアウト */
+    .sheet,.p-sheet{margin:0;width:100%;max-width:none;min-height:100vh;min-height:100dvh;
+      opacity:0;transform:translateY(100vh);
+      transition:transform 1s cubic-bezier(.4,0,.2,1) .16s, opacity .42s ease .6s !important;}
+    /* 開く：遅延なしでスッと上がる（不透明はすぐ） */
+    .overlay.open .sheet,.overlay.open .p-sheet{opacity:1 !important;transform:none !important;
+      transition:transform .72s cubic-bezier(.32,.72,0,1), opacity .28s ease !important;}
     /* スマホでは✕ホバーで白くしない（タッチで張り付くため）*/
     .closeX:hover:before,.closeX:hover:after{background:var(--xc,var(--accent));}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
