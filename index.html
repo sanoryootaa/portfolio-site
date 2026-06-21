@@ -154,11 +154,12 @@
     .work:nth-child(1){margin-left:18% !important;}  /* 1作目は年が左に付くので左余白を確保 */
     /* 上下ラベルは1行のまま（重なり防止）。横ラベルだけ収まらない時に折り返す */
     .label.e-left,.label.e-right{white-space:normal;max-width:22vw;}
-    /* スマホ：背景は白で帯を無くしつつ、カードを下からスライドさせて開閉（動きが見えてなめらか）*/
-    .overlay{background:#fff;}
-    .sheet,.p-sheet{margin:0;width:100%;max-width:none;min-height:100vh;
+    /* スマホ：背景は透明、カード(白・全画面)を下からスライドさせるだけ（フェードしないので“バシュ”と消えない）*/
+    .overlay{background:transparent;opacity:1;visibility:hidden;transition:visibility .46s ease;}
+    .overlay.open{opacity:1;visibility:visible;}
+    .sheet,.p-sheet{margin:0;width:100%;max-width:none;min-height:100vh;opacity:1;
       transform:translateY(100%);
-      transition:transform .46s cubic-bezier(.32,.72,0,1),opacity .3s ease;}
+      transition:transform .46s cubic-bezier(.32,.72,0,1);}
     .overlay.open .sheet,.overlay.open .p-sheet{transform:none;}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
     .closeX:before,.closeX:after{width:132px;height:20px;}
