@@ -275,7 +275,7 @@ function recolor(){
   ps.forEach((c,i)=>{const cnt=base+(i<extra?1:0);for(let k=0;k<cnt;k++)bag.push(c);});
   colors=shuffle(bag);
 }
-recolor();
+/* 初回の recolor() は DATA 定義後（boot）で呼ぶ（ここで呼ぶと DATA が未初期化でエラーになる）*/
 
 /* ===== default content (used until / unless the sheet provides a value) ===== */
 const sampleBody="サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。サンプルテキストだお。";
@@ -746,6 +746,7 @@ function applyDesign(){
 
 /* ===== boot : render defaults, then overlay sheet values if available ===== */
 function renderAll(){applyDesign();buildArchive();buildHeaderProfile();}
+recolor();          /* DATA 定義後に初回の色決定 */
 renderAll();
 restoreState();
 loadSheet().then(m=>{
