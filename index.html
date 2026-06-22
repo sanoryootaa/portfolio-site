@@ -260,11 +260,20 @@ const layout=[
  {x:18,top:71, yr:{e:"right",p:38,ph:44},ca:{e:"bottom",p:6,ph:6}},
  {x:46,top:80, yr:{e:"top",p:55,ph:44},  ca:{e:"left",p:30,ph:10}},
 ];
-/* random color per work (from small palette), fixed for the session */
+/* 作品の色：random=候補(PALETTE)から重複最小でランダム配分 / fixed=workN_colorで個別指定 */
 let colors=[];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
 function recolor(){
-  colors=layout.map((_,i)=>PALETTE[i%PALETTE.length]);
-  for(let i=colors.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[colors[i],colors[j]]=[colors[j],colors[i]];}
+  const W=layout.length;
+  if(/^(fixed|固定)$/i.test((g("color_mode")||"").trim())){
+    colors=layout.map((_,i)=>(g(`work${i+1}_color`)||"").trim()||PALETTE[i%PALETTE.length]||"#00DD58");
+    return;
+  }
+  /* 候補を各色できるだけ均等(回数差≤1)に割り当て→シャッフル。被りを最小化 */
+  const ps=shuffle((PALETTE&&PALETTE.length?PALETTE:["#00DD58"]).slice());
+  const n=ps.length, base=Math.floor(W/n), extra=W%n, bag=[];
+  ps.forEach((c,i)=>{const cnt=base+(i<extra?1:0);for(let k=0;k<cnt;k++)bag.push(c);});
+  colors=shuffle(bag);
 }
 recolor();
 
@@ -362,6 +371,7 @@ const DEFAULTS={
   text_color:"#0a0a0a",    /* 文字色 */
   accent_color:"#00DD58",  /* プロフィール/✕印/作品見出しの基調色 */
   work_colors:"",          /* 作品アクセント候補（カンマ区切り）空なら既定6色 */
+  color_mode:"random",     /* random=候補から重複最小でランダム / fixed=workN_colorで個別指定 */
   site_image:"",           /* リンク共有時のプレビュー画像・タブのアイコン */
   trophy_speed:"1",        /* トロフィーの速さ（大きいほど速い。1=標準）*/
   message:"",              /* 最下部・左下に出すメッセージ */
@@ -392,6 +402,7 @@ const KEY_ALIASES={
   "文字色":"text_color",
   "基調色":"accent_color",
   "作品色":"work_colors",
+  "カラーモード":"color_mode",
   "サイト画像":"site_image",
   "OGP画像":"site_image",
   "トロフィー速度":"trophy_speed",
@@ -412,6 +423,7 @@ wd.forEach((w,i)=>{const n=i+1;
   DEFAULTS[`work${n}_desc`]=sampleBody;
   DEFAULTS[`work${n}_credit`]= n===1?threadsCredit:soloCredit;
   DEFAULTS[`work${n}_award`]="";   /* 受賞歴。書かれている作品だけサムネにトロフィーを付ける */
+  DEFAULTS[`work${n}_color`]="";   /* fixedモード時の作品ごとの色 */
 });
 
 /* トロフィー：作品ごとに「歪んだ閉ループ」を生成し、それに沿って一定速度で滑らかに進む（揺れない）。
@@ -740,7 +752,8 @@ loadSheet().then(m=>{
   if(Object.keys(m).length){
     DATA=m;
     const wc=(m.work_colors||"").split(",").map(s=>s.trim()).filter(Boolean);
-    if(wc.length){PALETTE=wc;recolor();}   /* 作品アクセント色をシートで上書き */
+    if(wc.length){PALETTE=wc;}             /* 候補色をシートで上書き */
+    recolor();                              /* color_mode / workN_color / work_colors を反映 */
     renderAll();
   }
   restoreState();
