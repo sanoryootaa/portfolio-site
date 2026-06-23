@@ -127,7 +127,7 @@
   .label.trophy{line-height:1;white-space:normal;will-change:left,top;}
   @media (prefers-reduced-motion:reduce){.label.trophy{animation:none !important;}}
   .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:var(--credit-lh);letter-spacing:var(--credit-ls);font-weight:var(--credit-w);}
-  .d-credit h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}
+  .d-credit h2,.d-body h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}
   .d-credit .role{color:var(--wc);margin-top:14px;}
   .d-credit .role:first-of-type{margin-top:0;}
   .d-credit .nm{color:#000;}
@@ -640,7 +640,9 @@ function openDetail(n,col){
   const aw=g(`work${n}_award`);
   document.getElementById("dAward").innerHTML=aw?`<span class="tEmoji">🏆</span> ${aw}`:"";
   document.getElementById("dCredit").innerHTML=`<h2>credit</h2>`+creditHTML(g(`work${n}_credit`));
-  document.getElementById("dBody").textContent=g(`work${n}_desc`);
+  const body=document.getElementById("dBody");
+  body.innerHTML=`<h2>about</h2><span class="d-text"></span>`;
+  body.querySelector(".d-text").textContent=g(`work${n}_desc`);
   show(detail);
   setState("#work-"+n);
 }
