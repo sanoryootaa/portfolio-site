@@ -4,6 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
+<!-- ===== Google Analytics 4 ===== 測定IDの差し替えはこの下2か所(GA_ID)だけ ===== -->
+<script>var GA_ID="G-K5GHBEW050";</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K5GHBEW050"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());
+  /* GA4はIPを既定で匿名化（anonymize_ipは互換のため明示）。Google信号は無効でプライバシー最小配慮。Cookie同意バナーは付けない */
+  gtag('config',GA_ID,{anonymize_ip:true,allow_google_signals:false});
+</script>
+<!-- gtag.js が読み込めなくても下のJSは typeof gtag==='function' ガードで安全 -->
+<!-- ===== /GA4 ===== -->
 <title>sano ryota works archive</title>
 <!-- リンク共有時のプレビュー画像・タブのアイコン（site_image でシートから指定）-->
 <meta property="og:title" id="ogTitle" content="sano ryota works archive">
@@ -232,6 +244,12 @@
 </section>
 
 <script>
+/* ===== GA4 計測ヘルパー（gtag未読込でも落ちないようガード）=====
+   ※スクロール深度・エンゲージメント時間などはGA4の「拡張計測機能」が標準で取得。
+     ここで送るのは独自イベントのみ（scroll_bottom/engaged_browsing は名前が別なので二重計測にならない）。*/
+function gaEv(name,params){ if(typeof gtag==="function") gtag("event",name,params||{}); }
+let _gaWorkOpens=0, _gaEngaged=false, _gaCurTitle="";
+
 /* ===== Google Sheet (col A = keyword, col B = value) ===== */
 const SHEET_ID="17Mr0nny6o7xyvlWwVxq5igLhsAcyoX_6pp3pkvKRhbA";
 /* 読み込むタブ（シート）名。""=一番左のシート。
@@ -617,9 +635,9 @@ function buildHeaderProfile(){
          <section><h3>awards &amp; screenings</h3>${rows(g("profile_awards"))}</section>
          <section><h3>skills</h3>${rows(g("profile_skills"))}</section>
          <section class="p-contact"><h3>contact</h3>
-           <div class="p-row"><span class="k">mail</span><a href="mailto:${g("profile_mail")}">${g("profile_mail")}</a></div>
-           <div class="p-row"><span class="k">instagram</span><a href="${g("profile_instagram")}" target="_blank" rel="noopener">${g("profile_instagram").replace(/^https?:\/\/(www\.)?/,"")}</a></div>
-           <div class="p-row"><span class="k">youtube</span><a href="${g("profile_youtube")}" target="_blank" rel="noopener">${g("profile_youtube").replace(/^https?:\/\/(www\.)?/,"")}</a></div>
+           <div class="p-row"><span class="k">mail</span><a href="mailto:${g("profile_mail")}" onclick="gaEv('contact_click',{label:'mail'})">${g("profile_mail")}</a></div>
+           <div class="p-row"><span class="k">instagram</span><a href="${g("profile_instagram")}" target="_blank" rel="noopener" onclick="gaEv('sns_click',{platform:'instagram'})">${g("profile_instagram").replace(/^https?:\/\/(www\.)?/,"")}</a></div>
+           <div class="p-row"><span class="k">youtube</span><a href="${g("profile_youtube")}" target="_blank" rel="noopener" onclick="gaEv('sns_click',{platform:'youtube'})">${g("profile_youtube").replace(/^https?:\/\/(www\.)?/,"")}</a></div>
          </section>
        </div>
        <div class="p-photo"><div class="ph" ${photo?`style="background-image:url('${photo}')"`:""}></div></div>
@@ -645,12 +663,19 @@ function openDetail(n,col){
   body.querySelector(".d-text").textContent=g(`work${n}_desc`);
   show(detail);
   setState("#work-"+n);
+  /* GA4: 作品ポップアップを開いた（作品別閲覧数）+ 1訪問で2回以上開いたら engaged_browsing を1回だけ */
+  _gaCurTitle=g(`work${n}_title`);
+  gaEv("work_open",{work_title:g(`work${n}_title`),work_category:g(`work${n}_category`),work_date:g(`work${n}_year`)});
+  if(++_gaWorkOpens>=2 && !_gaEngaged){_gaEngaged=true;gaEv("engaged_browsing");}
 }
 function playVideo(id){
   document.getElementById("player").innerHTML=
     `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="video" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  /* GA4: 再生ボタンは autoplay=1 で即再生されるため、ここを「再生開始」とみなして送信。
+     ※YouTube IFrame Player API での厳密な再生検知は、既存の埋め込み実装を変えるリスク・複雑化を避けるため未使用。 */
+  gaEv("video_play",{work_title:_gaCurTitle});
 }
-function openProfile(){show(document.getElementById("profile"));setState("#profile");}
+function openProfile(){show(document.getElementById("profile"));setState("#profile");gaEv("about_open");}
 /* サイトタイトル：全て閉じてトップへスクロール */
 function goHome(){closeAll();window.scrollTo({top:0,behavior:"smooth"});}
 /* キラキラ演出のon/off（off,0,false,no,オフ,なし でOFF）*/
@@ -761,6 +786,19 @@ loadSheet().then(m=>{
   }
   restoreState();
 });
+
+/* GA4: 最下部(aboutメッセージ枠)が表示されたら scroll_bottom を1回だけ。
+   IntersectionObserverで監視するだけなので既存のabout出現アニメには干渉しない。
+   ※GA4拡張計測のscroll(90%)とは別名の独自イベントなので二重計測にならない。 */
+(function(){
+  const t=document.getElementById("botmsg");
+  if(!t || !("IntersectionObserver" in window)) return;
+  let sent=false;
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting && !sent){ sent=true; gaEv("scroll_bottom"); io.disconnect(); } });
+  });
+  io.observe(t);
+})();
 </script>
 </body>
 </html>
