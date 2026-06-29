@@ -199,7 +199,8 @@
     .closeX:hover:before,.closeX:hover:after{background:var(--xc,var(--accent));}
     .closeX{top:14px;right:16px;width:104px;height:104px;}
     .closeX:before,.closeX:after{width:132px;height:20px;}
-    .sheet{grid-template-columns:1fr;padding:26px 20px 46px;gap:18px;}
+    /* min-height:100dvh でも行が引き伸ばされないよう上から詰める（内容が少ない時の大きな余白を防ぐ）*/
+    .sheet{grid-template-columns:1fr;padding:26px 20px 46px;gap:18px;align-content:start;}
     .d-video,.d-meta,.d-credit,.d-body{grid-column:1 !important;grid-row:auto !important;}
     .d-meta h1{font-size:28px;}
     .p-sheet{padding:34px 22px 56px;}
