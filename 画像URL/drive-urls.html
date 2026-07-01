@@ -48,40 +48,35 @@
     </div>
     <div class="row">
       <div>
-        <label>Google API キー</label>
-        <input id="key" placeholder="AIza...">
-      </div>
-      <div>
         <label>画像サイズ(幅px)</label>
-        <select id="size">
-          <option>800</option><option selected>1600</option><option>2000</option><option>2600</option>
-        </select>
+        <input id="size" type="number" min="1" step="1" value="1600" placeholder="例: 1600">
       </div>
     </div>
     <div class="actions">
       <button id="go">取得する</button>
       <button id="copyAll" class="ghost" disabled>全部コピー（名前 + URL）</button>
       <button id="copyUrls" class="ghost" disabled>URLだけコピー</button>
+      <button id="clearSaved" class="ghost">保存したフォルダを消す</button>
     </div>
     <div class="status" id="status"></div>
   </div>
 
   <div class="grid" id="grid"></div>
 
-  <details>
-    <summary>準備（最初の1回だけ）</summary>
-    <ol>
-      <li>対象フォルダを右クリック →「共有」→「リンクを知っている全員」を<b>閲覧者</b>にする。</li>
-      <li><code>console.cloud.google.com</code> でプロジェクトを作成 →「APIとサービス」で <b>Google Drive API</b> を有効化。</li>
-      <li>「認証情報」→「APIキーを作成」。作ったキーをこの画面に貼る。</li>
-      <li>（任意）キーは「APIの制限＝Drive API」「アプリケーションの制限＝HTTPリファラー」で自分の公開ドメインに絞ると安全。</li>
-    </ol>
-    <div style="margin-top:10px;color:#555;">URLは <code>https://lh3.googleusercontent.com/d/ファイルID=w幅</code> 形式で出します。&lt;img&gt; にそのまま使えます。どれがどれか分かるよう、ドライブ側のファイル名を <code>work1.jpg</code> のように付けておくと、そのままスプレッドシートに流し込めます。</div>
-  </details>
 
 <script>
 const $=id=>document.getElementById(id);
 let items=[];
+
+/* Google API キー（埋め込み）。※公開ドメインに対しGCPで「HTTPリファラー制限」を推奨 */
+const API_KEY="AIzaSyAQUAI77SkOSFAHnDVHKYqCq82sGfHtJCQ";
+
+/* ---- remember last folder in this browser ---- */
+const LS_FOLDER="dlu_folder";
+window.addEventListener("DOMContentLoaded",()=>{
+  const f=localStorage.getItem(LS_FOLDER);
+  if(f) $("folder").value=f;
+});
 
 function folderId(s){
   s=s.trim();
@@ -124,11 +119,13 @@ function render(size){
 }
 
 $("go").addEventListener("click",async()=>{
-  const fid=folderId($("folder").value), key=$("key").value.trim();
-  if(!fid||!key){setStatus("フォルダとAPIキーを入力してください。",true);return;}
+  const folderRaw=$("folder").value.trim();
+  const fid=folderId(folderRaw);
+  if(!fid){setStatus("フォルダURL/IDを入力してください。",true);return;}
   setStatus("取得中…");$("go").disabled=true;
   try{
-    items=await fetchAll(fid,key);
+    items=await fetchAll(fid,API_KEY);
+    localStorage.setItem(LS_FOLDER,folderRaw);
     if(!items.length){setStatus("画像が見つかりませんでした（共有設定・フォルダIDを確認）。",true);}
     else setStatus(`${items.length}件の画像を取得しました。`);
     render($("size").value);
@@ -137,6 +134,10 @@ $("go").addEventListener("click",async()=>{
   $("go").disabled=false;
 });
 $("size").addEventListener("change",()=>{if(items.length)render($("size").value);});
+$("clearSaved").addEventListener("click",()=>{
+  localStorage.removeItem(LS_FOLDER);
+  $("folder").value="";setStatus("保存内容を消しました。");
+});
 $("copyAll").addEventListener("click",()=>{
   const t=items.map(f=>`${f.name}\t${f.url}`).join("\n");
   navigator.clipboard.writeText(t);setStatus("名前＋URLをコピーしました（タブ区切り）。");
