@@ -1,7 +1,7 @@
 # sano ryota works archive — 仕様書
 
 このサイトは **1ファイル（`index.html`）** で動く静的サイトで、内容は Google スプレッドシートから読み込みます。
-公開: GitHub Pages `sanoryootaa/portfolio-site` → https://sanoryootaa.github.io/portfolio-site/
+公開: GitHub Pages `sanoryootaa/portfolio-site` → 独自ドメイン **https://sanoryota.com**（`sanoryootaa.github.io/portfolio-site` も有効）
 
 ---
 
@@ -112,6 +112,34 @@
 - **詳細/プロフィール**：開いている状態は URLハッシュ（`#work-N` / `#profile`）に記録され、再読み込みで復元。
 - **✕ボタン**：カードの右上角に追従し、画面幅でサイズ可変。
 - 値が読めない時は既定（サンプル）が表示される。スプレッドシートは公開（リンク閲覧可）必須。
+
+---
+
+## 8. アクセス解析（Google Analytics 4）
+
+- `<head>` に gtag.js を導入。**測定IDの差し替えは `<head>` の GA4 ブロック2か所**（`var GA_ID="..."` と `gtag/js?id=...` の src）。
+- プライバシー: `anonymize_ip:true`＋`allow_google_signals:false`。Cookie同意バナーは無し。
+- 送信はすべて `gaEv()` 経由＝`typeof gtag==='function'` のときだけ実行（未読込でも落ちない）。
+- スクロール深度・エンゲージメント時間は GA4 の**拡張計測機能（標準）**を優先。独自イベントは名前が別で二重計測にならない。
+
+| イベント | プロパティ | 発火タイミング（紐づく既存ハンドラ） |
+|---|---|---|
+| `page_view` | 自動 | gtag `config`（来訪者数・PV・参照元・国・デバイス） |
+| `work_open` | work_title / work_category / work_date | `openDetail()`（作品ポップアップを開く）＝作品別閲覧数 |
+| `engaged_browsing` | — | `openDetail()`（1訪問で work_open 2回目に1回だけ） |
+| `about_open` | — | `openProfile()` |
+| `video_play` | work_title | `playVideo()`（再生ボタン＝autoplayを再生開始とみなす。IFrame APIは未使用） |
+| `contact_click` | label（mail） | プロフィール contact の mail リンク |
+| `sns_click` | platform（instagram / youtube） | プロフィールの各SNSリンク |
+| `scroll_bottom` | — | 最下部メッセージ枠を IntersectionObserver で検知（1回のみ） |
+
+**作品別閲覧数の見方**: GA4 → レポート → エンゲージメント → イベント → `work_open`。`work_title` 別に見るには、管理 → カスタム定義でイベントパラメータ `work_title` をカスタムディメンション登録 → 「探索」で分解。
+
+## 9. 独自ドメイン / GitHub Pages
+
+- リポジトリ直下に `CNAME`（中身 `sanoryota.com`）。GitHub Pages の Custom domain が自動設定される。
+- DNS: apex は A レコード（`185.199.108.153` / `.109` / `.110` / `.111`）、`www` は CNAME → `sanoryootaa.github.io`。
+- HTTPS（Let's Encrypt）は DNS 反映後に自動発行 → Settings > Pages で **Enforce HTTPS** を有効化。
 
 ---
 
