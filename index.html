@@ -28,20 +28,15 @@
     --bg:#ffffff;--ink:#0a0a0a;--red:#ec3b27;
     --accent:#00DD58;  /* プロフィール/✕印/作品見出しの基調色 accent_color / 基調色 */
     --fs:15px;
-    /* === 字詰め・行間・ウェイト（スプレッドシートで上書き可能 / イラレ感覚の数値）=== */
+    /* === トラッキング・行間・ウェイト（スプレッドシートで上書き可能 / イラレ感覚の数値）=== */
     /* 行間（行送り％：150 = 1.5倍）をセクション別に */
     --lh:1.5;          /* 全体        line_height         / 行間 */
     --title-lh:1.05;   /* 作品タイトル  title_line_height   / タイトル行間 */
     --credit-lh:1.55;  /* クレジット    credit_line_height  / クレジット行間 */
     --profile-lh:1.95; /* プロフィール本文 profile_line_height / プロフィール行間 */
     --desc-lh:1.95;    /* 作品説明文    desc_line_height    / 説明行間 */
-    /* 字詰め（トラッキング 1/1000em：50 = 0.05em）をセクション別に */
-    --ls:.01em;        /* 全体        letter_spacing       / 字詰め */
-    --title-ls:0;      /* 作品タイトル  title_letter_spacing  / タイトル字詰め */
-    --credit-ls:.02em; /* クレジット    credit_letter_spacing / クレジット字詰め */
-    --profile-ls:.01em;/* プロフィール  profile_letter_spacing/ プロフィール字詰め */
-    --desc-ls:.01em;   /* 作品説明文    desc_letter_spacing   / 説明字詰め */
-    --label-ls:.01em;  /* 年/カテゴリ   label_letter_spacing  / ラベル字詰め */
+    /* トラッキング（1/1000em：50 = 0.05em）。カーニングは 0 固定(font-kerning:none) */
+    --tracking:0;      /* 全体のトラッキング  tracking / トラッキング */
     --label-gap:8px;   /* 年/カテゴリのサムネ端からの距離 label_gap / ラベル距離（px）*/
     /* ウェイト（font-weight）をセクション別に */
     --title-w:700;     /* 作品タイトル  title_weight   / タイトルウェイト */
@@ -54,7 +49,13 @@
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   button{-webkit-tap-highlight-color:transparent;outline:none;}
   html,body{background:var(--bg);color:var(--ink);overflow-x:hidden;}
-  body{font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);-webkit-font-smoothing:antialiased;letter-spacing:var(--ls);}
+  /* イラレ相当: カーニング0 / 役物規則なし / プロポーショナルメトリクスON */
+  body{font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);-webkit-font-smoothing:antialiased;
+    letter-spacing:var(--tracking);
+    font-kerning:none;                    /* カーニング0（ペアカーニング無効）*/
+    font-feature-settings:"palt" 1;       /* プロポーショナルメトリクスON */
+    text-spacing-trim:space-all;          /* 役物規則なし（約物の自動詰めをしない）*/
+  }
   a{color:inherit;text-decoration:none;}
   /* スクロール最下部・左下のメッセージ（サイトタイトルと同じフォント・サイズ）*/
   .botmsg{position:relative;padding:24px 30px 30px;font-family:var(--sans);font-size:var(--fs);line-height:1.5;color:var(--ink);}
@@ -90,7 +91,7 @@
   .thumb .field{width:100%;height:100%;background:linear-gradient(160deg,#1c1c1c,#080808);}
   .thumb::after{content:"";position:absolute;inset:0;background:#000;opacity:0;transition:opacity .25s ease;}
   .work:hover .thumb::after{opacity:1;}                 /* hover = 黒 */
-  .label{position:absolute;font-size:var(--fs);line-height:1;white-space:nowrap;color:var(--ink);letter-spacing:var(--label-ls);font-weight:var(--label-w);--p:50%;--ph:20%;}
+  .label{position:absolute;font-size:var(--fs);line-height:1;white-space:nowrap;color:var(--ink);font-weight:var(--label-w);--p:50%;--ph:20%;}
   /* 上ラベルは小文字ディセンダー(p,j等)の分だけ少し持ち上げ、サムネとの視覚距離を四辺で均一化 */
   .label.e-top{padding-bottom:.16em;}
   /* サムネ端からの距離は四辺とも一定（--label-gap, px指定可）*/
@@ -130,7 +131,7 @@
   .player .field{width:100%;height:100%;background:linear-gradient(160deg,#1c1c1c,#080808);}
   .player iframe{width:100%;height:100%;border:0;display:block;}
   .d-meta{grid-column:2;grid-row:1;}
-  .d-meta h1{color:var(--wc);font-size:36px;font-weight:var(--title-w);line-height:var(--title-lh);letter-spacing:var(--title-ls);}
+  .d-meta h1{color:var(--wc);font-size:36px;font-weight:var(--title-w);line-height:var(--title-lh);}
   .d-meta .sub{color:var(--wc);font-size:var(--fs);line-height:1.4;margin-top:6px;}
   .d-meta .award{color:var(--ink);font-size:var(--fs);margin-top:10px;line-height:1.5;}
   /* 絵文字は Apple のものを使う */
@@ -138,18 +139,18 @@
   /* トロフィー：作品ごとの歪んだループ(t-roam-i)に沿って一定速度で滑らかに進む */
   .label.trophy{line-height:1;white-space:normal;will-change:left,top;}
   @media (prefers-reduced-motion:reduce){.label.trophy{animation:none !important;}}
-  .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:var(--credit-lh);letter-spacing:var(--credit-ls);font-weight:var(--credit-w);}
+  .d-credit{grid-column:3;grid-row:1 / span 2;font-size:var(--fs);line-height:var(--credit-lh);font-weight:var(--credit-w);}
   .d-credit h2,.d-body h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}
   .d-credit .role{color:var(--wc);margin-top:14px;}
   .d-credit .role:first-of-type{margin-top:0;}
   .d-credit .nm{color:#000;}
-  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--desc-lh);letter-spacing:var(--desc-ls);font-weight:var(--desc-w);max-width:700px;margin-top:10px;}
+  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--desc-lh);font-weight:var(--desc-w);max-width:700px;margin-top:10px;}
   .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border:0;border-radius:50%;background:var(--wc,var(--red));cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
   .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
   .playbtn:after{content:"";border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;}
 
   /* profile : same manner as detail (white card, 'credit'-style colored lowercase headers) */
-  .p-sheet{background:#fff;color:#000;width:92%;max-width:1120px;margin:auto;padding:60px 64px 80px;letter-spacing:var(--profile-ls);--wc:var(--accent);}
+  .p-sheet{background:#fff;color:#000;width:92%;max-width:1120px;margin:auto;padding:60px 64px 80px;--wc:var(--accent);}
   .p-name{color:var(--wc);font-size:40px;font-weight:700;letter-spacing:0;line-height:1.05;}
   .p-role{color:var(--wc);font-size:var(--fs);margin-top:6px;}
   .p-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:56px;margin-top:48px;align-items:start;}
@@ -376,13 +377,8 @@ const DEFAULTS={
   credit_line_height:"155",
   profile_line_height:"195",
   desc_line_height:"195",
-  /* design : 字詰め（トラッキング 1/1000em 50=0.05em）セクション別 */
-  letter_spacing:"10",
-  title_letter_spacing:"0",
-  credit_letter_spacing:"20",
-  profile_letter_spacing:"10",
-  desc_letter_spacing:"10",
-  label_letter_spacing:"10",
+  /* design : トラッキング（1/1000em 50=0.05em）。カーニングはCSSで0固定 */
+  tracking:"0",
   /* 年/カテゴリのサムネ端からの距離（px）*/
   label_gap:"8",
   /* 色（プロフィールシートで変更可）*/
@@ -410,12 +406,7 @@ const KEY_ALIASES={
   "クレジット行間":"credit_line_height",
   "プロフィール行間":"profile_line_height",
   "説明行間":"desc_line_height",
-  "字詰め":"letter_spacing",
-  "タイトル字詰め":"title_letter_spacing",
-  "クレジット字詰め":"credit_letter_spacing",
-  "プロフィール字詰め":"profile_letter_spacing",
-  "説明字詰め":"desc_letter_spacing",
-  "ラベル字詰め":"label_letter_spacing",
+  "トラッキング":"tracking",
   "ラベル距離":"label_gap",
   "背景色":"bg_color",
   "文字色":"text_color",
@@ -751,13 +742,8 @@ function applyDesign(){
   lh("--credit-lh", "credit_line_height");
   lh("--profile-lh","profile_line_height");
   lh("--desc-lh",   "desc_line_height");
-  /* 字詰め（トラッキング 1/1000em）*/
-  ls("--ls",        "letter_spacing");
-  ls("--title-ls",  "title_letter_spacing");
-  ls("--credit-ls", "credit_letter_spacing");
-  ls("--profile-ls","profile_letter_spacing");
-  ls("--desc-ls",   "desc_letter_spacing");
-  ls("--label-ls",  "label_letter_spacing");
+  /* トラッキング（1/1000em）。カーニングはCSSで0固定 */
+  ls("--tracking","tracking");
   /* ラベル距離（px）*/
   r.setProperty("--label-gap",toPX(g("label_gap")));
   /* 色 */

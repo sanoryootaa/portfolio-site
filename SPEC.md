@@ -82,20 +82,29 @@
 
 ---
 
-## 6. デザイン（字詰め・行間・ウェイト）— イラレ感覚の数値
+## 6. デザイン（トラッキング・行間・ウェイト）— イラレ感覚の数値
 
-- **字詰め（letter-spacing）**：トラッキング 1/1000em（例 `50`→0.05em、`-25`→-0.025em）。`em`付きでも可。
+**固定タイポ設定（CSSで全体に適用・キーでは変えない）**:
+- カーニング0 = `font-kerning:none`
+- プロポーショナルメトリクスON = `font-feature-settings:"palt" 1`
+- 役物規則なし = `text-spacing-trim:space-all`
+  - ※`text-spacing-trim` は新しめのブラウザのみ対応（未対応環境では既定動作）。
+
+**キーで調整できるもの**:
+- **トラッキング（letter-spacing）**：`tracking`（別名 `トラッキング`）1つのみ。1/1000em（例 `50`→0.05em、`-25`→-0.025em）。`em`付きでも可。サイト全体に効く（カーニングは0固定なので、字間はトラッキングのみで制御）。
 - **行間（line-height）**：行送り％（例 `150`→1.5倍）。`1.5` のような倍率も可。
 - **ウェイト（font-weight）**：数値（`400`＝標準, `700`＝太字）。
 
-| 区分 | 字詰めキー（別名） | 行間キー（別名） | ウェイトキー（別名） |
-|---|---|---|---|
-| 全体 | `letter_spacing`（字詰め） | `line_height`（行間） | — |
-| 作品タイトル | `title_letter_spacing`（タイトル字詰め） | `title_line_height`（タイトル行間） | `title_weight`（タイトルウェイト） |
-| クレジット | `credit_letter_spacing`（クレジット字詰め） | `credit_line_height`（クレジット行間） | `credit_weight`（クレジットウェイト） |
-| プロフィール | `profile_letter_spacing`（プロフィール字詰め） | `profile_line_height`（プロフィール行間） | `profile_weight`（プロフィールウェイト） |
-| 作品説明文 | `desc_letter_spacing`（説明字詰め） | `desc_line_height`（説明行間） | `desc_weight`（説明ウェイト） |
-| 年/カテゴリ ラベル | `label_letter_spacing`（ラベル字詰め） | — | `label_weight`（ラベルウェイト） |
+| 区分 | 行間キー（別名） | ウェイトキー（別名） |
+|---|---|---|
+| 全体 | `line_height`（行間） | — |
+| 作品タイトル | `title_line_height`（タイトル行間） | `title_weight`（タイトルウェイト） |
+| クレジット | `credit_line_height`（クレジット行間） | `credit_weight`（クレジットウェイト） |
+| プロフィール | `profile_line_height`（プロフィール行間） | `profile_weight`（プロフィールウェイト） |
+| 作品説明文 | `desc_line_height`（説明行間） | `desc_weight`（説明ウェイト） |
+| 年/カテゴリ ラベル | — | `label_weight`（ラベルウェイト） |
+
+- 字間（トラッキング）はセクション別ではなく `tracking` の1つに統一（全体へ）。
 
 | その他 | 別名 | 内容 |
 |---|---|---|
