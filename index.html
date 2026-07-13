@@ -38,6 +38,7 @@
     /* トラッキング（1/1000em：50 = 0.05em）。カーニングは 0 固定(font-kerning:none) */
     --tracking:0;      /* 全体のトラッキング  tracking / トラッキング */
     --label-gap:8px;   /* 年/カテゴリのサムネ端からの距離 label_gap / ラベル距離（px）*/
+    --about-gap:0px;   /* 作品ページ ABOUT の上の余白 about_gap / ABOUT上余白（px）*/
     /* ウェイト（font-weight）をセクション別に */
     --title-w:700;     /* 作品タイトル  title_weight   / タイトルウェイト */
     --credit-w:400;    /* クレジット    credit_weight  / クレジットウェイト */
@@ -144,7 +145,7 @@
   .d-credit .role{color:var(--wc);margin-top:14px;}
   .d-credit .role:first-of-type{margin-top:0;}
   .d-credit .nm{color:#000;}
-  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--desc-lh);font-weight:var(--desc-w);max-width:700px;text-align:justify;}
+  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--desc-lh);font-weight:var(--desc-w);max-width:700px;text-align:justify;margin-top:var(--about-gap);}
   .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border:0;border-radius:50%;background:var(--wc,var(--red));cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
   .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
   .playbtn:after{content:"";border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;}
@@ -323,6 +324,7 @@ const DEFAULTS={
   tracking:"0",
   /* 年/カテゴリのサムネ端からの距離（px）*/
   label_gap:"8",
+  about_gap:"0",           /* 作品ページ ABOUT の上の余白（px）*/
   /* 色（プロフィールシートで変更可）*/
   bg_color:"#ffffff",      /* 背景色 */
   text_color:"#0a0a0a",    /* 文字色 */
@@ -351,6 +353,7 @@ const KEY_ALIASES={
   "説明行間":"desc_line_height",
   "トラッキング":"tracking",
   "ラベル距離":"label_gap",
+  "ABOUT上余白":"about_gap",
   "背景色":"bg_color",
   "文字色":"text_color",
   "基調色":"accent_color",
@@ -693,8 +696,9 @@ function applyDesign(){
   lh("--desc-lh",   "desc_line_height");
   /* トラッキング（1/1000em）。カーニングはCSSで0固定 */
   ls("--tracking","tracking");
-  /* ラベル距離（px）*/
+  /* ラベル距離・ABOUT上余白（px）*/
   r.setProperty("--label-gap",toPX(g("label_gap")));
+  r.setProperty("--about-gap",toPX(g("about_gap")));
   /* 色 */
   r.setProperty("--bg",    g("bg_color"));
   r.setProperty("--ink",   g("text_color"));
