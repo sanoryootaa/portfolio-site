@@ -141,10 +141,12 @@
   .label.trophy{line-height:1;white-space:normal;will-change:left,top;}
   @media (prefers-reduced-motion:reduce){.label.trophy{animation:none !important;}}
   .d-credit{grid-column:2;grid-row:1 / span 3;font-size:var(--fs);line-height:var(--credit-lh);font-weight:var(--credit-w);}
-  .d-credit h2,.d-body h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}  /* 見出し(credit/about)はアクセント */
-  .d-credit .role{color:inherit;margin-top:14px;}  /* 役職・名前は本文色 */
+  .d-credit h2,.d-body h2{font-weight:400;font-size:var(--fs);margin-bottom:14px;}
+  .d-body h2{color:var(--wc);}                              /* ABOUT見出しはアクセント */
+  .d-credit h2{color:var(--credit-h-color,var(--wc));}      /* credit見出し色（既定=アクセント/作品色）credit_heading_color */
+  .d-credit .role{color:var(--credit-txt-color,inherit);margin-top:14px;}  /* 役職色（既定=本文色）credit_body_color */
   .d-credit .role:first-of-type{margin-top:0;}
-  .d-credit .nm{color:#000;}
+  .d-credit .nm{color:var(--credit-txt-color,#000);}        /* 名前色（既定=本文色）*/
   .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--desc-lh);font-weight:var(--desc-w);max-width:700px;text-align:justify;margin-top:var(--about-gap);}
   .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border:0;border-radius:50%;background:var(--wc,var(--red));cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
   .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
@@ -329,6 +331,8 @@ const DEFAULTS={
   bg_color:"#ffffff",      /* 背景色 */
   text_color:"#0a0a0a",    /* 文字色 */
   accent_color:"#00DD58",  /* プロフィール/✕印/作品見出しの基調色 */
+  credit_heading_color:"", /* credit 見出しの色（空=アクセント/作品色）*/
+  credit_body_color:"",    /* credit の役職・名前の色（空=本文色）*/
   work_colors:"",          /* 作品アクセント候補（カンマ区切り）空なら既定6色 */
   color_mode:"random",     /* random=候補から重複最小でランダム / fixed=workN_colorで個別指定 */
   site_image:"",           /* リンク共有時のプレビュー画像・タブのアイコン */
@@ -357,6 +361,8 @@ const KEY_ALIASES={
   "背景色":"bg_color",
   "文字色":"text_color",
   "基調色":"accent_color",
+  "クレジット見出し色":"credit_heading_color",
+  "クレジット本文色":"credit_body_color",
   "作品色":"work_colors",
   "カラーモード":"color_mode",
   "サイト画像":"site_image",
@@ -703,6 +709,9 @@ function applyDesign(){
   r.setProperty("--bg",    g("bg_color"));
   r.setProperty("--ink",   g("text_color"));
   r.setProperty("--accent",g("accent_color"));
+  /* creditの色（空なら削除→CSSのフォールバックが効く）*/
+  r.setProperty("--credit-h-color",g("credit_heading_color")||"");
+  r.setProperty("--credit-txt-color",g("credit_body_color")||"");
   /* ウェイト */
   r.setProperty("--title-w",  g("title_weight"));
   r.setProperty("--credit-w", g("credit_weight"));
