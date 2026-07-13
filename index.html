@@ -141,10 +141,8 @@
   .label.trophy{line-height:1;white-space:normal;will-change:left,top;}
   @media (prefers-reduced-motion:reduce){.label.trophy{animation:none !important;}}
   .d-credit{grid-column:2;grid-row:1 / span 3;font-size:var(--fs);line-height:var(--credit-lh);font-weight:var(--credit-w);}
-  .d-credit h2,.d-body h2{font-weight:400;font-size:var(--fs);margin-bottom:14px;}
-  .d-body h2{color:var(--wc);}          /* ABOUT見出しはアクセント */
-  .d-credit h2{color:inherit;}          /* クレジットは本文と同じ色 */
-  .d-credit .role{color:inherit;margin-top:14px;}
+  .d-credit h2,.d-body h2{color:var(--wc);font-weight:400;font-size:var(--fs);margin-bottom:14px;}  /* 見出し(credit/about)はアクセント */
+  .d-credit .role{color:inherit;margin-top:14px;}  /* 役職・名前は本文色 */
   .d-credit .role:first-of-type{margin-top:0;}
   .d-credit .nm{color:#000;}
   .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--desc-lh);font-weight:var(--desc-w);max-width:700px;text-align:justify;margin-top:var(--about-gap);}
