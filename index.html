@@ -333,6 +333,7 @@ const DEFAULTS={
   trophy_speed:"1",        /* トロフィーの速さ（大きいほど速い。1=標準）*/
   message:"",              /* 最下部・左下に出すメッセージ */
   message_sparkle:"on",    /* メッセージのキラキラ演出 on/off */
+  demo_video:DEMO_VIDEO,   /* workN_video が空の作品で使うフォールバック動画（URL/ID）*/
   /* design : ウェイト（400=標準, 700=太字）セクション別 */
   title_weight:"700",
   credit_weight:"400",
@@ -360,6 +361,7 @@ const KEY_ALIASES={
   "トロフィー速度":"trophy_speed",
   "メッセージ":"message",
   "キラキラ":"message_sparkle",
+  "デモ動画":"demo_video",
   "タイトルウェイト":"title_weight",
   "クレジットウェイト":"credit_weight",
   "プロフィールウェイト":"profile_weight",
@@ -439,7 +441,12 @@ async function loadSheet(){
 }
 
 /* ===== helpers ===== */
-function ytId(s){if(!s)return DEMO_VIDEO;const m=s.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/);return m?m[1]:s.trim();}
+function ytId(s){
+  s=(s||"").trim();
+  if(!s) s=(g("demo_video")||"").trim();   /* workN_video 未入力なら demo_video キーを使う */
+  if(!s) return DEMO_VIDEO;
+  const m=s.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/);return m?m[1]:s;
+}
 /* Google Drive 等の共有リンクを <img> で表示できる直リンクへ変換 */
 function imgURL(s){
   if(!s)return "";
