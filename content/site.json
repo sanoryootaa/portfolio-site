@@ -1,0 +1,40 @@
+{
+  "title": "sano ryota works archives",
+  "image": "",
+  "message": "Hire me maybe🙂",
+  "message_sparkle": false,
+  "colors": {
+    "background": "#ffffff",
+    "text": "#0a0a0a",
+    "accent": "#00E62E",
+    "credit_heading": "",
+    "credit_body": "",
+    "work_palette": [
+      "#00E62E",
+      "#001AE0",
+      "#DF0901",
+      "#FFC900",
+      "#851AFF",
+      "#FF6C00"
+    ],
+    "mode": "fixed"
+  },
+  "typography": {
+    "tracking": 100,
+    "line_height": 100,
+    "title_line_height": 100,
+    "credit_line_height": 140,
+    "profile_line_height": 140,
+    "desc_line_height": 160,
+    "title_weight": 700,
+    "credit_weight": 400,
+    "profile_weight": 400,
+    "desc_weight": 400,
+    "label_weight": 400
+  },
+  "spacing": {
+    "label_gap": 8,
+    "about_gap": 0
+  },
+  "trophy_speed": 0.2
+}

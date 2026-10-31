@@ -1,0 +1,113 @@
+# Pages CMS 管理画面の設定（https://app.pagescms.org）
+# content/*.json の項目を増やしたら、ここにも同じ name で足す。
+media:
+  input: media
+  output: /media
+
+content:
+  - name: works
+    label: 作品
+    type: file
+    path: content/works.json
+    format: json
+    fields:
+      - name: works
+        label: 作品一覧（上から順に表示・ドラッグで並べ替え）
+        type: object
+        list: true
+        fields:
+          - { name: title, label: タイトル, type: string, required: true }
+          - { name: category, label: カテゴリ, type: string, description: "例: projection mapping / concept film" }
+          - { name: year, label: 制作年, type: string }
+          - { name: thumb, label: サムネ画像, type: image }
+          - { name: video, label: 動画（YouTube URL）, type: string }
+          - { name: description, label: 説明文, type: text }
+          - { name: award, label: 受賞歴, type: string, description: 入力した作品だけトロフィーが付く }
+          - { name: color, label: 作品色, type: string, description: "#RRGGBB。カラーモードが fixed のとき使う" }
+          - name: credits
+            label: クレジット
+            type: object
+            list: true
+            fields:
+              - { name: role, label: 役職, type: string }
+              - { name: names, label: 名前, type: string, list: true }
+
+  - name: profile
+    label: プロフィール
+    type: file
+    path: content/profile.json
+    format: json
+    fields:
+      - { name: label, label: 右上リンクの文言, type: string }
+      - { name: name, label: 氏名, type: string }
+      - { name: role, label: 肩書き, type: string }
+      - { name: photo, label: 写真, type: image }
+      - { name: about, label: ABOUT ME, type: text }
+      - name: career
+        label: CAREER
+        type: object
+        list: true
+        fields:
+          - { name: date, label: 年月, type: string, description: "例: 2023.4" }
+          - { name: text, label: 内容, type: string }
+      - name: awards
+        label: AWARDS
+        type: object
+        list: true
+        fields:
+          - { name: date, label: 年月, type: string }
+          - { name: text, label: 内容, type: string }
+      - { name: skills, label: SKILLS, type: string, list: true }
+      - { name: mail, label: メール, type: string }
+      - { name: instagram, label: Instagram URL, type: string }
+      - { name: youtube, label: YouTube URL, type: string }
+
+  - name: site
+    label: サイト設定
+    type: file
+    path: content/site.json
+    format: json
+    fields:
+      - { name: title, label: サイトタイトル, type: string }
+      - { name: image, label: OGP・favicon画像, type: image }
+      - { name: message, label: 最下部メッセージ, type: string }
+      - { name: message_sparkle, label: メッセージのキラキラ演出, type: boolean }
+      - { name: trophy_speed, label: トロフィー速度（1=標準）, type: number }
+      - name: colors
+        label: 色
+        type: object
+        fields:
+          - { name: background, label: 背景色, type: string }
+          - { name: text, label: 文字色, type: string }
+          - { name: accent, label: 基調色, type: string }
+          - { name: credit_heading, label: クレジット見出し色（空=作品色）, type: string }
+          - { name: credit_body, label: クレジット本文色（空=文字色）, type: string }
+          - { name: work_palette, label: 作品色の候補（randomモード用）, type: string, list: true }
+          - name: mode
+            label: カラーモード
+            type: select
+            options:
+              values:
+                - { value: random, label: random（候補からランダム） }
+                - { value: fixed, label: fixed（作品ごとの色） }
+      - name: typography
+        label: 文字組み（イラレ感覚の数値）
+        type: object
+        fields:
+          - { name: tracking, label: トラッキング（1/1000em）, type: number }
+          - { name: line_height, label: 行間・全体（％）, type: number }
+          - { name: title_line_height, label: 行間・作品タイトル, type: number }
+          - { name: credit_line_height, label: 行間・クレジット, type: number }
+          - { name: profile_line_height, label: 行間・プロフィール, type: number }
+          - { name: desc_line_height, label: 行間・説明文, type: number }
+          - { name: title_weight, label: ウェイト・作品タイトル, type: number }
+          - { name: credit_weight, label: ウェイト・クレジット, type: number }
+          - { name: profile_weight, label: ウェイト・プロフィール, type: number }
+          - { name: desc_weight, label: ウェイト・説明文, type: number }
+          - { name: label_weight, label: ウェイト・年/カテゴリ, type: number }
+      - name: spacing
+        label: 余白（px）
+        type: object
+        fields:
+          - { name: label_gap, label: 年/カテゴリとサムネの距離, type: number }
+          - { name: about_gap, label: ABOUT上の余白, type: number }

@@ -1,0 +1,496 @@
+{
+  "works": [
+    {
+      "title": "Between Your Stars",
+      "category": "projection mapping",
+      "year": "2026",
+      "thumb": "/media/works/between-your-stars.jpg",
+      "video": "https://youtu.be/15gAot3p14A",
+      "description": "東京都庁舎に合わせて制作。",
+      "award": "",
+      "color": "#851AFF",
+      "credits": [
+        {
+          "role": "Concept",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Director",
+          "names": [
+            "RYOTA SANO",
+            "YAYOI IWASAKI"
+          ]
+        },
+        {
+          "role": "3DCG",
+          "names": [
+            "HAYATO UBUKATA",
+            "RYOTA SANO",
+            "HANA KIMURA",
+            "YUINA MORI",
+            "MIO TAKAHASHI",
+            "MANAMI KUMAGAI",
+            "SUZUNA KAN",
+            "MAHORO ODA"
+          ]
+        },
+        {
+          "role": "Edit",
+          "names": [
+            "RYOTA SANO"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Threads of Life",
+      "category": "projection mapping",
+      "year": "2025",
+      "thumb": "/media/works/threads-of-life.jpg",
+      "video": "https://youtu.be/FEqgXuUvYSc",
+      "description": "駅のホームには、多様な人々が行き交います。異なる目的地へ向かいながらも、一瞬の間、同じ空間を共有し、見えない繋がりが生まれます。都市は、国籍や世代、価値観を超えた人々が交差する場であり、その出会いが未来を形作ります。そして、クジラや魚が悠然と泳ぎ、異なる種が共存しながら時を紡ぐ海。2つの世界で過去から未来へと繋がる「いのちのつながり」を描きました。\n人間には人間のためだけの未来ではなく、地球上のあらゆる生命と共に未来を創ることが求められます。\n本作では、すべての生命と共に創る、新たな共生のビジョンを私たちの視点を通して表現しました。",
+      "award": "大阪・関西万博  シャインハットプロジェクションマッピング 上映作品選出",
+      "color": "#DF0901",
+      "credits": [
+        {
+          "role": "Concept",
+          "names": [
+            "YUINA MORI",
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "3DCG",
+          "names": [
+            "YUINA MORI",
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Color Grading & Edit",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Production Support",
+          "names": [
+            "NAOKI SAKEGAWA",
+            "HAYATO UBUKATA"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "3",
+      "category": "video installation",
+      "year": "2025",
+      "thumb": "/media/works/three.jpg",
+      "video": "https://youtu.be/Th4yUgXUXV8",
+      "description": "3面スクリーンを用いた没入空間である映像スタジオB-Immersive Cubeに対し、フォトリアルな隣接空間の拡張を試みた。実際の視点と3D空間のパースペクティブを同期させることで、平面スクリーン上に奥行きの軸を創出している。また、没入感を損なわずに空間を鑑賞できるよう、静的な美しさを基調とした構成をおこなった。多様な表現が蓄積されたこのスタジオにおいて、本作は新たなアプローチを提案するものである。",
+      "award": "",
+      "color": "#00E62E",
+      "credits": [
+        {
+          "role": "All",
+          "names": [
+            "RYOTA SANO"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "言葉の瓶",
+      "category": "public ad",
+      "year": "2025",
+      "thumb": "/media/works/kotoba-no-bin.jpg",
+      "video": "https://youtu.be/bOadL8Hf7_w",
+      "description": "自分に対してラベリングをして自らの可能性を狭める行為に問題提起する作品。自分を囲い込む言葉を瓶で視覚化し、大量の瓶はVFXで表現した。",
+      "award": "ACジャパン広告学生賞 CM映像部門 優秀賞受賞",
+      "color": "#001AE0",
+      "credits": [
+        {
+          "role": "Cast",
+          "names": [
+            "TAKEMITSU SATO"
+          ]
+        },
+        {
+          "role": "Concept & Direction",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Cinematography",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Edit",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "VFX",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Props & Support",
+          "names": [
+            "HIKARI NATSUI"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Fashion Lab × Photography majors Making-of",
+      "category": "concept film",
+      "year": "2025",
+      "thumb": "/media/works/fashion-lab-photography-majors-making-of.jpg",
+      "video": "https://youtu.be/RniGpoXr4as",
+      "description": "ファッション専攻 × 写真専攻で行った企画のメイキングとして制作",
+      "award": "",
+      "color": "#FF6C00",
+      "credits": [
+        {
+          "role": "DIRECTOR",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "FASHION LAB",
+          "names": [
+            "YUKA ONO",
+            "MOMO IGARASHI",
+            "HIROKI FUNADA",
+            "KAWAMURA ARISA",
+            "KURUMI ITO",
+            "YUMEKO KATO",
+            "HANA YAMAGUCHI",
+            "HANANO MACHIDA"
+          ]
+        },
+        {
+          "role": "DEPARTMENT OF PHOTOGRAPHY",
+          "names": [
+            "KIYOKA KUMAGAI",
+            "MINORI NOZAKI",
+            "MANAKA NAMIKI",
+            "MAKOTO KOMIYA"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "NID School Fest. - FINALE",
+      "category": "projection mapping",
+      "year": "2024",
+      "thumb": "/media/works/nid-school-fest-finale.jpg",
+      "video": "https://youtu.be/okjAvoyKADQ",
+      "description": "長岡造形大学の大学祭でフィナーレとして制作。企画立案から制作、上映まで一貫して有志の生徒で行った。\n祭典の終わりに相応しいものとして、エンドクレジットをテーマに、運営生徒の名前をオブジェクトとして使用した。",
+      "award": "にいがたデジコングランプリ 動画部門 グランプリ受賞",
+      "color": "#FFC900",
+      "credits": [
+        {
+          "role": "Direction",
+          "names": [
+            "NAOKI SAKEGAWA",
+            "HAYATO UBUKATA",
+            "RYOTA SANO",
+            "MANAMI KUMAGAI"
+          ]
+        },
+        {
+          "role": "3DCG",
+          "names": [
+            "NAOKI SAKEGAWA",
+            "HAYATO UBUKATA",
+            "RYOTA SANO",
+            "RYO INABA",
+            "AMAMI GUNJI",
+            "HANA KIMURA",
+            "YUINA MORI",
+            "TAKUMI TAMURA",
+            "MIO TAKAHASHI",
+            "YAYOI IWASAKI",
+            "FUMIKA URA",
+            "KOTONE SAKAGUCHI",
+            "MANAMI KUMAGAI"
+          ]
+        },
+        {
+          "role": "Opening Sound Design",
+          "names": [
+            "SHOUTA TAKENOUCHI"
+          ]
+        },
+        {
+          "role": "Edit",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Technical Support",
+          "names": [
+            "SOLU MEDHIAGE inc."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Suzuna Kan",
+      "category": "concept film",
+      "year": "2025",
+      "thumb": "/media/works/suzuna-kan.jpg",
+      "video": "https://youtu.be/VWwDfWWTXGE",
+      "description": "対象者のパーソナリティーを視覚的に表現した作品。日常のなかにある対比に焦点を当て、グラフィックを交えて構成した。",
+      "award": "",
+      "color": "#001AE0",
+      "credits": [
+        {
+          "role": "Cast",
+          "names": [
+            "SUZUNA KAN"
+          ]
+        },
+        {
+          "role": "Direction",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Cinematography",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Edit",
+          "names": [
+            "RYOTA SANO"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "かいまみ",
+      "category": "projection mapping",
+      "year": "2025",
+      "thumb": "/media/works/kaimami.jpg",
+      "video": "https://youtu.be/QXx9yu3ifrc",
+      "description": "テーマ「Voyage」に対し、単なる移動ではなく、「時間の旅」と定義した。 既存のプロジェクションマッピングに散見される、プリミティブな変形や派手な色彩の羅列へのアンチテーゼとして、写実的かつ上品なトーンによる「味わい深い読後感」を目指した。人類史や地球の変化を「旅」と捉え、視点を固定したまま奥行きの世界が変容していく構成を採用した。\nこの際、マッピング特有の「壁面変形」の面白さと、世界観への没入を促す「写実表現」を両立させるため、「ブラインド」の機構を導入した。板の回転による開閉動作が、壁面の物理的な変形として機能しつつ、同時に奥に広がる世界を覗く「窓」としての役割を果たす。この構造が作品の骨格となった。\nブラインドの左側を半透明、右側を不透明としたのは、私たちが歴史を認識する構造そのものの比喩になっている。歴史とは断片的なハイライトの連続であり、その間にある真実や変容は不可視である。垣間見える断片から、その周辺や行間にある物語を想像力で補完すること。タイトル『かいまみ』にはその姿勢を込めている。悠久の時を経て、その最先端に立つ我々が、東京ビッグサイトという巨大な窓を通して何を見据えるのか。その問いをラストシーンで表現した。",
+      "award": "東京国際プロジェクションマッピングアワードVol.10 上映作品選出",
+      "color": "#DF0901",
+      "credits": [
+        {
+          "role": "Concept",
+          "names": [
+            "NAOKI SAKEGAWA",
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Director",
+          "names": [
+            "RYOTA SANO",
+            "NAOKI SAKEGAWA"
+          ]
+        },
+        {
+          "role": "3DCG",
+          "names": [
+            "NAOKI SAKEGAWA",
+            "HAYATO UBUKATA",
+            "RYOTA SANO",
+            "RYO INABA",
+            "HANA KIMURA",
+            "YUINA MORI",
+            "TAKUMI TAMURA",
+            "MIO TAKAHASHI",
+            "YAYOI IWASAKI",
+            "MANAMI KUMAGAI",
+            "SUZUNA KAN"
+          ]
+        },
+        {
+          "role": "Edit",
+          "names": [
+            "RYOTA SANO"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "walk",
+      "category": "concept film",
+      "year": "2024",
+      "thumb": "/media/works/walk.jpg",
+      "video": "https://youtu.be/FJPxvpp6hO0",
+      "description": "膨大な量の人が行き交う現代の東京。人それぞれの目的意識が歩くことに現れ、街としてのエネルギーが浮かび上がってくる。\n3DCGとグラフィックを交えて東京のカオスを表現するように構成した。",
+      "award": "",
+      "color": "#001AE0",
+      "credits": [
+        {
+          "role": "Concept & Direction",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Cinematography",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Edit",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "VFX",
+          "names": [
+            "RYOTA SANO"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "幸福論",
+      "category": "short film",
+      "year": "2024",
+      "thumb": "/media/works/kofukuron.jpg",
+      "video": "https://youtu.be/zaMlUL9mslI",
+      "description": "第三の眼を持つ主人公を通して、他者の許容や人生の肯定を描いた作品。会話の”間”や、ローキーな画面で心情を表現した。",
+      "award": "",
+      "color": "#851AFF",
+      "credits": [
+        {
+          "role": "Cast",
+          "names": [
+            "RYOSEI YOSHIKAWA (Amane)",
+            "MANAMI NAGATA (Kana)",
+            "ATSUSHI YAMAMOTO (Professor)"
+          ]
+        },
+        {
+          "role": "Writing & Direction",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Cinematography",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Edit",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Special Makeup Effect",
+          "names": [
+            "RIKO MIYASHITA"
+          ]
+        },
+        {
+          "role": "Production Support",
+          "names": [
+            "RIKO MIYASHITA",
+            "CHINATSU KUDO"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "交流と挑戦",
+      "category": "documentary",
+      "year": "2024",
+      "thumb": "/media/works/koryu-to-chosen.jpg",
+      "video": "https://youtu.be/eOH_RdG8eCs",
+      "description": "髙橋佳李の考える、交流をする意味と挑戦を続ける理由。インタビューから見えてくる思いを表現したドキュメンタリー。",
+      "award": "",
+      "color": "#FF6C00",
+      "credits": [
+        {
+          "role": "Starring",
+          "names": [
+            "KAIRI TAKAHASHI"
+          ]
+        },
+        {
+          "role": "Concept & Production",
+          "names": [
+            "MANAMI KUMAGAI",
+            "MANA KOUCHI",
+            "RYOTA SANO",
+            "MIO TAKAHASHI"
+          ]
+        },
+        {
+          "role": "Edit",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Special Thanks",
+          "names": [
+            "3DR PLACE DESK",
+            "KAIRI TAKAHASHI",
+            "NAOKI SAKEGAWA",
+            "KENNGO SUGIYAMA",
+            "HAYATO UBUKATA",
+            "HIROFUMI HORIE",
+            "TAKARA KIDO"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ツクルヒト",
+      "category": "documentary",
+      "year": "2025",
+      "thumb": "/media/works/tsukuruhito.jpg",
+      "video": "https://youtu.be/k7Wwvs-I8Mo",
+      "description": "クリエイティブコーディングという手法を用いて表現を行っている生方隼人のビジョンを、1分のドキュメンタリーとしてまとめた。",
+      "award": "",
+      "color": "#00E62E",
+      "credits": [
+        {
+          "role": "All Words & Works",
+          "names": [
+            "HAYATO UBUKATA"
+          ]
+        },
+        {
+          "role": "Direction",
+          "names": [
+            "RYOTA SANO"
+          ]
+        },
+        {
+          "role": "Cinematography & Edit",
+          "names": [
+            "RYOTA SANO"
+          ]
+        }
+      ]
+    }
+  ]
+}

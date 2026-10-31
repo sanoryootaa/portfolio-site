@@ -1,0 +1,46 @@
+{
+  "label": "profile here",
+  "name": "Ryota Sano",
+  "role": "visual artist / filmmaker",
+  "photo": "/media/profile/photo.jpg",
+  "about": "実写映像からプロジェクションマッピング等のフル3DCGまで横断した幅広い映像制作を行う。企画・演出から、編集・カラーグレーディング・サウンドデザインなどポストプロダクションまで一貫して担当し、最終的な作品のクオリティ担保を行う。チーム制作ではディレクターとしてプロジェクト全体の監修を行う。",
+  "career": [
+    {
+      "date": "2004.8",
+      "text": "新潟県新潟市生まれ"
+    },
+    {
+      "date": "2020.4",
+      "text": "万代高等学校 英語理数科 入学"
+    },
+    {
+      "date": "2023.4",
+      "text": "長岡造形大学 デザイン学科 入学"
+    }
+  ],
+  "awards": [
+    {
+      "date": "2025.4",
+      "text": "大阪・関西万博  シャインハットプロジェクションマッピング 上映作品選出"
+    },
+    {
+      "date": "2025.11",
+      "text": "東京国際プロジェクションマッピングアワードVol.10 上映作品選出"
+    },
+    {
+      "date": "2025.11",
+      "text": "にいがたデジコングランプリ 動画部門 グランプリ受賞"
+    },
+    {
+      "date": "2026.4",
+      "text": "ACジャパン広告学生賞 CM映像部門 優秀賞受賞"
+    }
+  ],
+  "skills": [
+    "DaVinci Resolve / Blender / Premiere Pro / Illustrator / Lightroom",
+    "Language: English (TOEIC L&R 820, 英検 準1級)"
+  ],
+  "mail": "sanoryootaa@gmail.com",
+  "instagram": "https://www.instagram.com/sanoryootaa/",
+  "youtube": "https://www.youtube.com/@sanoryootaa"
+}
