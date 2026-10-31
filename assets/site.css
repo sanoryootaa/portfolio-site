@@ -1,0 +1,51 @@
+/* ===== 全ページ共通 ===== */
+:root{
+  --bg:#ffffff;--ink:#0a0a0a;--accent:#00E62E;
+  --fs:15px;
+  /* 英字=Helvetica、日本語=游ゴシック（Helveticaに無い文字だけ游ゴシックにフォールバック）*/
+  --sans:"Helvetica Neue",Helvetica,Arial,"Yu Gothic Medium","游ゴシック Medium",YuGothic,"游ゴシック体","Yu Gothic","游ゴシック",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--bg);color:var(--ink);overflow-x:hidden;}
+body{font-family:var(--sans);font-size:var(--fs);line-height:1.6;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+img{display:block;max-width:100%;}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+.emoji{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;}
+
+/* ===== 作品・プロフィール（別ページ：黒背景に白文字）===== */
+.dark{--bg:#000;--ink:#fff;--sub:rgba(255,255,255,.62);}
+.page{max-width:1180px;margin:0 auto;padding:120px 40px 120px;animation:pageIn .6s cubic-bezier(.22,1,.36,1) both;}
+@keyframes pageIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.home-link{position:fixed;top:30px;left:30px;z-index:20;mix-blend-mode:difference;color:#fff;}
+
+/* ✕：右上に固定。作品色で、ホームへ戻る */
+.closeX{--x:clamp(72px,7vw,140px);position:fixed;top:clamp(14px,2vw,30px);right:clamp(14px,2vw,30px);
+  width:var(--x);height:var(--x);z-index:30;cursor:pointer;animation:xIn .85s ease both;}
+.closeX:before,.closeX:after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--x)*1.26);height:calc(var(--x)*0.158);background:var(--wc,var(--accent));}
+.closeX:before{transform:translate(-50%,-50%) rotate(45deg);}
+.closeX:after{transform:translate(-50%,-50%) rotate(-45deg);}
+.closeX:hover:before,.closeX:hover:after{background:#fff;}
+@keyframes xIn{from{opacity:0;transform:rotate(-70deg);}to{opacity:1;transform:none;}}
+
+/* 見出し：英語＋日本語を並べる */
+.sec{margin-top:72px;}
+.sec>h2{font-size:var(--fs);font-weight:400;color:var(--wc,var(--accent));margin-bottom:18px;}
+.sec>h2 .ja{margin-left:.8em;}
+.sub-ja{color:var(--sub);}
+/* バイリンガル本文：PCは日英を左右に、スマホは縦積み */
+.bi{display:grid;grid-template-columns:1fr 1fr;gap:20px 48px;}
+.bi p{white-space:pre-line;text-align:justify;overflow-wrap:break-word;}
+.bi p[lang=en]{text-align:left;}
+
+@media (max-width:760px){
+  .page{padding:96px 20px 80px;}
+  .home-link{top:16px;left:18px;}
+  .closeX{--x:64px;top:12px;right:14px;}
+  .closeX:hover:before,.closeX:hover:after{background:var(--wc,var(--accent));}
+  .sec{margin-top:52px;}
+  .bi{grid-template-columns:1fr;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;}
+}

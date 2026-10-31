@@ -1,5 +1,6 @@
 # Pages CMS 管理画面の設定（https://app.pagescms.org）
 # content/*.json の項目を増やしたら、ここにも同じ name で足す。
+# 英語は「頭文字だけ大文字、他は小文字」（固有名詞は除く）
 media:
   input: media
   output: /media
@@ -17,15 +18,20 @@ content:
         list: true
         fields:
           - { name: title, label: タイトル, type: string, required: true }
-          - { name: category, label: カテゴリ, type: string, description: "例: projection mapping / concept film" }
+          - { name: slug, label: URL名, type: string, required: true, pattern: "^[a-z0-9-]+$", description: "半角英数字とハイフン。作品ページのURLになる（例: kaimami → work.html?id=kaimami）" }
+          - { name: category_en, label: ジャンル（英）, type: string, description: "例: Projection mapping" }
+          - { name: category_ja, label: ジャンル（日）, type: string, description: "例: プロジェクションマッピング" }
           - { name: year, label: 制作年, type: string }
+          - { name: award_en, label: 受賞歴（英）, type: string, description: 入力した作品だけトロフィーが付く }
+          - { name: award_ja, label: 受賞歴（日）, type: string }
+          - { name: about_ja, label: About（日）, type: text }
+          - { name: about_en, label: About（英）, type: text }
           - { name: thumb, label: サムネ画像, type: image }
+          - { name: images, label: 画像（作品ページに並ぶ）, type: image, list: true }
           - { name: video, label: 動画（YouTube URL）, type: string }
-          - { name: description, label: 説明文, type: text }
-          - { name: award, label: 受賞歴, type: string, description: 入力した作品だけトロフィーが付く }
           - { name: color, label: 作品色, type: string, description: "#RRGGBB。カラーモードが fixed のとき使う" }
           - name: credits
-            label: クレジット
+            label: クレジット（英語）
             type: object
             list: true
             fields:
@@ -38,26 +44,37 @@ content:
     path: content/profile.json
     format: json
     fields:
-      - { name: label, label: 右上リンクの文言, type: string }
-      - { name: name, label: 氏名, type: string }
-      - { name: role, label: 肩書き, type: string }
+      - { name: label, label: ホーム右上のリンク文言, type: string }
+      - { name: name_en, label: 氏名（英）, type: string }
+      - { name: name_ja, label: 氏名（日）, type: string }
+      - { name: role_en, label: 肩書き（英）, type: string }
+      - { name: role_ja, label: 肩書き（日）, type: string }
       - { name: photo, label: 写真, type: image }
-      - { name: about, label: ABOUT ME, type: text }
+      - { name: about_ja, label: About（日）, type: text }
+      - { name: about_en, label: About（英）, type: text }
       - name: career
-        label: CAREER
+        label: Career
         type: object
         list: true
         fields:
-          - { name: date, label: 年月, type: string, description: "例: 2023.4" }
-          - { name: text, label: 内容, type: string }
+          - { name: date, label: 年月, type: string, description: "例: 2023.4（空なら行頭から表示）" }
+          - { name: en, label: 内容（英）, type: string }
+          - { name: ja, label: 内容（日）, type: string }
       - name: awards
-        label: AWARDS
+        label: Awards & screenings
         type: object
         list: true
         fields:
           - { name: date, label: 年月, type: string }
-          - { name: text, label: 内容, type: string }
-      - { name: skills, label: SKILLS, type: string, list: true }
+          - { name: en, label: 内容（英）, type: string }
+          - { name: ja, label: 内容（日）, type: string }
+      - name: skills
+        label: Skills
+        type: object
+        list: true
+        fields:
+          - { name: en, label: 内容（英）, type: string }
+          - { name: ja, label: 内容（日・空でも可）, type: string }
       - { name: mail, label: メール, type: string }
       - { name: instagram, label: Instagram URL, type: string }
       - { name: youtube, label: YouTube URL, type: string }
@@ -69,19 +86,16 @@ content:
     format: json
     fields:
       - { name: title, label: サイトタイトル, type: string }
-      - { name: image, label: OGP・favicon画像, type: image }
-      - { name: message, label: 最下部メッセージ, type: string }
+      - { name: message, label: ホーム最下部のメッセージ, type: string }
       - { name: message_sparkle, label: メッセージのキラキラ演出, type: boolean }
       - { name: trophy_speed, label: トロフィー速度（1=標準）, type: number }
       - name: colors
         label: 色
         type: object
         fields:
-          - { name: background, label: 背景色, type: string }
-          - { name: text, label: 文字色, type: string }
-          - { name: accent, label: 基調色, type: string }
-          - { name: credit_heading, label: クレジット見出し色（空=作品色）, type: string }
-          - { name: credit_body, label: クレジット本文色（空=文字色）, type: string }
+          - { name: background, label: ホームの背景色, type: string }
+          - { name: text, label: ホームの文字色, type: string }
+          - { name: accent, label: 基調色（プロフィール見出しなど）, type: string }
           - { name: work_palette, label: 作品色の候補（randomモード用）, type: string, list: true }
           - name: mode
             label: カラーモード
@@ -90,24 +104,3 @@ content:
               values:
                 - { value: random, label: random（候補からランダム） }
                 - { value: fixed, label: fixed（作品ごとの色） }
-      - name: typography
-        label: 文字組み（イラレ感覚の数値）
-        type: object
-        fields:
-          - { name: tracking, label: トラッキング（1/1000em）, type: number }
-          - { name: line_height, label: 行間・全体（％）, type: number }
-          - { name: title_line_height, label: 行間・作品タイトル, type: number }
-          - { name: credit_line_height, label: 行間・クレジット, type: number }
-          - { name: profile_line_height, label: 行間・プロフィール, type: number }
-          - { name: desc_line_height, label: 行間・説明文, type: number }
-          - { name: title_weight, label: ウェイト・作品タイトル, type: number }
-          - { name: credit_weight, label: ウェイト・クレジット, type: number }
-          - { name: profile_weight, label: ウェイト・プロフィール, type: number }
-          - { name: desc_weight, label: ウェイト・説明文, type: number }
-          - { name: label_weight, label: ウェイト・年/カテゴリ, type: number }
-      - name: spacing
-        label: 余白（px）
-        type: object
-        fields:
-          - { name: label_gap, label: 年/カテゴリとサムネの距離, type: number }
-          - { name: about_gap, label: ABOUT上の余白, type: number }

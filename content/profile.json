@@ -1,44 +1,60 @@
 {
-  "label": "my profile",
-  "name": "Sano Ryota",
-  "role": "video artist",
+  "label": "My profile",
+  "name_en": "Sano Ryota",
+  "name_ja": "佐野涼太",
+  "role_en": "Video artist",
+  "role_ja": "映像作家",
   "photo": "/media/profile/photo.jpg",
-  "about": "実写映像からプロジェクションマッピング等のフル3DCGまで横断した幅広い映像制作を行う。企画・演出から、編集・カラーグレーディング・サウンドデザインなどポストプロダクションまで一貫して担当し、最終的な作品のクオリティ担保を行う。チーム制作ではディレクターとしてプロジェクト全体の監修を行う。",
+  "about_ja": "実写映像からプロジェクションマッピング等のフル3DCGまで横断した幅広い映像制作を行う。企画・演出から、編集・カラーグレーディング・サウンドデザインなどポストプロダクションまで一貫して担当し、最終的な作品のクオリティ担保を行う。チーム制作ではディレクターとしてプロジェクト全体の監修を行う。",
+  "about_en": "Works across a broad range of moving image, from live action to fully 3DCG pieces such as projection mapping. Handles everything from planning and direction through post-production — editing, color grading and sound design — to secure the quality of the final work. In team productions, oversees the entire project as director.",
   "career": [
     {
       "date": "2004.8",
-      "text": "新潟県新潟市生まれ"
+      "ja": "新潟県新潟市生まれ",
+      "en": "Born in Niigata, Japan"
     },
     {
       "date": "2020.4",
-      "text": "万代高等学校 英語理数科 入学"
+      "ja": "万代高等学校 英語理数科 入学",
+      "en": "Entered Bandai High School, English, Science and Mathematics course"
     },
     {
       "date": "2023.4",
-      "text": "長岡造形大学 デザイン学科 入学"
+      "ja": "長岡造形大学 デザイン学科 入学",
+      "en": "Entered Nagaoka Institute of Design, Department of Design"
     }
   ],
   "awards": [
     {
       "date": "2025.4",
-      "text": "大阪・関西万博  シャインハットプロジェクションマッピング 上映作品選出"
+      "ja": "大阪・関西万博 シャインハットプロジェクションマッピング 上映作品選出",
+      "en": "Expo 2025 Osaka, Kansai, Japan — Shine Hat projection mapping, selected for screening"
     },
     {
       "date": "2025.11",
-      "text": "東京国際プロジェクションマッピングアワードVol.10 上映作品選出"
+      "ja": "東京国際プロジェクションマッピングアワードVol.10 上映作品選出",
+      "en": "Tokyo International Projection Mapping Award Vol.10 — selected for screening"
     },
     {
       "date": "2025.11",
-      "text": "にいがたデジコングランプリ 動画部門 グランプリ受賞"
+      "ja": "にいがたデジコングランプリ 動画部門 グランプリ受賞",
+      "en": "Niigata Digicon Grand Prix — Video category, Grand prix"
     },
     {
       "date": "2026.4",
-      "text": "ACジャパン広告学生賞 CM映像部門 優秀賞受賞"
+      "ja": "ACジャパン広告学生賞 CM映像部門 優秀賞受賞",
+      "en": "AC Japan Ad Student Awards — TV commercial category, Excellence award"
     }
   ],
   "skills": [
-    "DaVinci Resolve / Blender / Premiere Pro / Illustrator / Lightroom",
-    "Language: English (TOEIC L&R 820, 英検 準1級)"
+    {
+      "en": "DaVinci Resolve / Blender / Premiere Pro / Illustrator / Lightroom",
+      "ja": ""
+    },
+    {
+      "en": "Language: English (TOEIC L&R 820, Eiken Grade Pre-1)",
+      "ja": "言語：英語（TOEIC L&R 820、英検準1級）"
+    }
   ],
   "mail": "sanoryootaa@gmail.com",
   "instagram": "https://www.instagram.com/sanoryootaa/",

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>Profile — Sano Ryota works archives</title>
+<meta property="og:image" content="https://sanoryota.com/media/site/ogp.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="media/site/favicon.png">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js"></script>
+<style>
+  .p-head{display:grid;grid-template-columns:1fr 300px;gap:48px;align-items:end;}
+  .p-name{font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.1;color:var(--accent);}
+  .p-name .ja{display:block;font-size:.42em;margin-top:.5em;font-weight:400;}
+  .p-role{margin-top:16px;display:flex;flex-wrap:wrap;gap:4px 1.2em;}
+  .p-photo{width:100%;aspect-ratio:3/4;object-fit:cover;background:#111;}
+  /* 年月＋内容（英・日）の行 */
+  .p-list{display:grid;grid-template-columns:max-content 1fr;gap:12px 28px;}
+  .p-list .d{white-space:nowrap;}
+  .p-list .t{display:flex;flex-direction:column;}
+  .p-list .full{grid-column:1/-1;}
+  .p-contact a{border-bottom:1px solid currentColor;overflow-wrap:anywhere;}
+  .p-contact .k{color:var(--sub);}
+  @media (max-width:760px){
+    .p-head{grid-template-columns:1fr;gap:32px;}
+    .p-photo{order:-1;max-width:240px;}
+    .p-list{column-gap:16px;}
+  }
+</style>
+</head>
+<body>
+<a class="home-link" id="homeLink" href="./"></a>
+<a class="closeX" id="close" href="./" aria-label="Close / 閉じる"></a>
+<main class="page" id="page"></main>
+<script>
+loadContent("site","profile").then(([site,p])=>{
+  applyColors(site,{dark:true});
+  document.getElementById("homeLink").textContent=site.title||"";
+  bindClose(document.getElementById("close"));
+  setTitle("Profile",site.title);
+
+  /* 年月＋英語＋日本語。年月が無い行は行頭から */
+  const rows=items=>`<div class="p-list">${(items||[]).map(it=>{
+    const t=`<span>${esc(it.en)}</span>${it.ja?`<span class="sub-ja">${esc(it.ja)}</span>`:""}`;
+    return it.date?`<div class="d">${esc(it.date)}</div><div class="t">${t}</div>`:`<div class="t full">${t}</div>`;
+  }).join("")}</div>`;
+  const link=(k,href,text,ev)=>href?`<div class="d k">${k}</div><div><a href="${esc(href)}" ${ev} ${href.startsWith("mailto:")?"":'target="_blank" rel="noopener"'}>${esc(text)}</a></div>`:"";
+  const bare=u=>(u||"").replace(/^https?:\/\/(www\.)?/,"").replace(/\/$/,"");
+
+  document.getElementById("page").innerHTML=
+    `<div class="p-head">
+       <div>
+         <h1 class="p-name">${esc(p.name_en)}<span class="ja">${esc(p.name_ja)}</span></h1>
+         <div class="p-role"><span>${esc(p.role_en)}</span><span class="sub-ja">${esc(p.role_ja)}</span></div>
+       </div>
+       ${p.photo?`<img class="p-photo" src="${esc(asset(p.photo))}" alt="${esc(p.name_en)}">`:""}
+     </div>
+     <section class="sec"><h2>About me<span class="ja">プロフィール</span></h2><div class="bi"><p lang="ja">${esc(p.about_ja)}</p><p lang="en">${esc(p.about_en)}</p></div></section>
+     <section class="sec"><h2>Career<span class="ja">経歴</span></h2>${rows(p.career)}</section>
+     <section class="sec"><h2>Awards &amp; screenings<span class="ja">受賞・上映</span></h2>${rows(p.awards)}</section>
+     <section class="sec"><h2>Skills<span class="ja">スキル</span></h2>${rows(p.skills)}</section>
+     <section class="sec p-contact"><h2>Contact<span class="ja">連絡先</span></h2><div class="p-list">
+       ${link("Mail",p.mail&&"mailto:"+p.mail,p.mail,`onclick="gaEv('contact_click',{label:'mail'})"`)}
+       ${link("Instagram",p.instagram,bare(p.instagram),`onclick="gaEv('sns_click',{platform:'instagram'})"`)}
+       ${link("YouTube",p.youtube,bare(p.youtube),`onclick="gaEv('sns_click',{platform:'youtube'})"`)}
+     </div></section>`;
+  gaEv("about_open");
+});
+</script>
+</body>
+</html>

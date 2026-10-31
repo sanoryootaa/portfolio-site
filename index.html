@@ -4,68 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
-<!-- ===== Google Analytics 4 ===== 測定IDの差し替えはこの下2か所(GA_ID)だけ ===== -->
-<script>var GA_ID="G-K5GHBEW050";</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K5GHBEW050"></script>
-<script>
-  window.dataLayer=window.dataLayer||[];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js',new Date());
-  /* GA4はIPを既定で匿名化（anonymize_ipは互換のため明示）。Google信号は無効でプライバシー最小配慮。Cookie同意バナーは付けない */
-  gtag('config',GA_ID,{anonymize_ip:true,allow_google_signals:false});
-</script>
-<!-- gtag.js が読み込めなくても下のJSは typeof gtag==='function' ガードで安全 -->
-<!-- ===== /GA4 ===== -->
-<title>sano ryota works archive</title>
-<!-- リンク共有時のプレビュー画像・タブのアイコン（site_image でシートから指定）-->
-<meta property="og:title" id="ogTitle" content="sano ryota works archive">
-<meta property="og:image" id="ogImage" content="https://lh3.googleusercontent.com/d/1kANZYppuxMJCWePFoMk7klaHJ8BlRE8Q=w800">
+<title>Sano Ryota works archives</title>
+<!-- リンク共有時のプレビュー画像（SNSはJSを読まないのでここに直書き）-->
+<meta property="og:title" content="Sano Ryota works archives">
+<meta property="og:image" content="https://sanoryota.com/media/site/ogp.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" id="twImage" content="https://lh3.googleusercontent.com/d/1kANZYppuxMJCWePFoMk7klaHJ8BlRE8Q=w800">
-<link rel="icon" id="favicon" href="https://lh3.googleusercontent.com/d/1UZ0m5Xl32j_JGDwNCfEBV87hP9CirErM=w1600">
+<meta name="twitter:image" content="https://sanoryota.com/media/site/ogp.jpg">
+<link rel="icon" href="media/site/favicon.png">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js"></script>
+<script>
+  /* 旧URL（#work-N / #profile）は新しいページへ転送 */
+  if(location.hash==="#profile")location.replace("profile.html");
+</script>
 <style>
-  :root{
-    --bg:#ffffff;--ink:#0a0a0a;--red:#ec3b27;
-    --accent:#00DD58;  /* プロフィール/✕印/作品見出しの基調色 accent_color / 基調色 */
-    --fs:15px;
-    /* === トラッキング・行間・ウェイト（スプレッドシートで上書き可能 / イラレ感覚の数値）=== */
-    /* 行間（行送り％：150 = 1.5倍）をセクション別に */
-    --lh:1.5;          /* 全体        line_height         / 行間 */
-    --title-lh:1.05;   /* 作品タイトル  title_line_height   / タイトル行間 */
-    --credit-lh:1.55;  /* クレジット    credit_line_height  / クレジット行間 */
-    --profile-lh:1.95; /* プロフィール本文 profile_line_height / プロフィール行間 */
-    --desc-lh:1.95;    /* 作品説明文    desc_line_height    / 説明行間 */
-    /* トラッキング（1/1000em：50 = 0.05em）。カーニングは 0 固定(font-kerning:none) */
-    --tracking:0;      /* 全体のトラッキング  tracking / トラッキング */
-    --label-gap:8px;   /* 年/カテゴリのサムネ端からの距離 label_gap / ラベル距離（px）*/
-    --about-gap:0px;   /* 作品ページ ABOUT の上の余白 about_gap / ABOUT上余白（px）*/
-    /* ウェイト（font-weight）をセクション別に */
-    --title-w:700;     /* 作品タイトル  title_weight   / タイトルウェイト */
-    --credit-w:400;    /* クレジット    credit_weight  / クレジットウェイト */
-    --profile-w:400;   /* プロフィール本文 profile_weight / プロフィールウェイト */
-    --desc-w:400;      /* 作品説明文    desc_weight    / 説明ウェイト */
-    --label-w:400;     /* 年/カテゴリ   label_weight   / ラベルウェイト */
-    --sans:"Helvetica Neue",Arial,"Yu Gothic",YuGothic,"游ゴシック体","游ゴシック","Hiragino Kaku Gothic ProN",sans-serif;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-  button{-webkit-tap-highlight-color:transparent;outline:none;}
-  html,body{background:var(--bg);color:var(--ink);overflow-x:hidden;}
-  /* イラレ相当: カーニング0 / 役物規則なし / プロポーショナルメトリクスON */
-  body{font-family:var(--sans);font-size:var(--fs);line-height:var(--lh);-webkit-font-smoothing:antialiased;
-    letter-spacing:var(--tracking);
-    font-kerning:none;                    /* カーニング0（ペアカーニング無効）*/
-    font-feature-settings:"palt" 1;       /* プロポーショナルメトリクスON */
-    text-spacing-trim:space-all;          /* 役物規則なし（約物の自動詰めをしない）*/
-  }
-  a{color:inherit;text-decoration:none;}
-  /* スクロール最下部・左下のメッセージ（サイトタイトルと同じフォント・サイズ）*/
-  .botmsg{display:none;position:relative;padding:24px 30px 30px;font-family:var(--sans);font-size:var(--fs);line-height:1.5;color:var(--ink);}
+  /* スクロール最下部・左下のメッセージ */
+  .botmsg{display:none;position:relative;padding:24px 30px 30px;}
   .msg-trigger{cursor:pointer;display:inline-block;border-bottom:1px solid currentColor;}
   .msg-trigger::after{content:"✨";margin-left:.45em;border:0;animation:twinkle 1.3s steps(1,end) infinite;}
   @keyframes twinkle{50%{opacity:.15;}}
-  .msg-reveal{display:none;max-width:680px;white-space:pre-wrap;color:var(--ink);}
+  .msg-reveal{display:none;max-width:680px;white-space:pre-wrap;}
   .botmsg.no-spark .msg-trigger{display:none;}          /* キラキラOFF時はトリガーごと無し（丸出し）*/
-  .botmsg.no-spark .msg-reveal{animation:none;}         /* OFFはアニメ無しでプレーン表示 */
+  .botmsg.no-spark .msg-reveal{animation:none;}
   .botmsg.show .msg-trigger{display:none;}
   .botmsg.show .msg-reveal{display:block;animation:reveal .8s cubic-bezier(.16,1,.3,1) both;}
   @keyframes reveal{from{opacity:0;filter:blur(10px);transform:translateY(10px) scale(.97);}
@@ -76,592 +36,150 @@
     100%{opacity:0;transform:translateY(-46px) scale(1.25) rotate(45deg);}}
 
   header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;
-    padding:30px 30px;z-index:60;pointer-events:none;mix-blend-mode:difference;color:#fff;}
-  header div{font-size:var(--fs);}
+    padding:30px 30px;z-index:60;pointer-events:none;mix-blend-mode:difference;color:#fff;line-height:1.5;}
   header .center{position:absolute;left:50%;top:30px;transform:translateX(-50%);pointer-events:auto;cursor:pointer;}
-  header .right{margin-left:auto;pointer-events:auto;cursor:pointer;display:inline-flex;align-items:center;}
+  header .right{margin-left:auto;pointer-events:auto;display:inline-flex;align-items:center;}
   /* アイコンはヘッダー(反転合成)の外の別レイヤー。素の色のまま点滅 */
-  .favico{position:fixed;width:var(--fs);height:var(--fs);object-fit:contain;z-index:61;cursor:pointer;animation:blink 1s steps(1,end) infinite;}
+  .favico{position:fixed;width:var(--fs);height:var(--fs);object-fit:contain;z-index:61;animation:blink 1s steps(1,end) infinite;}
   @keyframes blink{50%{opacity:0;}}
 
-  /* archive : airy %-scatter, fixed font */
+  /* archive : airy %-scatter */
   #stage{position:relative;width:100%;max-width:1500px;margin:0 auto;aspect-ratio:1600/4600;}
-  .work{position:absolute;width:19%;cursor:pointer;}
-  /* キーボード操作時のフォーカスを可視化（マウス操作では出さない）*/
-  .work:focus-visible,header [role=button]:focus-visible,.closeX:focus-visible,.msg-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+  .work{position:absolute;width:19%;display:block;}
   .thumb{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#0c0c0c;}
-  .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
-  .thumb .field{width:100%;height:100%;background:linear-gradient(160deg,#1c1c1c,#080808);}
+  .thumb img{width:100%;height:100%;object-fit:cover;}
   .thumb::after{content:"";position:absolute;inset:0;background:#000;opacity:0;transition:opacity .25s ease;}
   .work:hover .thumb::after{opacity:1;}                 /* hover = 黒 */
-  .label{position:absolute;font-size:var(--fs);line-height:1;white-space:nowrap;color:var(--ink);font-weight:var(--label-w);--p:50%;--ph:20%;}
-  /* 上ラベルは小文字ディセンダー(p,j等)の分だけ少し持ち上げ、サムネとの視覚距離を四辺で均一化 */
-  .label.e-top{padding-bottom:.16em;}
-  /* サムネ端からの距離は四辺とも一定（--label-gap, px指定可）*/
-  .label.e-top{bottom:calc(100% + var(--label-gap));top:auto;left:var(--p);}
-  .label.e-bottom{top:calc(100% + var(--label-gap));left:var(--p);}
-  .label.e-left{right:calc(100% + var(--label-gap));left:auto;top:var(--p);}
-  .label.e-right{left:calc(100% + var(--label-gap));top:var(--p);}
-
-  /* overlays */
-  .overlay{position:fixed;inset:0;background:#000;z-index:100;overflow-y:auto;display:flex;opacity:0;visibility:hidden;transition:opacity .5s ease .16s,visibility .5s ease;}
-  .overlay.open{opacity:1;visibility:visible;transition:opacity .4s ease,visibility .4s ease;}
-  /* 開閉アニメ：カードがふわっと上下しながらフェード。閉じる時もなめらかに */
-  .sheet,.p-sheet{opacity:0;transform:translateY(28px) scale(.99);
-    transition:opacity .5s ease .16s,transform .55s cubic-bezier(.22,1,.36,1) .16s;}
-  .overlay.open .sheet,.overlay.open .p-sheet{opacity:1;transform:none;transition:opacity .45s ease,transform .55s cubic-bezier(.22,1,.36,1);}
-  /* ✕印：開くときは回りながら出現。閉じるときは先に回転し始めてからゆっくり回って消える（回転は控えめ）*/
-  /* 閉じる時：その場で少し回転しつつ、今より少し早めにフェードアウト */
-  .closeX{opacity:0;transform:rotate(-70deg);transition:opacity .3s ease .08s,transform .5s ease;}
-  .overlay.open .closeX{opacity:1;transform:none;transition:opacity .3s ease,transform .85s ease .05s;}
-  /* ✕：サイズは画面幅で可変。位置は各カードの右上角に追従（狭い画面で被らず、広い画面で離れすぎない）*/
-  #detail{--cw:min(95vw,1640px);}
-  #profile{--cw:min(92vw,1120px);}
-  .closeX{--x:clamp(104px,9vw,200px);position:fixed;top:clamp(14px,2vw,30px);
-    right:max(18px,calc((100vw - var(--cw,min(95vw,1640px)))/2 - var(--x)*0.28));
-    width:var(--x);height:var(--x);z-index:130;cursor:pointer;background:none;border:0;}
-  .closeX:before,.closeX:after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--x)*1.26);height:calc(var(--x)*0.158);background:var(--xc,var(--accent));}
-  .closeX:before{transform:translate(-50%,-50%) rotate(45deg);}
-  .closeX:after{transform:translate(-50%,-50%) rotate(-45deg);}
-  .closeX:hover:before,.closeX:hover:after{background:#fff;}
-
-  /* detail : video / title+meta / credit  = 3 separate columns (intentional) */
-  .sheet{background:#fff;color:#000;width:95%;max-width:1640px;margin:auto;padding:56px 60px 60px;
-    display:grid;grid-template-columns:2.3fr .8fr;gap:20px 46px;align-items:start;--wc:var(--accent);}
-  .d-video{grid-column:1;grid-row:1;}
-  .player{position:relative;width:100%;aspect-ratio:16/9;background:#111;overflow:hidden;}
-  .player img{width:100%;height:100%;object-fit:cover;display:block;}
-  .player .field{width:100%;height:100%;background:linear-gradient(160deg,#1c1c1c,#080808);}
-  .player iframe{width:100%;height:100%;border:0;display:block;}
-  .d-meta{grid-column:1;grid-row:2;}   /* タイトル/カテゴリ/制作年/受賞 を動画の下・ABOUTの上に */
-  .d-meta h1{color:var(--wc);font-size:36px;font-weight:var(--title-w);line-height:var(--title-lh);}
-  .d-meta .sub{color:var(--wc);font-size:var(--fs);line-height:1.4;margin-top:6px;}
-  .d-meta .award{color:var(--ink);font-size:var(--fs);margin-top:10px;line-height:1.5;}
-  /* 絵文字は Apple のものを使う */
-  .label.trophy,.tEmoji{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;}
+  .label{position:absolute;line-height:1;white-space:nowrap;--p:50%;}
+  /* サムネ端からの距離は四辺とも 8px。上ラベルはディセンダー分だけ持ち上げる */
+  .label.e-top{bottom:calc(100% + 8px);left:var(--p);padding-bottom:.16em;}
+  .label.e-bottom{top:calc(100% + 8px);left:var(--p);}
+  .label.e-left{right:calc(100% + 8px);top:var(--p);}
+  .label.e-right{left:calc(100% + 8px);top:var(--p);}
   /* トロフィー：作品ごとの歪んだループ(t-roam-i)に沿って一定速度で滑らかに進む */
-  .label.trophy{line-height:1;white-space:normal;will-change:left,top;}
-  @media (prefers-reduced-motion:reduce){.label.trophy{animation:none !important;}}
-  .d-credit{grid-column:2;grid-row:1 / span 3;font-size:var(--fs);line-height:var(--credit-lh);font-weight:var(--credit-w);}
-  .d-credit h2,.d-body h2{font-weight:400;font-size:var(--fs);margin-bottom:14px;}
-  .d-body h2{color:var(--wc);}                              /* ABOUT見出しはアクセント */
-  .d-credit h2{color:var(--credit-h-color,var(--wc));}      /* credit見出し色（既定=アクセント/作品色）credit_heading_color */
-  .d-credit .role{color:var(--credit-txt-color,inherit);margin-top:14px;}  /* 役職色（既定=本文色）credit_body_color */
-  .d-credit .role:first-of-type{margin-top:0;}
-  .d-credit .nm{color:var(--credit-txt-color,#000);}        /* 名前色（既定=本文色）*/
-  .d-body{grid-column:1;grid-row:3;font-size:var(--fs);line-height:var(--desc-lh);font-weight:var(--desc-w);max-width:700px;text-align:justify;margin-top:var(--about-gap);}
-  .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border:0;border-radius:50%;background:var(--wc,var(--red));cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
-  .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
-  .playbtn:after{content:"";border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;}
-
-  /* profile : same manner as detail (white card, 'credit'-style colored lowercase headers) */
-  .p-sheet{background:#fff;color:#000;width:92%;max-width:1120px;margin:auto;padding:60px 64px 80px;--wc:var(--accent);}
-  .p-name{color:var(--wc);font-size:40px;font-weight:700;letter-spacing:0;line-height:1.05;}
-  .p-role{color:var(--wc);font-size:var(--fs);margin-top:6px;}
-  .p-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:56px;margin-top:48px;align-items:start;}
-  .p-main{min-width:0;}                                  /* グリッド内のはみ出し防止 */
-  .p-main section{margin-bottom:34px;}
-  .p-main h3{color:var(--wc);font-size:var(--fs);font-weight:400;margin-bottom:14px;}
-  .p-main p{font-size:var(--fs);line-height:var(--profile-lh);font-weight:var(--profile-w);max-width:620px;overflow-wrap:break-word;text-align:justify;}
-  /* career / awards / skills：日付列＋内容列の2カラムグリッドで左右を揃える */
-  /* row-gap は使わず行間(profile_line_height)で項目間隔を決める → セクション全体に効く */
-  .p-list{display:grid;grid-template-columns:max-content 1fr;column-gap:18px;row-gap:0;font-size:var(--fs);line-height:var(--profile-lh);}
-  .p-list dt{white-space:nowrap;color:#000;}
-  .p-list dd{min-width:0;overflow-wrap:anywhere;}
-  .p-list dd.full{grid-column:1/-1;}   /* 日付なし行は行頭(1列目左端)から */
-  /* contact：横並び。下線=リンクが分かるよう維持 */
-  .p-row{display:flex;gap:18px;font-size:var(--fs);line-height:var(--profile-lh);}
-  .p-row span,.p-row a{min-width:0;overflow-wrap:anywhere;} /* 長文・長URLを折り返して右にはみ出さない */
-  .p-row .k{min-width:92px;flex-shrink:0;}
-  .p-contact .p-row .k{min-width:150px;}
-  .p-main a{border-bottom:1px solid #000;}
-  .p-photo .ph{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#1c1c1c,#080808) center/cover no-repeat;}
+  .label.trophy{white-space:normal;will-change:left,top;}
 
   @media (max-width:760px){
-    /* スマホ：タイトルは左、プロフィールは右で一段下げる */
-    /* タイトルとプロフィールの上端を揃え、両方を少しだけ下げる */
-    header{align-items:flex-start;padding:16px 18px;}
-    header .center{position:static;left:auto;top:auto;transform:none;max-width:58%;}
-    header .right{margin-left:auto;margin-top:0;}
-    #stage{aspect-ratio:auto;max-width:none;padding:132px 20px 90px;}
-    /* サムネはランダムに散らす（縦一列にしない）。端から端まで大きく振る */
-    /* 横位置はJSが --mleft に入れた値を使う（モバイルのみ適用）*/
+    header{padding:16px 18px;}
+    header .center{position:static;transform:none;max-width:58%;}
+    #stage{aspect-ratio:auto !important;max-width:none;padding:132px 20px 90px;}
+    /* 横位置はJSが --mleft に入れたランダム値（モバイルのみ適用）*/
     .work{position:relative !important;left:auto !important;top:auto !important;width:54% !important;margin:0 0 108px var(--mleft,0) !important;}
-    /* 上下ラベルは1行のまま（重なり防止）。横ラベルだけ収まらない時に折り返す */
     .label.e-left,.label.e-right{white-space:normal;max-width:22vw;}
-    /* スマホ：visibilityを使わず、オーバーレイは常時表示・透明・クリック透過。
-       カードは閉じ位置(画面下)に常駐し、transform だけでスライド開閉（即時非表示が起きない）*/
-    /* 閉じ/閉じ中は透明(ホームが見える)、開いている間は白で全面カバー(ホームを隠す) */
-    .overlay{background:transparent !important;opacity:1 !important;visibility:visible !important;pointer-events:none;display:block !important;transition:none !important;}
-    .overlay.open{background:#fff !important;pointer-events:auto;}
-    /* 閉じ：✕の回転を先に見せるため少し遅らせ、ゆっくりスライドダウン＋後半でフェードアウト */
-    .sheet,.p-sheet{margin:0;width:100%;max-width:none;min-height:100vh;min-height:100dvh;
-      opacity:0;transform:translateY(100vh);
-      transition:transform 1s cubic-bezier(.4,0,.2,1) .16s, opacity 1s ease .16s !important;}
-    /* 開く：遅延なしでスッと上がる（不透明はすぐ） */
-    .overlay.open .sheet,.overlay.open .p-sheet{opacity:1 !important;transform:none !important;
-      transition:transform .72s cubic-bezier(.32,.72,0,1), opacity .28s ease !important;}
-    /* スマホでは✕ホバーで白くしない（タッチで張り付くため）*/
-    .closeX:hover:before,.closeX:hover:after{background:var(--xc,var(--accent));}
-    .closeX{top:14px;right:16px;width:104px;height:104px;}
-    .closeX:before,.closeX:after{width:132px;height:20px;}
-    /* min-height:100dvh でも行が引き伸ばされないよう上から詰める（内容が少ない時の大きな余白を防ぐ）*/
-    .sheet{grid-template-columns:1fr;padding:26px 20px 46px;gap:18px;align-content:start;}
-    .d-video,.d-meta,.d-credit,.d-body{grid-column:1 !important;grid-row:auto !important;}
-    .d-meta h1{font-size:28px;}
-    .p-sheet{padding:34px 22px 56px;}
-    .p-name{font-size:30px;}
-    .p-grid{grid-template-columns:1fr;gap:32px;margin-top:34px;}
-    .p-photo{order:-1;max-width:260px;}
-    /* コンタクト：横並びのまま詰めて、リンク(下線)が区切り線と紛れないようにする */
-    .p-contact .p-row .k{min-width:84px;}
-    .p-row{gap:12px;}
     .botmsg{padding:16px 18px 26px;}
   }
   @media (prefers-reduced-motion:reduce){
-    *{transition:none !important;}
-    /* 装飾の無限アニメも止める（点滅アイコン・キラキラ・スパーク）*/
-    .favico{animation:none !important;}
-    .msg-trigger::after{animation:none !important;}
-    .spark{animation:none !important;display:none !important;}
+    .spark{display:none !important;}
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="center" id="hTitle" role="button" tabindex="0" onclick="goHome()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goHome();}">sano ryota works archive</div>
-  <div class="right" id="hProfile" role="button" tabindex="0" onclick="openProfile()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openProfile();}"><span id="hProfileText">profile here</span></div>
+  <a class="center" id="hTitle" href="./" onclick="event.preventDefault();window.scrollTo({top:0,behavior:'smooth'})"></a>
+  <a class="right" id="hProfile" href="profile.html"></a>
 </header>
-<img class="favico" id="favicoTop" src="https://lh3.googleusercontent.com/d/1UZ0m5Xl32j_JGDwNCfEBV87hP9CirErM=w1600" alt="" onclick="openProfile()">
+<img class="favico" id="favicoTop" src="media/site/favicon.png" alt="">
 
 <main><div id="stage"></div></main>
 <footer class="botmsg" id="botmsg">
-  <span class="msg-trigger" id="msgTrigger" role="button" tabindex="0" onclick="showMessage()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showMessage();}">watch message from ryota sano</span>
+  <span class="msg-trigger" id="msgTrigger" role="button" tabindex="0" onclick="showMessage()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showMessage();}">Watch message from Ryota Sano</span>
   <div class="msg-reveal" id="bottomMsg"></div>
 </footer>
 
-<section id="detail" class="overlay" role="dialog" aria-modal="true" aria-label="作品詳細" aria-hidden="true">
-  <button class="closeX" id="dClose" aria-label="閉じる" onclick="closeAll()"></button>
-  <div class="sheet" id="sheet">
-    <div class="d-video"><div class="player" id="player"></div></div>
-    <div class="d-meta"><h1 id="dTitle"></h1><div class="sub" id="dSub"></div><div class="award" id="dAward"></div></div>
-    <div class="d-body" id="dBody"></div>
-    <div class="d-credit" id="dCredit"></div>
-  </div>
-</section>
-
-<section id="profile" class="overlay" role="dialog" aria-modal="true" aria-label="プロフィール" aria-hidden="true">
-  <button class="closeX" aria-label="閉じる" style="--xc:var(--accent)" onclick="closeAll()"></button>
-  <div class="p-sheet" id="pSheet"></div>
-</section>
-
 <script>
-/* ===== GA4 計測ヘルパー（gtag未読込でも落ちないようガード）=====
-   ※スクロール深度・エンゲージメント時間などはGA4の「拡張計測機能」が標準で取得。
-     ここで送るのは独自イベントのみ（scroll_bottom/engaged_browsing は名前が別なので二重計測にならない）。*/
-function gaEv(name,params){ if(typeof gtag==="function") gtag("event",name,params||{}); }
-let _gaWorkOpens=0, _gaEngaged=false, _gaCurTitle="";
-
-/* ===== Google Sheet (col A = keyword, col B = value) ===== */
-const SHEET_ID="17Mr0nny6o7xyvlWwVxq5igLhsAcyoX_6pp3pkvKRhbA";
-/* 読み込むタブ（シート）名。""=一番左のシート。
-   タブを分けたいときはここに名前を足す。後ろのタブが前のタブを上書き。 */
-const SHEET_TABS=["", "profile", "works"];
-function tabCSV(name){
-  /* headers=0 必須：付けないと gviz が先頭行を見出しと誤判定し、
-     プロフィール等の先頭キー群が1セルに結合されて反映されなくなる */
-  const base=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&headers=0`;
-  return name?`${base}&sheet=${encodeURIComponent(name)}`:base;
-}
-
-/* ===== layout config (design only, not in sheet) ===== */
-let PALETTE=["#00DD58","#2E7BFF","#FF4D3D","#FFC400","#B16CFF","#FF7A00"];
+/* ===== 配置（12作品ぶんの散らばり。13作品目以降は同じパターンを下へ繰り返す）===== */
 const layout=[
- {x:12,top:3,  yr:{e:"left",p:40,ph:36}, ca:{e:"bottom",p:10,ph:10}},
- {x:60,top:7,  yr:{e:"top",p:10,ph:10},  ca:{e:"bottom",p:55,ph:46}},
- {x:34,top:15, yr:{e:"left",p:30,ph:30}, ca:{e:"top",p:55,ph:50}},
- {x:6, top:23, yr:{e:"top",p:60,ph:46},  ca:{e:"bottom",p:10,ph:10}},
- {x:64,top:25, yr:{e:"top",p:15,ph:8},   ca:{e:"bottom",p:45,ph:40}},
- {x:28,top:34, yr:{e:"left",p:22,ph:24}, ca:{e:"bottom",p:50,ph:44}},
- {x:56,top:42, yr:{e:"top",p:55,ph:46},  ca:{e:"bottom",p:8,ph:8}},
- {x:10,top:48, yr:{e:"bottom",p:55,ph:46},ca:{e:"top",p:10,ph:10}},
- {x:40,top:56, yr:{e:"left",p:36,ph:36}, ca:{e:"top",p:55,ph:50}},
- {x:66,top:62, yr:{e:"top",p:15,ph:8},   ca:{e:"bottom",p:48,ph:42}},
- {x:18,top:71, yr:{e:"right",p:38,ph:44},ca:{e:"bottom",p:6,ph:6}},
- {x:46,top:80, yr:{e:"top",p:55,ph:44},  ca:{e:"left",p:30,ph:10}},
+ {x:12,top:3}, {x:60,top:7}, {x:34,top:15},{x:6, top:23},
+ {x:64,top:25},{x:28,top:34},{x:56,top:42},{x:10,top:48},
+ {x:40,top:56},{x:66,top:62},{x:18,top:71},{x:46,top:80},
 ];
-/* 作品の色：random=候補(PALETTE)から重複最小でランダム配分 / fixed=workN_colorで個別指定 */
-let colors=[];
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
-function recolor(){
-  const W=layout.length;
-  if(/^(fixed|固定)$/i.test((g("color_mode")||"").trim())){
-    colors=layout.map((_,i)=>(g(`work${i+1}_color`)||"").trim()||PALETTE[i%PALETTE.length]||"#00DD58");
-    return;
-  }
-  /* 候補を各色できるだけ均等(回数差≤1)に割り当て→シャッフル。被りを最小化 */
-  const ps=shuffle((PALETTE&&PALETTE.length?PALETTE:["#00DD58"]).slice());
-  const n=ps.length, base=Math.floor(W/n), extra=W%n, bag=[];
-  ps.forEach((c,i)=>{const cnt=base+(i<extra?1:0);for(let k=0;k<cnt;k++)bag.push(c);});
-  colors=shuffle(bag);
-}
-/* 初回の recolor() は DATA 定義後（boot）で呼ぶ（ここで呼ぶと DATA が未初期化でエラーになる）*/
-
-/* ===== default content（シート未入力なら空。サンプルテキストは出さない）===== */
-const DEMO_VIDEO="M7lc1UVf-VE"; /* workN_video 未入力時の埋め込みサンプル（差し替え可） */
-
-const DEFAULTS={
-  site_title:"sano ryota works archive",
-  profile_label:"profile here",
-  profile_name:"sano ryota",
-  profile_role:"filmmaker / director",
-  profile_about:"実写映像からプロジェクションマッピング等のフル3DCGまで横断した幅広い映像制作を行う。企画・演出から、編集・カラーグレーディング・サウンドデザインなどポストプロダクションまで一貫して担当し、最終的な作品のクオリティ担保を行う。チーム制作ではディレクターとして、演出意図を具体的な制作工程へ落とし込み、プロジェクトを牽引する。",
-  profile_career:"2004.8  新潟県新潟市生まれ\n2020.4  万代高等学校 英語理数科 入学\n2023.4  長岡造形大学 デザイン学科 入学",
-  profile_awards:"2025.4  大阪・関西万博 シャインハットプロジェクションマッピング 上映作品選出\n2025.11  東京国際プロジェクションマッピングアワードVol.10 上映作品選出\n2025.11  にいがたデジコングランプリ 動画部門 グランプリ受賞\n2026.4  ACジャパン広告学生賞 CM映像部門 優秀賞受賞",
-  profile_skills:"DaVinci Resolve / Blender / Premiere Pro / Illustrator / Lightroom\nLanguage: English (TOEIC L&R 820, 英検 準1級)",
-  profile_mail:"sanoryootaa@gmail.com",
-  profile_instagram:"https://www.instagram.com/sanoryootaa/",
-  profile_youtube:"https://www.youtube.com/@sanoryootaa",
-  profile_photo:"",
-  /* design : 行間（行送り％ 150=1.5倍）セクション別 */
-  line_height:"150",
-  title_line_height:"105",
-  credit_line_height:"155",
-  profile_line_height:"195",
-  desc_line_height:"195",
-  /* design : トラッキング（1/1000em 50=0.05em）。カーニングはCSSで0固定 */
-  tracking:"0",
-  /* 年/カテゴリのサムネ端からの距離（px）*/
-  label_gap:"8",
-  about_gap:"0",           /* 作品ページ ABOUT の上の余白（px）*/
-  /* 色（プロフィールシートで変更可）*/
-  bg_color:"#ffffff",      /* 背景色 */
-  text_color:"#0a0a0a",    /* 文字色 */
-  accent_color:"#00DD58",  /* プロフィール/✕印/作品見出しの基調色 */
-  credit_heading_color:"", /* credit 見出しの色（空=アクセント/作品色）*/
-  credit_body_color:"",    /* credit の役職・名前の色（空=本文色）*/
-  work_colors:"",          /* 作品アクセント候補（カンマ区切り）空なら既定6色 */
-  color_mode:"random",     /* random=候補から重複最小でランダム / fixed=workN_colorで個別指定 */
-  site_image:"",           /* リンク共有時のプレビュー画像・タブのアイコン */
-  trophy_speed:"1",        /* トロフィーの速さ（大きいほど速い。1=標準）*/
-  message:"",              /* 最下部・左下に出すメッセージ */
-  message_sparkle:"on",    /* メッセージのキラキラ演出 on/off */
-  demo_video:DEMO_VIDEO,   /* workN_video が空の作品で使うフォールバック動画（URL/ID）*/
-  /* design : ウェイト（400=標準, 700=太字）セクション別 */
-  title_weight:"700",
-  credit_weight:"400",
-  profile_weight:"400",
-  desc_weight:"400",
-  label_weight:"400",
-};
-
-/* スプレッドシートで日本語キーでも書けるようにする別名 */
-const KEY_ALIASES={
-  "行間":"line_height",
-  "タイトル行間":"title_line_height",
-  "クレジット行間":"credit_line_height",
-  "プロフィール行間":"profile_line_height",
-  "説明行間":"desc_line_height",
-  "トラッキング":"tracking",
-  "ラベル距離":"label_gap",
-  "ABOUT上余白":"about_gap",
-  "背景色":"bg_color",
-  "文字色":"text_color",
-  "基調色":"accent_color",
-  "クレジット見出し色":"credit_heading_color",
-  "クレジット本文色":"credit_body_color",
-  "作品色":"work_colors",
-  "カラーモード":"color_mode",
-  "サイト画像":"site_image",
-  "OGP画像":"site_image",
-  "トロフィー速度":"trophy_speed",
-  "メッセージ":"message",
-  "キラキラ":"message_sparkle",
-  "デモ動画":"demo_video",
-  "タイトルウェイト":"title_weight",
-  "クレジットウェイト":"credit_weight",
-  "プロフィールウェイト":"profile_weight",
-  "説明ウェイト":"desc_weight",
-  "ラベルウェイト":"label_weight",
-};
-for(let n=1;n<=layout.length;n++){        /* 未入力は空（サンプルを出さない）*/
-  DEFAULTS[`work${n}_title`]="";
-  DEFAULTS[`work${n}_category`]="";
-  DEFAULTS[`work${n}_year`]="";
-  DEFAULTS[`work${n}_thumb`]="";
-  DEFAULTS[`work${n}_video`]="";
-  DEFAULTS[`work${n}_desc`]="";
-  DEFAULTS[`work${n}_credit`]="";
-  DEFAULTS[`work${n}_award`]="";   /* 受賞歴。書かれている作品だけサムネにトロフィーを付ける */
-  DEFAULTS[`work${n}_color`]="";   /* fixedモード時の作品ごとの色 */
-}
-
-/* トロフィー：作品ごとに「歪んだ閉ループ」を生成し、それに沿って一定速度で滑らかに進む（揺れない）。
-   円ではなく各々違う形なので色々な方向へ動き、端でふわっと折り返す。 */
+const WORK_W=19, MWORK_W=54, M_SIDE=16;   /* PC/スマホの作品幅(%)・スマホで左右ラベルに要る余白(%) CSSと一致させる */
 const rnd=(a,b)=>+(a+Math.random()*(b-a)).toFixed(1);
-const trophy=layout.map((_,idx)=>{
-  const N=14;                                  /* 頂点を増やして滑らかな円軌道に（跳ね返り感を消す）*/
-  const start=Math.random()*Math.PI*2;
-  const dir=Math.random()<.5?1:-1;             /* 回る向き */
-  const rx=rnd(54,74), ry=rnd(60,84);          /* ループ半径(%) 少し外側へ */
-  const wob=rnd(0.06,0.16), wph=Math.random()*Math.PI*2, wn=2+Math.floor(Math.random()*2); /* ゆるい楕円のうねり */
-  const pts=[];
-  for(let k=0;k<N;k++){
-    const ang=start+dir*(k/N)*Math.PI*2;
-    const m=1+wob*Math.sin(wn*ang+wph);        /* なだらかに半径を変化（カクつかない）*/
-    pts.push([ +(50+Math.cos(ang)*rx*m).toFixed(1), +(50+Math.sin(ang)*ry*m).toFixed(1) ]);
-  }
-  return {pts, dur:rnd(3.5,6), delay:rnd(-6,0)};  /* 一定速度・位相ばらし */
-});
-/* 上で作った各ループを @keyframes として注入 */
-(function injectTrophyKeyframes(){
-  let css="";
-  trophy.forEach((T,i)=>{
-    let frames="";
-    for(let k=0;k<=T.pts.length;k++){
-      const p=T.pts[k%T.pts.length];
-      frames+=`${(k/T.pts.length*100).toFixed(1)}%{left:${p[0]}%;top:${p[1]}%;}`;
-    }
-    css+=`@keyframes t-roam-${i}{${frames}}`;
-  });
-  const s=document.createElement("style");s.textContent=css;document.head.appendChild(s);
-})();
-
-/* ===== CSV ===== */
-function parseCSV(t){const rows=[];let row=[],cur="",q=false;
-  for(let i=0;i<t.length;i++){const c=t[i];
-    if(q){if(c==='"'){if(t[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}
-    else{if(c==='"')q=true;else if(c===','){row.push(cur);cur="";}
-      else if(c==='\n'){row.push(cur);rows.push(row);row=[];cur="";}
-      else if(c!=='\r')cur+=c;}}
-  if(cur!==""||row.length){row.push(cur);rows.push(row);}return rows;}
-
-async function loadTab(name){
-  try{
-    const r=await fetch(tabCSV(name),{cache:"no-store"});
-    if(!r.ok)return {};
-    let text=await r.text();
-    text=text.replace(/^﻿/,""); /* 先頭セルの BOM を除去（最初のキーが反応しない原因）*/
-    const rows=parseCSV(text);const m={};
-    rows.forEach(row=>{
-      let k=(row[0]||"").trim();const v=(row[1]||"").trim();
-      if(KEY_ALIASES[k])k=KEY_ALIASES[k]; /* 日本語キーを正規キーへ */
-      if(k&&v)m[k]=v;});
-    return m;
-  }catch(e){return {};}
-}
-/* 複数タブを読み込んで結合（後ろのタブが優先）*/
-async function loadSheet(){
-  const maps=await Promise.all(SHEET_TABS.map(loadTab));
-  return Object.assign({},...maps);
-}
-
-/* ===== helpers ===== */
-/* シート値を innerHTML/属性へ入れる前のHTMLエスケープ（本人入力でも & < > " ' で崩れないように）*/
-function esc(s){return (s==null?"":String(s)).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function ytId(s){
-  s=(s||"").trim();
-  if(!s) s=(g("demo_video")||"").trim();   /* workN_video 未入力なら demo_video キーを使う */
-  if(!s) return DEMO_VIDEO;
-  const m=s.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/);return m?m[1]:s;
-}
-/* Google Drive 等の共有リンクを <img> で表示できる直リンクへ変換。
-   w=表示幅の目安（一覧サムネは小さめ=軽く、詳細ポスターは大きめ）*/
-function imgURL(s,w){
-  if(!s)return "";
-  s=s.trim();
-  const m=s.match(/\/d\/([\w-]+)/)||s.match(/[?&]id=([\w-]+)/);
-  if(m)return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${w||2000}`;
-  return s;
-}
-/* イラレ感覚の数値を CSS 値へ変換 */
-function toLS(v){ /* 字詰め：トラッキング 1/1000em（50→0.05em）。単位付きはそのまま */
-  v=(v+"").trim(); if(v==="")return "0";
-  if(/[a-z%]/i.test(v))return v;
-  const n=parseFloat(v); return isNaN(n)?"0":(n/1000)+"em";
-}
-function toLH(v){ /* 行間：行送り％（150→1.5）。1.5 のような倍率もそのまま受ける */
-  v=(v+"").trim(); if(v==="")return "normal";
-  if(v.endsWith("%"))return (parseFloat(v)/100)||"normal";
-  const n=parseFloat(v); if(isNaN(n))return v;
-  return n>=10 ? n/100 : n;
-}
-function toPX(v){ /* 数値だけなら px を補う。単位付きはそのまま */
-  v=(v+"").trim(); if(v==="")return "0";
-  return /[a-z%]/i.test(v)?v:v+"px";
-}
-function creditHTML(txt){
-  return txt.split("\n").map(l=>{l=l.trim();if(!l)return "";
-    return l.endsWith("/")?`<div class="role">${esc(l)}</div>`:`<div class="nm">${esc(l)}</div>`;}).join("");
-}
-
-/* ===== render ===== */
-let DATA={};
-function g(k){return (DATA[k]!=null&&DATA[k]!=="")?DATA[k]:DEFAULTS[k];}
-
-/* 散らばりはそのまま、作品帯を左右中央に揃える（左右余白を均等化）＋もう少し右へ */
-const WORK_W=19;
+/* 散らばりはそのまま、作品帯を左右中央に揃える */
 const X_SHIFT=((100-Math.max(...layout.map(L=>L.x+WORK_W)))-Math.min(...layout.map(L=>L.x)))/2;
 
-/* 年・カテゴリのラベル位置を毎回ランダムに。年とカテゴリは別の辺に置き、
-   画面端の作品では外側の辺(left/right)を避けて見切れを防ぐ */
-const labelCfg=layout.map(L=>{
-  const left=L.x+X_SHIFT;
+/* 作品ごとのランダム要素（ラベル位置・揺らぎ・スマホ横位置・トロフィー軌道）*/
+function randomize(i){
+  const L=layout[i%layout.length], left=L.x+X_SHIFT;
+  /* 年とカテゴリは別の辺。画面端の作品では外側の辺を避けて見切れを防ぐ */
   let allow=["top","bottom","left","right"];
   if(left<14) allow=allow.filter(e=>e!=="left");
   if(left+WORK_W>86) allow=allow.filter(e=>e!=="right");
   const pk=()=>allow[Math.floor(Math.random()*allow.length)];
   const e1=pk(); let e2; do{e2=pk();}while(e2===e1);
-  const pp=()=>+(16+Math.random()*58).toFixed(0);   /* 辺上の位置 16〜74% */
-  return {yr:{e:e1,p:pp()}, ca:{e:e2,p:pp()}};
-});
+  const pp=()=>Math.round(16+Math.random()*58);   /* 辺上の位置 16〜74% */
+  const yr={e:e1,p:pp()}, ca={e:e2,p:pp()};
+  /* スマホ：サイドにラベルが付く作品はその側に余白を確保 */
+  let lo=2, hi=100-MWORK_W-2;
+  if(e1==="left"||e2==="left")   lo=Math.max(lo,M_SIDE);
+  if(e1==="right"||e2==="right") hi=Math.min(hi,100-MWORK_W-M_SIDE);
+  /* トロフィー：歪んだ閉ループを生成（円ではなく各々違う形）*/
+  const N=14, start=Math.random()*Math.PI*2, dir=Math.random()<.5?1:-1;
+  const rx=rnd(54,74), ry=rnd(60,84), wob=rnd(0.06,0.16), wph=Math.random()*Math.PI*2, wn=2+Math.floor(Math.random()*2);
+  const pts=[];
+  for(let k=0;k<N;k++){
+    const ang=start+dir*(k/N)*Math.PI*2, m=1+wob*Math.sin(wn*ang+wph);
+    pts.push([+(50+Math.cos(ang)*rx*m).toFixed(1), +(50+Math.sin(ang)*ry*m).toFixed(1)]);
+  }
+  return {yr,ca,dx:rnd(-6,6),dy:rnd(-0.7,1.4),mleft:+(lo+Math.random()*(hi-lo)).toFixed(1),
+    trophy:{pts,dur:rnd(3.5,6),delay:rnd(-6,0)}};
+}
+function injectTrophyKeyframes(cfg){
+  let css="";
+  cfg.forEach((c,i)=>{
+    const P=c.trophy.pts;let frames="";
+    for(let k=0;k<=P.length;k++){const p=P[k%P.length];frames+=`${(k/P.length*100).toFixed(1)}%{left:${p[0]}%;top:${p[1]}%;}`;}
+    css+=`@keyframes t-roam-${i}{${frames}}`;
+  });
+  const s=document.createElement("style");s.textContent=css;document.head.appendChild(s);
+}
 
-/* PC：作品位置を毎回わずかに揺らす（順番・全体配置はそのまま）。
-   縦はステージが非常に高いので小さめ＆やや下方向寄りにし、上はヘッダーに被らないようクランプ */
-const jitter=layout.map(()=>({dx:rnd(-6,6), dy:rnd(-0.7,1.4)}));
-
-/* スマホ用：毎回ランダムな横位置(margin-left%)。サイドにラベルが付く作品はその側に余白を確保し、画面外に出ないようにする */
-const MWORK_W=54;                 /* スマホの作品幅(%) CSSと一致させる */
-const M_SIDE=16;                  /* 左右ラベルに要る余白(%) */
-const mobileX=labelCfg.map(c=>{
-  let lo=2, hi=100-MWORK_W-2;     /* 既定 2%〜44% */
-  if(c.yr.e==="left"||c.ca.e==="left")   lo=Math.max(lo,M_SIDE);
-  if(c.yr.e==="right"||c.ca.e==="right") hi=Math.min(hi,100-MWORK_W-M_SIDE);
-  return +(lo+Math.random()*(hi-lo)).toFixed(1);
-});
-
-function buildArchive(){
-  const stage=document.getElementById("stage");stage.innerHTML="";
-  const tSpeed=parseFloat(g("trophy_speed"))||1;   /* 大きいほど速い */
-  layout.forEach((L,i)=>{
-    const n=i+1,col=colors[i];
-    const thumb=imgURL(g(`work${n}_thumb`),800);   /* 一覧サムネは小さめで軽く（詳細はw2000）*/
-    const el=document.createElement("div");el.className="work";
-    el.style.left=(L.x+X_SHIFT+jitter[i].dx)+"%";
-    el.style.top=Math.max(3,L.top+jitter[i].dy)+"%";   /* 上はヘッダーに被らないよう最低3% */
-    el.style.setProperty("--mleft",mobileX[i]+"%");   /* スマホ時のランダム横位置（モバイルCSSでのみ適用。PCのabsoluteを右へずらさない）*/
-    const title=g(`work${n}_title`);
-    el.setAttribute("role","button");el.setAttribute("tabindex","0");   /* キーボード操作で開けるように */
-    if(title)el.setAttribute("aria-label",title);
-    const inner=thumb?`<img src="${esc(thumb)}" alt="${esc(title)}" loading="lazy">`:`<div class="field"></div>`;
-    const trophyHTML=g(`work${n}_award`)
-      ?`<span class="label trophy" style="animation:t-roam-${i} ${(trophy[i].dur/tSpeed).toFixed(2)}s linear infinite;animation-delay:${(trophy[i].delay/tSpeed).toFixed(2)}s" title="${esc(g(`work${n}_award`))}">🏆</span>`
-      :"";
-    const lc=labelCfg[i];
-    el.innerHTML=`<div class="thumb">${inner}</div>`+
-      `<span class="label year e-${lc.yr.e}" style="--p:${lc.yr.p}%;--ph:${lc.yr.p}%">${esc(g(`work${n}_year`))}</span>`+
-      `<span class="label cat e-${lc.ca.e}" style="--p:${lc.ca.p}%;--ph:${lc.ca.p}%">${esc(g(`work${n}_category`))}</span>`+
-      trophyHTML;
-      el.addEventListener("click",()=>openDetail(n,col));
-      el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openDetail(n,col);}});
+function buildArchive(site,works){
+  const stage=document.getElementById("stage");
+  const pages=Math.max(1,Math.ceil(works.length/layout.length));
+  stage.style.aspectRatio=`1600/${4600*pages}`;
+  const cfg=works.map((_,i)=>randomize(i));
+  injectTrophyKeyframes(cfg);
+  const tSpeed=parseFloat(site.trophy_speed)||1;   /* 大きいほど速い */
+  stage.innerHTML="";
+  works.forEach((w,i)=>{
+    const L=layout[i%layout.length], c=cfg[i], k=Math.floor(i/layout.length);
+    const el=document.createElement("a");el.className="work";el.href=workURL(w);
+    el.style.left=(L.x+X_SHIFT+c.dx)+"%";
+    el.style.top=((Math.max(3,L.top+c.dy)+100*k)/pages)+"%";   /* 上はヘッダーに被らないよう最低3% */
+    el.style.setProperty("--mleft",c.mleft+"%");
+    el.setAttribute("aria-label",w.title||"");
+    const thumb=asset(w.thumb);
+    const award=w.award_en||w.award_ja;
+    el.innerHTML=
+      `<div class="thumb">${thumb?`<img src="${esc(thumb)}" alt="${esc(w.title)}" loading="lazy">`:""}</div>`+
+      `<span class="label year e-${c.yr.e}" style="--p:${c.yr.p}%">${esc(w.year)}</span>`+
+      `<span class="label cat e-${c.ca.e}" style="--p:${c.ca.p}%">${esc(w.category_en)}</span>`+
+      (award?`<span class="label trophy emoji" style="animation:t-roam-${i} ${(c.trophy.dur/tSpeed).toFixed(2)}s linear infinite;animation-delay:${(c.trophy.delay/tSpeed).toFixed(2)}s" title="${esc(award)}">🏆</span>`:"");
     stage.appendChild(el);
   });
 }
-function buildHeaderProfile(){
-  document.getElementById("hTitle").textContent=g("site_title");
-  document.getElementById("hProfileText").textContent=g("profile_label");
-  const msg=g("message");
-  document.getElementById("bottomMsg").textContent=msg;
+
+function buildHeader(site,profile){
+  document.getElementById("hTitle").textContent=site.title||"";
+  document.getElementById("hProfile").textContent=profile.label||"Profile";
+  setTitle(site.title);
   const fb=document.getElementById("botmsg");
-  fb.style.display=msg?"block":"none";                     /* メッセージが有る時だけ表示（既定は非表示）*/
-  const on=sparkleOn();
-  fb.classList.toggle("no-spark",!on);                     /* キラキラ on/off */
-  if(!on)fb.classList.add("show");                         /* OFFはトリガー無しで丸出し */
+  document.getElementById("bottomMsg").textContent=site.message||"";
+  fb.style.display=site.message?"block":"none";            /* メッセージが有る時だけ表示 */
+  fb.classList.toggle("no-spark",!site.message_sparkle);
+  if(!site.message_sparkle)fb.classList.add("show");       /* OFFはトリガー無しで丸出し */
   placeFavico();
-  /* タブ名・リンクプレビュー画像・アイコン */
-  document.title=g("site_title");
-  const sImg=imgURL(g("site_image"));
-  document.getElementById("ogTitle").content=g("site_title");
-  if(sImg){
-    document.getElementById("ogImage").content=sImg;
-    document.getElementById("twImage").content=sImg;
-    document.getElementById("favicon").href=sImg;
-  }
-  /* 1行=1項目。先頭が日付(数字始まり)ならそれを左列、残りを右列に。区切りは半角/全角スペース・タブのいずれでもOK */
-  const rows=s=>{
-    const items=s.split("\n").filter(x=>x.trim()).map(line=>{
-      line=line.trim();
-      const m=line.match(/^([0-9][0-9.\/-]*)[\s　]+([\s\S]+)$/);
-      if(m){const body=m[2].replace(/[\s　]+/g," ").trim();
-        return `<dt>${esc(m[1])}</dt><dd>${esc(body)}</dd>`;}
-      return `<dd class="full">${esc(line)}</dd>`; /* 日付なしは2列ぶち抜きで行頭から */
-    }).join("");
-    return `<div class="p-list">${items}</div>`;
-  };
-  const photo=imgURL(g("profile_photo"));
-  const mail=g("profile_mail"),ig=g("profile_instagram"),yt=g("profile_youtube");
-  document.getElementById("pSheet").innerHTML=
-    `<h1 class="p-name">${esc(g("profile_name"))}</h1>
-     <div class="p-role">${esc(g("profile_role"))}</div>
-     <div class="p-grid">
-       <div class="p-main">
-         <section><h3>about me</h3><p>${esc(g("profile_about"))}</p></section>
-         <section><h3>career</h3>${rows(g("profile_career"))}</section>
-         <section><h3>awards &amp; screenings</h3>${rows(g("profile_awards"))}</section>
-         <section><h3>skills</h3>${rows(g("profile_skills"))}</section>
-         <section class="p-contact"><h3>contact</h3>
-           <div class="p-row"><span class="k">mail</span><a href="mailto:${esc(mail)}" onclick="gaEv('contact_click',{label:'mail'})">${esc(mail)}</a></div>
-           <div class="p-row"><span class="k">instagram</span><a href="${esc(ig)}" target="_blank" rel="noopener" onclick="gaEv('sns_click',{platform:'instagram'})">${esc(ig.replace(/^https?:\/\/(www\.)?/,""))}</a></div>
-           <div class="p-row"><span class="k">youtube</span><a href="${esc(yt)}" target="_blank" rel="noopener" onclick="gaEv('sns_click',{platform:'youtube'})">${esc(yt.replace(/^https?:\/\/(www\.)?/,""))}</a></div>
-         </section>
-       </div>
-       <div class="p-photo"><div class="ph" ${photo?`style="background-image:url('${esc(photo)}')"`:""}></div></div>
-     </div>`;
 }
 
-/* ===== detail ===== */
-const detail=document.getElementById("detail");
-let _navDepth=0;   /* pushState で積んだオーバーレイ履歴の数（Backで閉じるため）*/
-function openDetail(n,col,fromNav){
-  document.getElementById("sheet").style.setProperty("--wc",col);
-  document.getElementById("dClose").style.setProperty("--xc",col);
-  const thumb=imgURL(g(`work${n}_thumb`));
-  const poster=thumb?`<img src="${esc(thumb)}" alt="${esc(g(`work${n}_title`))}">`:`<div class="field"></div>`;
-  const player=document.getElementById("player");
-  player.innerHTML=poster+`<button class="playbtn" aria-label="再生"></button>`;
-  const vid=ytId(g(`work${n}_video`));
-  player.querySelector(".playbtn").addEventListener("click",()=>playVideo(vid));
-  document.getElementById("dTitle").textContent=g(`work${n}_title`);
-  const cat=g(`work${n}_category`),yr=g(`work${n}_year`);
-  document.getElementById("dSub").textContent=[cat,yr].filter(Boolean).join(", ");  /* 片方欠けてもカンマが浮かない */
-  const aw=g(`work${n}_award`);
-  document.getElementById("dAward").innerHTML=aw?`<span class="tEmoji">🏆</span> ${esc(aw)}`:"";
-  document.getElementById("dCredit").innerHTML=`<h2>credit</h2>`+creditHTML(g(`work${n}_credit`));
-  const body=document.getElementById("dBody");
-  body.innerHTML=`<h2>about</h2><span class="d-text"></span>`;
-  body.querySelector(".d-text").textContent=g(`work${n}_desc`);
-  show(detail);
-  _gaCurTitle=g(`work${n}_title`);
-  if(!fromNav){                                     /* リロード/戻る復元では履歴を積まない・GAも二重送信しない */
-    history.pushState({m:"work",n},"","#work-"+n);_navDepth++;
-    /* GA4: 作品ポップアップを開いた（作品別閲覧数）+ 1訪問で2回以上開いたら engaged_browsing を1回だけ */
-    gaEv("work_open",{work_title:g(`work${n}_title`),work_category:g(`work${n}_category`),work_date:g(`work${n}_year`)});
-    if(++_gaWorkOpens>=2 && !_gaEngaged){_gaEngaged=true;gaEv("engaged_browsing");}
-  }
-}
-function playVideo(id){
-  document.getElementById("player").innerHTML=
-    `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="video" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
-  /* GA4: 再生ボタンは autoplay=1 で即再生されるため、ここを「再生開始」とみなして送信。
-     ※YouTube IFrame Player API での厳密な再生検知は、既存の埋め込み実装を変えるリスク・複雑化を避けるため未使用。 */
-  gaEv("video_play",{work_title:_gaCurTitle});
-}
-function openProfile(fromNav){
-  show(document.getElementById("profile"));
-  if(!fromNav){history.pushState({m:"profile"},"","#profile");_navDepth++;gaEv("about_open");}
-}
-/* サイトタイトル：全て閉じてトップへスクロール */
-function goHome(){closeAll();window.scrollTo({top:0,behavior:"smooth"});}
-/* キラキラ演出のon/off（off,0,false,no,オフ,なし でOFF）*/
-function sparkleOn(){return !/^(off|0|false|no|オフ|なし)$/i.test((g("message_sparkle")||"").trim());}
-/* メッセージを開く＋無駄にキラキラ */
+let SPARKLE=true;
 function showMessage(){
-  const f=document.getElementById("botmsg");if(!f)return;
+  const f=document.getElementById("botmsg");
   f.classList.add("show");
-  if(!sparkleOn())return;                 /* OFFならスパークルを出さない */
+  if(!SPARKLE)return;
   for(let i=0;i<18;i++){
-    const s=document.createElement("span");s.className="spark";s.textContent="✨";
+    const s=document.createElement("span");s.className="spark emoji";s.textContent="✨";
     s.style.left=(20+Math.random()*300)+"px";
     s.style.top=(16+Math.random()*52)+"px";
     s.style.fontSize=(9+Math.random()*15)+"px";
@@ -670,120 +188,35 @@ function showMessage(){
     setTimeout(()=>s.remove(),2200);
   }
 }
-/* 点滅アイコンを「profile here」テキストの直前に配置（小文字に合わせ少し下げる）*/
+/* 点滅アイコンを「Profile here」の直前に配置 */
 function placeFavico(){
-  const t=document.getElementById("hProfileText"),ic=document.getElementById("favicoTop");
-  if(!t||!ic)return;
+  const t=document.getElementById("hProfile"),ic=document.getElementById("favicoTop");
   const r=t.getBoundingClientRect();
-  ic.style.top=(r.top+r.height*0.5-ic.offsetHeight/2+2)+"px";
+  ic.style.top=(r.top+r.height*0.5-ic.offsetHeight/2)+"px";
   ic.style.left=(r.left-ic.offsetWidth-7)+"px";
 }
 window.addEventListener("resize",placeFavico);
 window.addEventListener("load",placeFavico);
-function show(n){n.classList.add("open");n.setAttribute("aria-hidden","false");n.scrollTop=0;document.body.style.overflow="hidden";placeCloseX();}
-/* ✕をカードの右上角に合わせる（広い画面=中央寄りのカード角へ、背の高い内容=上端付近へ）。
-   スマホは固定配置のままにするため何もしない（CSSに任せる）。*/
-function placeCloseX(){
-  const mobile=window.innerWidth<=760;
-  document.querySelectorAll(".overlay").forEach(ov=>{
-    const x=ov.querySelector(".closeX");if(!x)return;
-    if(mobile||!ov.classList.contains("open")){x.style.top=x.style.left=x.style.right="";return;}
-    const card=ov.querySelector(".sheet,.p-sheet");if(!card)return;
-    const xw=x.offsetWidth;
-    const cardTop=card.offsetTop-ov.scrollTop;                 /* transformの影響を受けない実位置 */
-    const cardRight=card.offsetLeft+card.offsetWidth;
-    x.style.top=Math.max(14,cardTop-xw*0.30)+"px";
-    x.style.left=Math.min(window.innerWidth-xw,cardRight-xw*0.72)+"px";
-    x.style.right="auto";
-  });
-}
-window.addEventListener("resize",placeCloseX);
-/* DOMだけ閉じる（履歴操作は伴わない）*/
-function closeDOM(){
-  document.querySelectorAll(".overlay").forEach(o=>{o.classList.remove("open");o.setAttribute("aria-hidden","true");});
-  document.getElementById("player").innerHTML="";document.body.style.overflow="";
-}
-/* ユーザー操作の「閉じる」（✕/Esc/タイトル）。積んだ履歴があれば Back で閉じてURLも綺麗に戻す */
-function closeAll(){
-  if(_navDepth>0){history.back();return;}   /* popstate 側で closeDOM が走る */
-  closeDOM();
-  if(location.hash)history.replaceState(null,"",location.pathname+location.search);
-}
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll();});
 
-/* ブラウザの「戻る/進む」でオーバーレイの開閉をURLに追従させる */
-window.addEventListener("popstate",()=>{
-  const h=location.hash;
-  if(h==="#profile"){openProfile(true);return;}
-  const m=h.match(/^#work-(\d+)$/);
-  if(m){const n=+m[1];if(n>=1&&n<=layout.length){openDetail(n,colors[n-1],true);return;}}
-  _navDepth=Math.max(0,_navDepth-1);   /* ハッシュ無し＝閉じる */
-  closeDOM();
+/* ===== boot ===== */
+loadContent("site","works","profile").then(([site,data,profile])=>{
+  const works=data.works||[];
+  /* 旧URL #work-N → 作品ページ */
+  const m=location.hash.match(/^#work-(\d+)$/);
+  if(m&&works[+m[1]-1]){location.replace(workURL(works[+m[1]-1]));return;}
+  applyColors(site);
+  SPARKLE=!!site.message_sparkle;
+  rememberColors(works,workColors(site,works));   /* 作品ページで同じ色を使う */
+  buildArchive(site,works);
+  buildHeader(site,profile);
 });
 
-/* ===== 初回：URLハッシュの表示を復元（履歴は積まず・GAも送らない）===== */
-function restoreState(){
-  const h=location.hash;
-  if(h==="#profile"){openProfile(true);return;}
-  const m=h.match(/^#work-(\d+)$/);
-  if(m){const n=+m[1];if(n>=1&&n<=layout.length)openDetail(n,colors[n-1],true);}
-}
-
-/* ===== design : 字詰め・行間をスプレッドシート値で反映 ===== */
-function applyDesign(){
-  const r=document.documentElement.style;
-  const lh=(v,k)=>r.setProperty(v,toLH(g(k)));
-  const ls=(v,k)=>r.setProperty(v,toLS(g(k)));
-  /* 行間（行送り％）*/
-  lh("--lh",        "line_height");
-  lh("--title-lh",  "title_line_height");
-  lh("--credit-lh", "credit_line_height");
-  lh("--profile-lh","profile_line_height");
-  lh("--desc-lh",   "desc_line_height");
-  /* トラッキング（1/1000em）。カーニングはCSSで0固定 */
-  ls("--tracking","tracking");
-  /* ラベル距離・ABOUT上余白（px）*/
-  r.setProperty("--label-gap",toPX(g("label_gap")));
-  r.setProperty("--about-gap",toPX(g("about_gap")));
-  /* 色 */
-  r.setProperty("--bg",    g("bg_color"));
-  r.setProperty("--ink",   g("text_color"));
-  r.setProperty("--accent",g("accent_color"));
-  /* creditの色（空なら削除→CSSのフォールバックが効く）*/
-  r.setProperty("--credit-h-color",g("credit_heading_color")||"");
-  r.setProperty("--credit-txt-color",g("credit_body_color")||"");
-  /* ウェイト */
-  r.setProperty("--title-w",  g("title_weight"));
-  r.setProperty("--credit-w", g("credit_weight"));
-  r.setProperty("--profile-w",g("profile_weight"));
-  r.setProperty("--desc-w",   g("desc_weight"));
-  r.setProperty("--label-w",  g("label_weight"));
-}
-
-/* ===== boot : render defaults, then overlay sheet values if available ===== */
-function renderAll(){applyDesign();buildArchive();buildHeaderProfile();}
-/* 読み込み中に既定(サンプル)テキストが見えないよう、初回描画はシート取得後に実行。
-   取得できなかった場合も、その時点で既定値でフォールバック描画する。 */
-loadSheet().then(m=>{
-  if(Object.keys(m).length){
-    DATA=m;
-    const wc=(m.work_colors||"").split(",").map(s=>s.trim()).filter(Boolean);
-    if(wc.length){PALETTE=wc;}             /* 候補色をシートで上書き */
-  }
-  recolor();                                /* color_mode / workN_color / work_colors を反映 */
-  renderAll();
-  restoreState();
-});
-
-/* GA4: 最下部(aboutメッセージ枠)が表示されたら scroll_bottom を1回だけ。
-   IntersectionObserverで監視するだけなので既存のabout出現アニメには干渉しない。
-   ※GA4拡張計測のscroll(90%)とは別名の独自イベントなので二重計測にならない。 */
+/* GA4: 最下部のメッセージ枠が表示されたら scroll_bottom を1回だけ */
 (function(){
   const t=document.getElementById("botmsg");
-  if(!t || !("IntersectionObserver" in window)) return;
-  let sent=false;
+  if(!("IntersectionObserver" in window))return;
   const io=new IntersectionObserver(es=>{
-    es.forEach(e=>{ if(e.isIntersecting && !sent){ sent=true; gaEv("scroll_bottom"); io.disconnect(); } });
+    if(es.some(e=>e.isIntersecting)){gaEv("scroll_bottom");io.disconnect();}
   });
   io.observe(t);
 })();
