@@ -23,6 +23,7 @@
 - 認証：Fine-grained PAT（このリポジトリのみ・Contents RW）を localStorage `admin:token` に保存。
 - 3段階：編集中 `W`（localStorage `admin:work` に自動保存）→ 確認用 `DRAFT`（renewal ブランチ・`/stage/` で見られる）→ 本公開 `LIVE`（main）。
 - 確認用ページ（`?stage=1`、site.js の `STAGE`）：GitHub API で renewal の最新コミット SHA を取り、`raw.githubusercontent.com/<sha>/content/*.json` を読む（同じURLだと raw が5分キャッシュするため SHA 指定）。ログイン済み端末は admin のトークンで問い合わせ（未ログインは60回/時）。GA なし・noindex・左下に目印。
+- **lab ブランチ＝実験場**（sanoryota.com/lab/）。`lab` に push すると `.github/workflows/lab-publish.yml`（lab ブランチにだけある）が main の `lab/` にコピーして Pages を再ビルド。main の `lab/` は手で触らない。本番から lab へはリンクしない。詳細は lab ブランチの `LAB.md`。
 - **renewal ブランチはもうコード置き場ではない**（管理画面が content を書き込む）。コードは main だけに push し、`main:renewal` を push しないこと。
 - 書き込みは Git Data API で複数ファイル1コミット（`commit()`、422 は取り直して再試行）。draft ブランチが無ければ main から作る。
 - プレビュー：編集のたびに localStorage `preview:<name>` に書き、iframe の `?preview=1` ページが `storage` イベントで描き直す（`onContent()`）。プレビュー・管理画面では GA を送らない。
