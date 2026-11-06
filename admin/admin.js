@@ -291,7 +291,7 @@ const multi=(k,l,dir,o={})=>{
   const list=val(k)||[];
   return `<div class="field">${hintL(l,o.hint)}
     ${list.length?`<div class="imgs" data-list="${k}" data-axis="grid">${list.map((p,j)=>`<div class="it" data-j="${j}"><img src="${esc(imgSrc(p))}" alt=""><button class="x" data-del="${k}" data-j="${j}" aria-label="削除">✕</button></div>`).join("")}</div>`:""}
-    <div class="drop" data-upload="${k}" data-dir="${dir}" data-multi style="margin-top:8px">＋ 画像を追加（クリック・ドラッグ＆ドロップ／複数OK）</div></div>`;
+    <div class="drop" data-upload="${k}" data-dir="${dir}" data-multi style="margin-top:8px">＋ 画像を追加（クリック・ドラッグ＆ドロップ／複数OK）<br><small>JPEG・PNG・TIFF・HEIC・WebP・GIF など</small></div></div>`;
 };
 /* 繰り返し行。fields: [[key|null(=文字列そのもの), placeholder, "textarea"?]] */
 const rows=(k,l,fields,tpl,o={})=>{
@@ -458,63 +458,140 @@ function rerender(){const y=innerWidth>900?$("#editor").scrollTop:scrollY;render
 
 /* 並べ替え（マウス・指どちらも）。axis: "y"=縦一列 / "grid"=格子 */
 function sortable(box,axis,onMove){
+  /* ポインターキャプチャは使わない（入れ替えで要素を動かすとキャプチャが外れ、指を離しても確定しないため）。
+     動き・離すは window で受ける */
   box.onpointerdown=e=>{
+    if(e.button>0)return;
     const handle=axis==="grid"?e.target.closest(".it"):e.target.closest(".handle");
     if(!handle||e.target.closest("button")||!box.contains(handle))return;
     const item=handle.closest("[data-j]");if(!item||item.parentElement!==box)return;
     e.preventDefault();
-    const from=[...box.children].indexOf(item);let moved=false;
-    item.classList.add("dragging");handle.setPointerCapture(e.pointerId);
-    handle.onpointermove=ev=>{
-      const over=document.elementFromPoint(ev.clientX,ev.clientY);
+    const from=[...box.children].indexOf(item);let moved=false,lastY=e.clientY,raf=0;
+    item.classList.add("dragging");document.body.style.userSelect="none";
+    const scroller=innerWidth>900?$("#editor"):null;
+    /* 画面の上下端に近づいたら自動でスクロール（長い一覧でも端まで運べる）*/
+    const edgeScroll=()=>{
+      const top=scroller?scroller.getBoundingClientRect().top:0, bottom=scroller?scroller.getBoundingClientRect().bottom:innerHeight;
+      const d=lastY<top+60?-12:lastY>bottom-90?12:0;
+      if(d){scroller?scroller.scrollBy(0,d):scrollBy(0,d);place(lastX,lastY);}
+      raf=requestAnimationFrame(edgeScroll);
+    };
+    let lastX=e.clientX;
+    const place=(x,y)=>{
+      const over=document.elementFromPoint(x,y);
       const o=over&&over.closest("[data-j]");
       if(!o||o===item||o.parentElement!==box)return;
       const r=o.getBoundingClientRect();
-      const after=axis==="grid"&&ev.clientY>r.top&&ev.clientY<r.bottom?ev.clientX>r.left+r.width/2:ev.clientY>r.top+r.height/2;
-      box.insertBefore(item,after?o.nextSibling:o);moved=true;
+      const after=axis==="grid"&&y>r.top&&y<r.bottom?x>r.left+r.width/2:y>r.top+r.height/2;
+      const ref=after?o.nextSibling:o;
+      if(ref!==item&&item.nextSibling!==ref){box.insertBefore(item,ref);moved=true;}
     };
-    handle.onpointerup=handle.onpointercancel=()=>{
-      handle.onpointermove=handle.onpointerup=handle.onpointercancel=null;item.classList.remove("dragging");
+    const move=ev=>{lastX=ev.clientX;lastY=ev.clientY;place(lastX,lastY);};
+    const end=()=>{
+      removeEventListener("pointermove",move);removeEventListener("pointerup",end);removeEventListener("pointercancel",end);
+      cancelAnimationFrame(raf);item.classList.remove("dragging");document.body.style.userSelect="";
       const to=[...box.children].indexOf(item);
       if(moved&&to!==from)onMove(from,to);
+      /* ドラッグ直後のクリック（作品を開く）を1回だけ無視 */
+      if(moved)addEventListener("click",ev=>{ev.stopPropagation();ev.preventDefault();},{capture:true,once:true});
     };
+    addEventListener("pointermove",move);addEventListener("pointerup",end);addEventListener("pointercancel",end);
+    raf=requestAnimationFrame(edgeScroll);
   };
 }
 
 /* ===== 画像 ===== */
+/* 対応形式：JPEG / PNG / GIF / WebP / AVIF / BMP / SVG / TIFF / HEIC・HEIF（iPhone）。
+   ブラウザが読めない TIFF・HEIC は、admin/vendor/ の変換ライブラリを必要なときだけ読み込む */
+const IMG_ACCEPT="image/*,.tif,.tiff,.heic,.heif,.avif,.webp,.bmp,.svg";
+const IMG_EXT=/\.(jpe?g|png|gif|webp|avif|bmp|svg|tiff?|heic|heif)$/i;
 function pickFiles(t){
-  const inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.multiple=t.dataset.multi!=null;
+  const inp=document.createElement("input");inp.type="file";inp.accept=IMG_ACCEPT;inp.multiple=t.dataset.multi!=null;
   inp.onchange=()=>upload([...inp.files],t);inp.click();
 }
+const VENDOR=new URL("vendor/",document.currentScript.src).href;   /* admin.js と同じ場所の vendor/ */
+const _libs={};
+function loadLib(src){
+  return _libs[src]=_libs[src]||new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>{delete _libs[src];rej(new Error("変換ライブラリを読み込めませんでした"));};document.head.appendChild(s);});
+}
+async function sniff(file){
+  const b=new Uint8Array(await file.slice(0,12).arrayBuffer());
+  if((b[0]===0x49&&b[1]===0x49&&b[2]===0x2a)||(b[0]===0x4d&&b[1]===0x4d&&b[3]===0x2a))return "tiff";
+  if(String.fromCharCode(...b.slice(4,12)).match(/^ftyp(heic|heix|hevc|heim|heis|mif1|msf1)/))return "heic";
+  return "";
+}
+/* ブラウザ標準で読む（Safari は TIFF・HEIC もここで読める）*/
+function nativeDecode(blob){
+  return new Promise((res,rej)=>{const u=URL.createObjectURL(blob),i=new Image();
+    i.onload=()=>res({src:i,w:i.naturalWidth||1600,h:i.naturalHeight||900,done:()=>URL.revokeObjectURL(u)});
+    i.onerror=()=>{URL.revokeObjectURL(u);rej(new Error("decode"));};i.src=u;});
+}
+async function decodeTiff(file){
+  await loadLib(VENDOR+"pako_inflate-1.0.11.min.js");             /* 圧縮TIFF用。UTIF より先に */
+  await loadLib(VENDOR+"utif-3.1.0.js");
+  const buf=await file.arrayBuffer(), ifds=UTIF.decode(buf);
+  const page=ifds.reduce((a,b)=>(b.width*b.height>a.width*a.height?b:a),ifds[0]);   /* サムネ用の小さいページではなく一番大きい画像 */
+  UTIF.decodeImage(buf,page,ifds);
+  const w=page.width,h=page.height,rgba=UTIF.toRGBA8(page);
+  /* 大きすぎる画像は canvas に載らない端末があるので、先に間引いてから載せる */
+  const k=Math.min(1,Math.sqrt(16e6/(w*h))), cw=Math.max(1,Math.round(w*k)), ch=Math.max(1,Math.round(h*k));
+  const c=document.createElement("canvas");c.width=cw;c.height=ch;
+  const out=c.getContext("2d").createImageData(cw,ch);
+  if(k===1)out.data.set(rgba);
+  else for(let y=0;y<ch;y++){const sy=Math.floor(y/k)*w;for(let x=0;x<cw;x++){const si=(sy+Math.floor(x/k))*4,di=(y*cw+x)*4;
+    out.data[di]=rgba[si];out.data[di+1]=rgba[si+1];out.data[di+2]=rgba[si+2];out.data[di+3]=rgba[si+3];}}
+  c.getContext("2d").putImageData(out,0,0);
+  return {src:c,w:cw,h:ch,done:()=>{}};
+}
+async function decodeHeic(file){
+  await loadLib(VENDOR+"heic2any-0.0.4.min.js");
+  const r=await heic2any({blob:file,toType:"image/jpeg",quality:.92});
+  return nativeDecode(Array.isArray(r)?r[0]:r);
+}
+async function decodeAny(file){
+  const kind=await sniff(file)||(/\.tiff?$/i.test(file.name)?"tiff":/\.hei[cf]$/i.test(file.name)?"heic":"");
+  try{return await nativeDecode(file);}
+  catch(e){
+    if(kind==="tiff")return decodeTiff(file);
+    if(kind==="heic")return decodeHeic(file);
+    throw new Error(`「${file.name}」はこのブラウザで読めない形式です`);
+  }
+}
+/* 長辺 max px の JPEG に（透過は黒で埋める＝サイトの黒地になじむ）*/
 async function shrink(file,max=2000){
-  const url=URL.createObjectURL(file);
+  const d=await decodeAny(file);
   try{
-    const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});
-    const k=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
-    const c=document.createElement("canvas");c.width=Math.round(img.naturalWidth*k);c.height=Math.round(img.naturalHeight*k);
-    const x=c.getContext("2d");x.fillStyle="#000";x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);
-    return await new Promise(r=>c.toBlob(r,"image/jpeg",.85));
-  }finally{URL.revokeObjectURL(url);}
+    const k=Math.min(1,max/Math.max(d.w,d.h));
+    const c=document.createElement("canvas");c.width=Math.round(d.w*k);c.height=Math.round(d.h*k);
+    const x=c.getContext("2d");x.fillStyle="#000";x.fillRect(0,0,c.width,c.height);
+    x.imageSmoothingQuality="high";x.drawImage(d.src,0,0,c.width,c.height);
+    const blob=await new Promise(r=>c.toBlob(r,"image/jpeg",.85));
+    if(!blob)throw new Error(`「${file.name}」を変換できませんでした`);
+    return blob;
+  }finally{d.done();}
 }
 const toB64=b=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result.split(",")[1]);f.readAsDataURL(b);});
 async function upload(files,t){
-  files=files.filter(f=>f.type.startsWith("image/")||/\.(heic|heif)$/i.test(f.name));if(!files.length)return;
+  files=files.filter(f=>f.type.startsWith("image/")||IMG_EXT.test(f.name));
+  if(!files.length){toast("画像ファイルを選んでください（JPEG・PNG・TIFF・HEIC など）",true);return;}
   const k=t.dataset.upload, dir=t.dataset.dir, multi=t.dataset.multi!=null;
   const w=route().name==="work"?W.works.works[route().i]:null;
   const base=((w&&w.slug)||dir).replace(/[^a-z0-9-]/gi,"").toLowerCase()||"img";
   setBusy(`画像をアップロード中…（${files.length}枚）`);
   try{
     const out=[],commitFiles=[];
-    for(const f of (multi?files:files.slice(0,1))){
+    for(const [n,f] of (multi?files:files.slice(0,1)).entries()){
+      setBusy(`画像を変換中…（${n+1}/${multi?files.length:1}）`);
       const blob=await shrink(f);
       const path=`media/${dir}/${base}-${Date.now().toString(36)}${Math.random().toString(36).slice(2,5)}.jpg`;
       commitFiles.push({path,content:await toB64(blob),base64:true});
       BLOBS["/"+path]=URL.createObjectURL(blob);out.push("/"+path);
     }
+    setBusy(`画像をアップロード中…（${commitFiles.length}枚）`);
     await commit(GH.live,commitFiles,`Upload ${commitFiles.length} image(s) from admin`);
     if(multi)setPath(W,k,[...(getPath(W,k)||[]),...out]);else setPath(W,k,out[0]);
     setBusy("");changed();rerender();toast("画像を追加しました");
-  }catch(e){setBusy("");toast("アップロードできませんでした："+errText(e),true);}
+  }catch(e){setBusy("");toast(e.status?"アップロードできませんでした："+errText(e):e.message,true);}
 }
 
 /* ===== 下書き保存・公開 ===== */

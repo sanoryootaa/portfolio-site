@@ -24,6 +24,8 @@
 - 書き込みは Git Data API で複数ファイル1コミット（`commit()`、422 は取り直して再試行）。draft ブランチが無ければ main から作る。
 - プレビュー：編集のたびに localStorage `preview:<name>` に書き、iframe の `?preview=1` ページが `storage` イベントで描き直す（`onContent()`）。プレビュー・管理画面では GA を送らない。
 - 画像：canvas で長辺2000px JPEG に縮小 → main の `media/` に即コミット。反映前は blob URL で表示（`BLOBS`）。
+  - ブラウザが読めない TIFF / HEIC は `admin/vendor/`（utif 3.1.0 + pako_inflate 1.0.11 / heic2any 0.0.4、自前配信）を必要時だけ読み込んで変換（`decodeAny()`）。
+- 並べ替え `sortable()`：ポインターキャプチャは使わない（DOM 入れ替えでキャプチャが外れて確定しなくなるため）。window で move/up を受け、端で自動スクロール。
 - 項目を足すとき：JSON ＋ 描画（各ページ）＋ 管理画面の `view*()` ＋ `F_LABEL`（公開時の差分表示）＋ SPEC.md。
 - 文字組みのエリアを足すとき：`TYPO_AREAS` に1行（label/page/sel/既定値）。管理画面にも自動で出る。
 
