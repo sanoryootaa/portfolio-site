@@ -13,13 +13,13 @@
 <link rel="stylesheet" href="assets/site.css">
 <script src="assets/site.js"></script>
 <style>
-  /* 構成：タイトル → ジャンル/制作年 → 受賞歴 → about → 画像 → 動画 → クレジット */
+  /* 構成：動画 → 画像（動画と同じ横幅で縦に並べる）→ タイトル → ジャンル/制作年 → 受賞歴 → about → クレジット */
   .w-sub{margin-top:2px;}
   /* 受賞歴はタイトル下の余白に重ねて置く（飛び立っても下の段がガクッと詰まらない）*/
   .w-head{position:relative;}
   .w-award{position:absolute;left:0;top:100%;margin-top:4px;white-space:nowrap;}
-  .w-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;}
-  .w-images img{width:100%;height:auto;}
+  .w-media{display:grid;gap:12px;margin-bottom:44px;}
+  .w-media img.still{width:100%;height:auto;}
   .player{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;}
   .player img{width:100%;height:100%;object-fit:cover;}
   .player iframe{width:100%;height:100%;border:0;display:block;}
@@ -27,17 +27,18 @@
   .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
   .playbtn:after{content:"";border-left:22px solid #000;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:5px;}
   /* クレジット：左=役職 / 右=名前。名前が多い役職は右側で段組みして縦に伸びすぎないように */
-  .credits{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 40px;max-width:900px;}
-  .credits .nm{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));column-gap:24px;}
+  /* クレジット：左=役職 / 右=名前を「, 」でつないで詰めて折り返す（名前が多くても読みやすい幅に収める）*/
+  .credits{display:grid;grid-template-columns:160px minmax(0,560px);gap:8px 24px;}
+  .credits .nm span{white-space:nowrap;}
+  .credits .nm span:not(:last-child)::after{content:",";}
   @media (prefers-reduced-motion:reduce){.w-head{padding-bottom:1.6em;}.w-award{position:static;white-space:normal;margin-top:2px;}}
   .notfound{padding-top:20vh;}
   .notfound a{border-bottom:1px solid currentColor;}
   @media (max-width:760px){
-    .w-images{grid-template-columns:1fr;gap:8px;}
+    .w-media{gap:8px;margin-bottom:36px;}
     .credits{grid-template-columns:1fr;row-gap:0;}
     .credits .role{margin-top:10px;}
     .credits .role:first-child{margin-top:0;}
-    .credits .nm{grid-template-columns:repeat(2,minmax(0,1fr));}
     .playbtn{width:56px;height:56px;}
     .playbtn:after{border-left-width:17px;border-top-width:10px;border-bottom-width:10px;margin-left:4px;}
   }
@@ -63,22 +64,22 @@ onContent(["site","works"],([site,data],first)=>{
   const about=(w.about_ja||w.about_en)
     ?`<section class="sec"><h2>(About)</h2><div class="bi">${w.about_ja?`<p lang="ja">${esc(w.about_ja)}</p>`:""}${w.about_en?`<p lang="en">${esc(w.about_en)}</p>`:""}</div></section>`:"";
   const imgs=(w.images||[]).filter(Boolean);
-  const images=imgs.length
-    ?`<section class="sec w-images">${imgs.map(s=>`<img src="${esc(asset(s))}" alt="${esc(w.title)}" loading="lazy">`).join("")}</section>`:"";
+  const images=imgs.map(s=>`<img class="still" src="${esc(asset(s))}" alt="${esc(w.title)}" loading="lazy">`).join("");
   const vid=ytId(w.video);
   const video=vid
-    ?`<section class="sec"><div class="player" id="player"><img src="${esc(asset(w.thumb))}" alt=""><button class="playbtn" aria-label="Play"></button></div></section>`:"";
+    ?`<div class="player" id="player"><img src="${esc(asset(w.thumb))}" alt=""><button class="playbtn" aria-label="Play"></button></div>`:"";
   const credits=(w.credits||[]).length
     ?`<section class="sec"><h2>(Credit)</h2><div class="credits">${w.credits.map(c=>
-        `<div class="role">${esc(c.role)}</div><div class="nm">${(c.names||[]).map(n=>`<div>${esc(n)}</div>`).join("")}</div>`).join("")}</div></section>`:"";
+        `<div class="role">${esc(c.role)}</div><div class="nm">${(c.names||[]).map(n=>`<span>${esc(n)}</span>`).join(" ")}</div>`).join("")}</div></section>`:"";
 
   page.innerHTML=
-    `<div class="w-head">
+    `${video||images?`<div class="w-media">${video}${images}</div>`:""}
+     <div class="w-head">
        <h1 class="page-title">${esc(w.title)}</h1>
        ${sub?`<div class="w-sub">${esc(sub)}</div>`:""}
        ${w.award?`<div class="w-award"><span class="emoji">🏆</span> ${esc(w.award)}</div>`:""}
      </div>
-     ${about}${images}${video}${credits}`;
+     ${about}${credits}`;
 
   const awardEl=page.querySelector(".w-award");
   /* ページのフェードイン（位置がずれる）が終わってから元の位置を測って飛ばす */
