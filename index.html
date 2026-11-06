@@ -3,225 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- 公開前（home.html の間）は検索に出さない。公開時に削除 -->
+<!-- lab：検索に出さない（robots.txt ではブロックしない）・GA なし（site.js の LAB）-->
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#ffffff">
-<title>Sano Ryota Works Archives</title>
-<!-- リンク共有時のプレビュー画像（SNSはJSを読まないのでここに直書き）-->
-<meta property="og:title" content="Sano Ryota Works Archives">
-<meta property="og:image" content="https://sanoryota.com/media/site/ogp.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://sanoryota.com/media/site/ogp.jpg">
+<title>Lab — Sano Ryota Works Archives</title>
 <link rel="icon" href="/media/site/favicon.png">
-<link rel="stylesheet" href="assets/site.css?v=202611061708">
-<script src="assets/site.js?v=202611061708"></script>
-<script>
-  /* 旧URL（#work-N / #profile）は新しいページへ転送 */
-  if(location.hash==="#profile")location.replace("profile.html");
-</script>
+<link rel="stylesheet" href="assets/site.css?v=lab1">
+<script src="assets/site.js?v=lab1"></script>
 <style>
-  /* スクロール最下部・左下のメッセージ */
-  .botmsg{display:none;position:relative;padding:24px 30px 30px;}
-  .msg-trigger{cursor:pointer;display:inline-block;border-bottom:1px solid currentColor;}
-  .msg-trigger::after{content:"✨";margin-left:.45em;border:0;animation:twinkle 1.3s steps(1,end) infinite;}
-  @keyframes twinkle{50%{opacity:.15;}}
-  .msg-reveal{display:none;max-width:680px;white-space:pre-wrap;}
-  .botmsg.no-spark .msg-trigger{display:none;}          /* キラキラOFF時はトリガーごと無し（丸出し）*/
-  .botmsg.no-spark .msg-reveal{animation:none;}
-  .botmsg.show .msg-trigger{display:none;}
-  .botmsg.show .msg-reveal{display:block;animation:reveal .8s cubic-bezier(.16,1,.3,1) both;}
-  @keyframes reveal{from{opacity:0;filter:blur(10px);transform:translateY(10px) scale(.97);}
-    to{opacity:1;filter:blur(0);transform:none;}}
-  .spark{position:absolute;pointer-events:none;will-change:transform,opacity;animation:spark 1.1s ease-out forwards;}
-  @keyframes spark{0%{opacity:0;transform:translateY(0) scale(.3) rotate(0);}
-    25%{opacity:1;}
-    100%{opacity:0;transform:translateY(-46px) scale(1.25) rotate(45deg);}}
+  /* ===== 開口部の大きさ（ここを変えると調整できる）===== */
+  :root{--aperture-w:44vw;--aperture-h:52vh;}
+  @media (max-width:760px){:root{--aperture-w:78vw;--aperture-h:42vh;}}
+  #aperture{position:fixed;left:0;top:0;width:var(--aperture-w);height:var(--aperture-h);visibility:hidden;pointer-events:none;}
 
+  #glass{position:fixed;inset:0;width:100vw;height:100vh;display:block;touch-action:pan-y;}
+  #spacer{position:relative;pointer-events:none;}
   header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;
-    padding:30px 30px;z-index:60;pointer-events:none;mix-blend-mode:difference;color:#fff;line-height:1.5;}
-  header .center{position:absolute;left:50%;top:30px;transform:translateX(-50%);pointer-events:auto;cursor:pointer;}
+    padding:30px;z-index:60;pointer-events:none;mix-blend-mode:difference;color:#fff;}
+  header .center{position:absolute;left:50%;top:30px;transform:translateX(-50%);pointer-events:auto;}
   header .right{margin-left:auto;pointer-events:auto;display:inline-flex;align-items:center;}
-  /* アイコンはヘッダー(反転合成)の外の別レイヤー。素の色のまま点滅 */
-  .favico{position:fixed;width:var(--fs);height:var(--fs);object-fit:contain;z-index:61;animation:blink 1s steps(1,end) infinite;}
+  .favico{width:var(--fs);height:var(--fs);object-fit:contain;margin-right:7px;animation:blink 1s steps(1,end) infinite;mix-blend-mode:normal;}
   @keyframes blink{50%{opacity:0;}}
-
-  /* archive : airy %-scatter */
-  #stage{position:relative;width:100%;max-width:1500px;margin:0 auto;aspect-ratio:1600/4600;}
-  .work{position:absolute;width:19%;display:block;}
-  .thumb{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#0c0c0c;}
-  .thumb img{width:100%;height:100%;object-fit:cover;}
-  .thumb::after{content:"";position:absolute;inset:0;background:#000;opacity:0;transition:opacity .25s ease;}
-  .work:hover .thumb::after{opacity:1;}                 /* hover = 黒 */
-  .label{position:absolute;line-height:1;white-space:nowrap;--p:50%;}
-  /* サムネ端からの距離は四辺とも 8px。上ラベルはディセンダー分だけ持ち上げる */
-  .label.e-top{bottom:calc(100% + 8px);left:var(--p);padding-bottom:.16em;}
-  .label.e-bottom{top:calc(100% + 8px);left:var(--p);}
-  .label.e-left{right:calc(100% + 8px);top:var(--p);}
-  .label.e-right{left:calc(100% + 8px);top:var(--p);}
-  /* トロフィー：作品ごとの歪んだループ(t-roam-i)に沿って一定速度で滑らかに進む */
-  .label.trophy{white-space:normal;will-change:left,top;}
-
-  @media (max-width:760px){
-    header{padding:16px 18px;}
-    header .center{position:static;transform:none;max-width:58%;}
-    #stage{aspect-ratio:auto !important;max-width:none;padding:132px 20px 90px;}
-    /* 横位置はJSが --mleft に入れたランダム値（モバイルのみ適用）*/
-    .work{position:relative !important;left:auto !important;top:auto !important;width:54% !important;margin:0 0 108px var(--mleft,0) !important;}
-    .label.e-left,.label.e-right{white-space:normal;max-width:22vw;}
-    .botmsg{padding:16px 18px 26px;}
-  }
-  @media (prefers-reduced-motion:reduce){
-    .spark{display:none !important;}
-  }
+  .botmsg{position:relative;z-index:10;padding:24px 30px 30px;pointer-events:none;}
+  /* キーボード用のリンク（見た目は3Dの枠で示す。読み上げにも使う）*/
+  #links a{position:fixed;left:-9999px;top:0;}
+  @media (max-width:760px){header{padding:16px 18px;}header .center{position:static;transform:none;max-width:58%;}.botmsg{padding:16px 18px 26px;}}
+  @media (prefers-reduced-motion:reduce){.favico{animation:none;}}
 </style>
 </head>
 <body>
-
+<canvas id="glass" aria-hidden="true"></canvas>
+<div id="aperture"></div>
 <header>
-  <a class="center" id="hTitle" data-home href="./" onclick="event.preventDefault();window.scrollTo({top:0,behavior:'smooth'})"></a>
-  <a class="right" id="hProfile" href="profile.html"></a>
+  <a class="center" id="hTitle" data-home href="./"></a>
+  <a class="right" href="profile.html"><img class="favico" src="/media/site/favicon.png" alt=""><span id="hProfile"></span></a>
 </header>
-<img class="favico" id="favicoTop" src="/media/site/favicon.png" alt="">
-
-<main><div id="stage"></div></main>
-<footer class="botmsg" id="botmsg">
-  <span class="msg-trigger" id="msgTrigger" role="button" tabindex="0" onclick="showMessage()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showMessage();}">Watch Message from Ryota Sano</span>
-  <div class="msg-reveal" id="bottomMsg"></div>
-</footer>
-
-<script>
-/* ===== 配置（12作品ぶんの散らばり。13作品目以降は同じパターンを下へ繰り返す）===== */
-const layout=[
- {x:12,top:3}, {x:60,top:7}, {x:34,top:15},{x:6, top:23},
- {x:64,top:25},{x:28,top:34},{x:56,top:42},{x:10,top:48},
- {x:40,top:56},{x:66,top:62},{x:18,top:71},{x:46,top:80},
-];
-const WORK_W=19, MWORK_W=54, M_SIDE=16;   /* PC/スマホの作品幅(%)・スマホで左右ラベルに要る余白(%) CSSと一致させる */
-const rnd=(a,b)=>+(a+Math.random()*(b-a)).toFixed(1);
-/* 散らばりはそのまま、作品帯を左右中央に揃える */
-const X_SHIFT=((100-Math.max(...layout.map(L=>L.x+WORK_W)))-Math.min(...layout.map(L=>L.x)))/2;
-
-/* 作品ごとのランダム要素（ラベル位置・揺らぎ・スマホ横位置・トロフィー軌道）*/
-function randomize(i){
-  const L=layout[i%layout.length], left=L.x+X_SHIFT;
-  /* 年とカテゴリは別の辺。画面端の作品では外側の辺を避けて見切れを防ぐ */
-  let allow=["top","bottom","left","right"];
-  if(left<14) allow=allow.filter(e=>e!=="left");
-  if(left+WORK_W>86) allow=allow.filter(e=>e!=="right");
-  const pk=()=>allow[Math.floor(Math.random()*allow.length)];
-  const e1=pk(); let e2; do{e2=pk();}while(e2===e1);
-  const pp=()=>Math.round(16+Math.random()*58);   /* 辺上の位置 16〜74% */
-  const yr={e:e1,p:pp()}, ca={e:e2,p:pp()};
-  /* スマホ：サイドにラベルが付く作品はその側に余白を確保 */
-  let lo=2, hi=100-MWORK_W-2;
-  if(e1==="left"||e2==="left")   lo=Math.max(lo,M_SIDE);
-  if(e1==="right"||e2==="right") hi=Math.min(hi,100-MWORK_W-M_SIDE);
-  /* トロフィー：歪んだ閉ループを生成（円ではなく各々違う形）*/
-  const N=14, start=Math.random()*Math.PI*2, dir=Math.random()<.5?1:-1;
-  const rx=rnd(54,74), ry=rnd(60,84), wob=rnd(0.06,0.16), wph=Math.random()*Math.PI*2, wn=2+Math.floor(Math.random()*2);
-  const pts=[];
-  for(let k=0;k<N;k++){
-    const ang=start+dir*(k/N)*Math.PI*2, m=1+wob*Math.sin(wn*ang+wph);
-    pts.push([+(50+Math.cos(ang)*rx*m).toFixed(1), +(50+Math.sin(ang)*ry*m).toFixed(1)]);
-  }
-  return {yr,ca,dx:rnd(-6,6),dy:rnd(-0.7,1.4),mleft:+(lo+Math.random()*(hi-lo)).toFixed(1),
-    trophy:{pts,dur:rnd(3.5,6),delay:rnd(-6,0)}};
-}
-function injectTrophyKeyframes(cfg){
-  let css="";
-  cfg.forEach((c,i)=>{
-    const P=c.trophy.pts;let frames="";
-    for(let k=0;k<=P.length;k++){const p=P[k%P.length];frames+=`${(k/P.length*100).toFixed(1)}%{left:${p[0]}%;top:${p[1]}%;}`;}
-    css+=`@keyframes t-roam-${i}{${frames}}`;
-  });
-  let s=document.getElementById("trophyKeys");
-  if(!s){s=document.createElement("style");s.id="trophyKeys";document.head.appendChild(s);}
-  s.textContent=css;
-}
-
-function buildArchive(site,works){
-  const stage=document.getElementById("stage");
-  const pages=Math.max(1,Math.ceil(works.length/layout.length));
-  stage.style.aspectRatio=`1600/${4600*pages}`;
-  const cfg=works.map((_,i)=>randomize(i));
-  injectTrophyKeyframes(cfg);
-  const tSpeed=parseFloat(site.trophy_speed)||1;   /* 大きいほど速い */
-  stage.innerHTML="";
-  works.forEach((w,i)=>{
-    const L=layout[i%layout.length], c=cfg[i], k=Math.floor(i/layout.length);
-    const el=document.createElement("a");el.className="work";el.href=workURL(w);
-    el.style.left=(L.x+X_SHIFT+c.dx)+"%";
-    el.style.top=((Math.max(3,L.top+c.dy)+100*k)/pages)+"%";   /* 上はヘッダーに被らないよう最低3% */
-    el.style.setProperty("--mleft",c.mleft+"%");
-    el.setAttribute("aria-label",w.title||"");
-    const thumb=asset(w.thumb);
-    const award=w.award;
-    el.innerHTML=
-      `<div class="thumb">${thumb?`<img src="${esc(thumb)}" alt="${esc(w.title)}" loading="lazy">`:""}</div>`+
-      `<span class="label year e-${c.yr.e}" style="--p:${c.yr.p}%">${esc(w.year)}</span>`+
-      `<span class="label cat e-${c.ca.e}" style="--p:${c.ca.p}%">${esc(w.category)}</span>`+
-      (award?`<span class="label trophy emoji" style="animation:t-roam-${i} ${(c.trophy.dur/tSpeed).toFixed(2)}s linear infinite;animation-delay:${(c.trophy.delay/tSpeed).toFixed(2)}s" title="${esc(award)}">🏆</span>`:"");
-    stage.appendChild(el);
-  });
-}
-
-function buildHeader(site,profile){
-  document.getElementById("hTitle").textContent=site.title||"";
-  document.getElementById("hProfile").textContent=profile.label||"Profile";
-  setTitle(site.title);
-  const fb=document.getElementById("botmsg");
-  document.getElementById("bottomMsg").textContent=site.message||"";
-  fb.style.display=site.message?"block":"none";            /* メッセージが有る時だけ表示 */
-  fb.classList.toggle("no-spark",!site.message_sparkle);
-  if(!site.message_sparkle)fb.classList.add("show");       /* OFFはトリガー無しで丸出し */
-  placeFavico();
-}
-
-let SPARKLE=true;
-function showMessage(){
-  const f=document.getElementById("botmsg");
-  f.classList.add("show");
-  if(!SPARKLE)return;
-  for(let i=0;i<18;i++){
-    const s=document.createElement("span");s.className="spark emoji";s.textContent="✨";
-    s.style.left=(20+Math.random()*300)+"px";
-    s.style.top=(16+Math.random()*52)+"px";
-    s.style.fontSize=(9+Math.random()*15)+"px";
-    s.style.animationDelay=(Math.random()*0.55).toFixed(2)+"s";
-    f.appendChild(s);
-    setTimeout(()=>s.remove(),2200);
-  }
-}
-/* 点滅アイコンを「Profile here」の直前に配置 */
-function placeFavico(){
-  const t=document.getElementById("hProfile"),ic=document.getElementById("favicoTop");
-  const r=t.getBoundingClientRect();
-  ic.style.top=(r.top+r.height*0.5-ic.offsetHeight/2)+"px";
-  ic.style.left=(r.left-ic.offsetWidth-7)+"px";
-}
-window.addEventListener("resize",placeFavico);
-window.addEventListener("load",placeFavico);
-
-/* ===== boot ===== */
-onContent(["site","works","profile"],([site,data,profile],first)=>{
-  const works=data.works||[];
-  /* 旧URL #work-N → 作品ページ */
-  const m=first&&location.hash.match(/^#work-(\d+)$/);
-  if(m&&works[+m[1]-1]){location.replace(workURL(works[+m[1]-1]));return;}
-  SPARKLE=!!site.message_sparkle;
-  buildArchive(site,works);
-  buildHeader(site,profile);
-});
-
-/* GA4: 最下部のメッセージ枠が表示されたら scroll_bottom を1回だけ */
-(function(){
-  const t=document.getElementById("botmsg");
-  if(!("IntersectionObserver" in window))return;
-  const io=new IntersectionObserver(es=>{
-    if(es.some(e=>e.isIntersecting)){gaEv("scroll_bottom");io.disconnect();}
-  });
-  io.observe(t);
-})();
-</script>
+<nav id="links" aria-label="Works"></nav>
+<div id="spacer"></div>
+<footer class="botmsg" id="botmsg" hidden><span></span></footer>
+<script type="module" src="assets/glass.js?v=lab1"></script>
 </body>
 </html>
