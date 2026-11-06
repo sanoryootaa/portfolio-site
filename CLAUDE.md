@@ -54,4 +54,5 @@
 - 表示確認は `python3 -m http.server` で（`fetch` を使うので file:// では動かない）。
 - コミット→push まで一気に（main 直）。反映は1〜2分＋キャッシュ注意。
 - 管理画面から main / draft にコミットが入るので、作業前に必ず `git pull --rebase`。
+- **CSS/JS（assets/・admin/）を変えたら `tools/bump.sh`** を実行して各ページの `?v=` を更新（GitHub Pages は max-age=600 なので、しないと最大10分古いファイルが使われる）。管理画面のプレビューは `&t=` でページ本体も毎回取り直す。
 - レイアウトは PC と スマホ（`max-width:760px`）で別指定。

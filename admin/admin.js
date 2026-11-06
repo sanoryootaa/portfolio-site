@@ -193,7 +193,7 @@ function renderShell(){
   $("#logout").onclick=e=>{e.preventDefault();logout();};
   $("#pvOpen").onclick=()=>{$("#pv").classList.add("open");fitPreview();};
   $("#pvClose").onclick=()=>$("#pv").classList.remove("open");
-  $("#pvReload").onclick=()=>{pushPreview();$("#pvFrame").src=pvSrc;};
+  $("#pvReload").onclick=()=>{pushPreview();const u=new URL(pvSrc,location.href);u.searchParams.set("t",Date.now().toString(36));$("#pvFrame").src=u.href;};
   $("#pvMode").onclick=e=>{const m=e.target.dataset.m;if(m){pvMode=m;fitPreview();}};
   $("#pvPage").onchange=e=>{pvPage=e.target.value;setPreview();};
   addEventListener("resize",fitPreview);
@@ -226,10 +226,12 @@ function routePage(){
   }
   return pvPage||"home";
 }
+/* t= は管理画面を開くたびに変わる値。ページ本体の古いキャッシュ（Pages は最大10分）を使わせない */
+const PV_T=Date.now().toString(36);
 function pageURL(p){
-  if(p==="profile")return "../profile.html?preview=1";
-  if(p&&p.startsWith("work:")){const w=W.works.works[+p.slice(5)];if(w)return `../work.html?id=${encodeURIComponent(w.slug)}&preview=1`;}
-  return `../${HOME}?preview=1`;
+  if(p==="profile")return `../profile.html?preview=1&t=${PV_T}`;
+  if(p&&p.startsWith("work:")){const w=W.works.works[+p.slice(5)];if(w)return `../work.html?id=${encodeURIComponent(w.slug)}&preview=1&t=${PV_T}`;}
+  return `../${HOME}?preview=1&t=${PV_T}`;
 }
 function setPreview(){
   const sel=$("#pvPage");if(!sel)return;
