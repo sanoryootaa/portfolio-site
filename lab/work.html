@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 公開前は検索に出さない。公開時に削除 -->
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<title>Sano Ryota Works Archives</title>
+<meta property="og:image" content="https://sanoryota.com/media/site/ogp.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/media/site/favicon.png">
+<link rel="stylesheet" href="assets/site.css?v=202611061708">
+<script src="assets/site.js?v=202611061708"></script>
+<style>
+  /* 構成：タイトル → ジャンル/制作年 → 受賞歴 → about → 動画 → 画像 → クレジット */
+  .w-sub{margin-top:2px;}
+  /* 受賞歴はタイトル下の余白に重ねて置く（飛び立っても下の段がガクッと詰まらない）*/
+  .w-head{position:relative;}
+  .w-award{position:absolute;left:0;top:100%;margin-top:4px;white-space:nowrap;}
+  /* 画像：12分割のグリッド。1枚ごとに フル(12)/2/3(8)/1/2(6)/1/3(4)/1/4(3)。間隔・切り抜き比率は作品ごと（gallery）*/
+  .w-images{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gap,12px);align-items:start;}
+  .w-images img{width:100%;height:auto;grid-column:span 12;}
+  .w-images img[data-size="2/3"]{grid-column:span 8;}
+  .w-images img[data-size="1/2"]{grid-column:span 6;}
+  .w-images img[data-size="1/3"]{grid-column:span 4;}
+  .w-images img[data-size="1/4"]{grid-column:span 3;}
+  .w-images.crop img{aspect-ratio:var(--ratio);object-fit:cover;}
+  .w-vsec+.w-images{margin-top:var(--gap,12px);}   /* 動画のすぐ下は画像の間隔と同じだけ空ける */
+  .player{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;}
+  .player img{width:100%;height:100%;object-fit:cover;}
+  .player iframe{width:100%;height:100%;border:0;display:block;}
+  .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;border:0;border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
+  .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
+  .playbtn:after{content:"";border-left:22px solid #000;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:5px;}
+  /* クレジット：役職ごとに縦に積む（役職は末尾に / ）*/
+  .cr+.cr{margin-top:12px;}
+  @media (prefers-reduced-motion:reduce){.w-head{padding-bottom:1.6em;}.w-award{position:static;white-space:normal;margin-top:2px;}}
+  .notfound{padding-top:20vh;}
+  .notfound a{border-bottom:1px solid currentColor;}
+  @media (max-width:760px){
+    /* スマホ：2/3 はフルに、1/3・1/4 は半分に（小さくなりすぎないように）*/
+    .w-images img[data-size="2/3"]{grid-column:span 12;}
+    .w-images img[data-size="1/3"],.w-images img[data-size="1/4"]{grid-column:span 6;}
+    .playbtn{width:56px;height:56px;}
+    .playbtn:after{border-left-width:17px;border-top-width:10px;border-bottom-width:10px;margin-left:4px;}
+  }
+</style>
+</head>
+<body>
+<a class="home-link" id="homeLink" data-home href="./"></a>
+<a class="closeX" id="close" data-home href="./" aria-label="Close"></a>
+<main class="page" id="page"></main>
+<script>
+const id=new URLSearchParams(location.search).get("id");
+bindClose(document.getElementById("close"));
+onContent(["site","works"],([site,data],first)=>{
+  document.getElementById("homeLink").textContent=site.title||"";
+  const works=data.works||[], w=works.find(w=>w.slug===id), page=document.getElementById("page");
+  if(!w){
+    page.innerHTML=`<p class="notfound">Work not found.<br><br><a href="${HOME}">Back to Works</a></p>`;
+    return;
+  }
+  setTitle(w.title,site.title);
+
+  const sub=[w.category,w.year].filter(Boolean).join(", ");   /* 片方欠けてもカンマが浮かない */
+  const about=(w.about_ja||w.about_en)
+    ?`<section class="sec"><h2>(About)</h2><div class="bi">${w.about_ja?`<p lang="ja">${esc(w.about_ja)}</p>`:""}${w.about_en?`<p lang="en">${esc(w.about_en)}</p>`:""}</div></section>`:"";
+  /* 画像は "パス" でも {src,size} でもよい */
+  const imgs=(w.images||[]).map(x=>typeof x==="string"?{src:x}:x).filter(x=>x&&x.src);
+  const g=w.gallery||{}, ratio=g.ratio&&g.ratio!=="original"?g.ratio.replace(":"," / "):"";
+  const images=imgs.length
+    ?`<section class="sec w-images${ratio?" crop":""}" style="--gap:${+(g.gap??12)}px${ratio?`;--ratio:${ratio}`:""}">${imgs.map(x=>
+        `<img src="${esc(asset(x.src))}" data-size="${esc(x.size||"full")}" alt="${esc(w.title)}" loading="lazy">`).join("")}</section>`:"";
+  const vid=ytId(w.video);
+  const video=vid
+    ?`<section class="sec w-vsec"><div class="player" id="player"><img src="${esc(asset(w.thumb))}" alt=""><button class="playbtn" aria-label="Play"></button></div></section>`:"";
+  const credits=(w.credits||[]).length
+    ?`<section class="sec"><h2>(Credit)</h2>${w.credits.map(c=>
+        `<div class="cr"><div>${esc(c.role)} /</div>${(c.names||[]).map(n=>`<div>${esc(n)}</div>`).join("")}</div>`).join("")}</section>`:"";
+
+  page.innerHTML=
+    `<div class="w-head">
+       <h1 class="page-title">${esc(w.title)}</h1>
+       ${sub?`<div class="w-sub">${esc(sub)}</div>`:""}
+       ${w.award?`<div class="w-award"><span class="emoji">🏆</span> ${esc(w.award)}</div>`:""}
+     </div>
+     ${about}${video}${images}${credits}`;
+
+  const awardEl=page.querySelector(".w-award");
+  /* ページのフェードイン（位置がずれる）が終わってから元の位置を測って飛ばす */
+  if(awardEl)Promise.all(page.getAnimations().map(a=>a.finished)).then(()=>flyDragon(awardEl));
+
+  const btn=page.querySelector(".playbtn");
+  if(btn)btn.addEventListener("click",()=>{
+    document.getElementById("player").innerHTML=
+      `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(vid)}?autoplay=1&rel=0" title="${esc(w.title)}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+    /* autoplay=1 で即再生されるので、ここを「再生開始」とみなす */
+    gaEv("video_play",{work_title:w.title});
+  });
+
+  /* GA4: 作品別閲覧数 + 1訪問で2作品目を開いたら engaged_browsing を1回だけ */
+  if(!first)return;
+  gaEv("work_open",{work_title:w.title,work_category:w.category,work_date:w.year});
+  try{
+    const n=+(sessionStorage.getItem("workOpens")||0)+1;sessionStorage.setItem("workOpens",n);
+    if(n===2)gaEv("engaged_browsing");
+  }catch(e){}
+});
+</script>
+</body>
+</html>
