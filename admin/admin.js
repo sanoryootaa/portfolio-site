@@ -72,6 +72,8 @@ function errText(e){
 /* ===== 状態 ===== */
 function normalize(d){
   d.works=d.works||{};d.works.works=d.works.works||[];
+  /* 画像は {src,size} に揃える（古いデータは "パス" の文字列）*/
+  d.works.works.forEach(w=>{w.images=(w.images||[]).map(x=>typeof x==="string"?{src:x,size:"full"}:x);});
   d.profile=d.profile||{};["career","awards","skills"].forEach(k=>d.profile[k]=d.profile[k]||[]);
   d.site=d.site||{};d.site.typography=d.site.typography||{};
   return d;
@@ -289,11 +291,23 @@ const single=(k,l,dir,o={})=>{
       ${p?`<button class="btn small ghost" data-clear="${k}">外す</button>`:""}
     </div></div></div>`;
 };
-const multi=(k,l,dir,o={})=>{
-  const list=val(k)||[];
-  return `<div class="field">${hintL(l,o.hint)}
-    ${list.length?`<div class="imgs" data-list="${k}" data-axis="grid">${list.map((p,j)=>`<div class="it" data-j="${j}"><img src="${esc(imgSrc(p))}" alt=""><button class="x" data-del="${k}" data-j="${j}" aria-label="削除">✕</button></div>`).join("")}</div>`:""}
-    <div class="drop" data-upload="${k}" data-dir="${dir}" data-multi style="margin-top:8px">＋ 画像を追加（クリック・ドラッグ＆ドロップ／複数OK）<br><small>JPEG・PNG・TIFF・HEIC・WebP・GIF など</small></div></div>`;
+/* 作品の画像：1枚ごとの大きさ（12分割グリッド）＋ 間隔・切り抜き比率。一覧はサイトと同じ並び方で見せる */
+const G_SIZES=[["full","フル",12],["2/3","2/3",8],["1/2","1/2",6],["1/3","1/3",4],["1/4","1/4",3]];
+const G_RATIOS=[["original","元の比率"],["16:9","16:9"],["3:2","3:2"],["4:3","4:3"],["1:1","1:1"],["4:5","4:5"]];
+const gallery=(k,gk,dir)=>{
+  const list=val(k)||[], g=val(gk)||{}, ratio=g.ratio||"original", gap=g.gap??12;
+  const span=sz=>(G_SIZES.find(x=>x[0]===sz)||G_SIZES[0])[2];
+  return `<div class="group"><div class="gt"><span>画像（動画の下に並ぶ）</span><span class="hint">ドラッグで並べ替え・下のボタンで大きさ</span></div>
+    <div class="row2">
+      <label class="ctl"><span class="ic" data-scrub>間隔</span><input type="number" data-k="${gk}.gap" data-type="num" value="${gap}" step="1" min="0" inputmode="numeric"><span class="u">px</span></label>
+      <label class="ctl"><span class="ic">切り抜き</span><select data-k="${gk}.ratio">${G_RATIOS.map(([v,l])=>`<option value="${v}"${ratio===v?" selected":""}>${l}</option>`).join("")}</select><span class="u"></span></label>
+    </div>
+    ${list.length?`<div class="gal" data-list="${k}" data-axis="grid" style="--gap:${Math.min(gap,12)/2}px">${list.map((x,j)=>`<div class="it" data-j="${j}" style="grid-column:span ${span(x.size)}">
+      <img src="${esc(imgSrc(x.src))}" alt=""${ratio!=="original"?` style="aspect-ratio:${ratio.replace(":"," / ")};object-fit:cover"`:""}>
+      <button class="x" data-del="${k}" data-j="${j}" aria-label="削除">✕</button>
+      <div class="sz">${G_SIZES.map(([v,l])=>`<button data-size-set="${k}.${j}.size" data-v="${v}" class="${(x.size||"full")===v?"on":""}">${l}</button>`).join("")}</div>
+    </div>`).join("")}</div>`:""}
+    <div class="drop" data-upload="${k}" data-dir="${dir}" data-multi style="margin-top:10px">＋ 画像を追加（クリック・ドラッグ＆ドロップ／複数OK）<br><small>JPEG・PNG・TIFF・HEIC・WebP・GIF など</small></div></div>`;
 };
 /* 繰り返し行。fields: [[key|null(=文字列そのもの), placeholder, "textarea"?]] */
 const rows=(k,l,fields,tpl,o={})=>{
@@ -334,9 +348,9 @@ function viewWork(i){
   ${area(k+".about_ja","About（日本語）",{rows:6})}
   ${area(k+".about_en","About（英語）",{rows:6})}
   ${single(k+".thumb","サムネ画像","works",{hint:"ホーム・動画の表紙"})}
-  ${multi(k+".images","画像（作品ページに並ぶ）","works",{hint:"ドラッグで並べ替え"})}
-  <div class="field">${hintL("動画（YouTube URL）")}<input class="in" data-k="${k}.video" value="${esc(val(k+".video"))}" placeholder="https://youtu.be/…" inputmode="url">
+  <div class="field">${hintL("動画（YouTube URL）","About の下に表示")}<input class="in" data-k="${k}.video" value="${esc(val(k+".video"))}" placeholder="https://youtu.be/…" inputmode="url">
     ${vid?`<div class="yt"><img src="https://i.ytimg.com/vi/${encodeURIComponent(vid)}/hqdefault.jpg" alt=""><span>ID: ${esc(vid)}</span></div>`:""}</div>
+  ${gallery(k+".images",k+".gallery","works")}
   ${rows(k+".credits","クレジット",[["role","役職（例：Direction）"],["names","名前（1行に1人）","lines"]],{role:"",names:[]},{hint:"⋮⋮ で並べ替え"})}
   <div class="group"><button class="btn danger small" id="delWork">この作品を削除</button></div>`;
 }
@@ -406,6 +420,7 @@ function bindEditor(ed){
       if(!W.site.typography[key])W.site.typography[key]=clone(TYPO_AREAS[key].d);
     }
     setPath(W,k,v);
+    if(/\.gallery\.ratio$/.test(k)){changed();rerender();return;}   /* 管理画面の一覧も切り抜きを反映 */
     if(/\.title$/.test(k)&&route().name==="work")$(".editor h1.h").textContent=v||"（無題）";
     if(k.startsWith("site.typography.")){const th=el.closest(".typo").querySelector(".th .v"),t=typoValue(W.site,k.split(".")[2]);
       th.textContent=`${t.size}px / ${t.leading}% / ${t.tracking}${t.palt?" / palt":""}`;}
@@ -424,6 +439,7 @@ function bindEditor(ed){
       W.works.works.splice(i,1);changed();location.hash="#works";return;
     }
     if(t.dataset.add){const list=getPath(W,t.dataset.add)||[];list.push(JSON.parse(t.dataset.tpl));setPath(W,t.dataset.add,list);changed();rerender(t.dataset.add);return;}
+    if(t.dataset.sizeSet){setPath(W,t.dataset.sizeSet,t.dataset.v);changed();rerender();return;}
     if(t.dataset.del){getPath(W,t.dataset.del).splice(+t.dataset.j,1);changed();rerender(t.dataset.del);return;}
     if(t.dataset.clear){setPath(W,t.dataset.clear,"");changed();renderEditor();return;}
     if(t.dataset.upload!=null){pickFiles(t);return;}
@@ -591,7 +607,7 @@ async function upload(files,t){
     }
     setBusy(`画像をアップロード中…（${commitFiles.length}枚）`);
     await commit(GH.live,commitFiles,`Upload ${commitFiles.length} image(s) from admin`);
-    if(multi)setPath(W,k,[...(getPath(W,k)||[]),...out]);else setPath(W,k,out[0]);
+    if(multi)setPath(W,k,[...(getPath(W,k)||[]),...out.map(src=>({src,size:"full"}))]);else setPath(W,k,out[0]);
     setBusy("");changed();rerender();toast("画像を追加しました");
   }catch(e){setBusy("");toast(e.status?"アップロードできませんでした："+errText(e):e.message,true);}
 }
@@ -606,7 +622,7 @@ async function saveDraft(){
     DRAFT=clone(W);saveLocal();setBusy("");toast("下書きを保存しました（サイトにはまだ出ません）");
   }catch(e){setBusy("");toast(errText(e),true);}
 }
-const F_LABEL={title:"タイトル",slug:"URL名",category:"ジャンル",year:"制作年",award:"受賞歴",about_ja:"About（日）",about_en:"About（英）",thumb:"サムネ",images:"画像",video:"動画",credits:"クレジット",
+const F_LABEL={title:"タイトル",slug:"URL名",category:"ジャンル",year:"制作年",award:"受賞歴",about_ja:"About（日）",about_en:"About（英）",thumb:"サムネ",images:"画像",gallery:"画像の間隔・切り抜き",video:"動画",credits:"クレジット",
   label:"右上の文言",name:"氏名",role:"肩書き",photo:"写真",career:"Career",awards:"Awards",skills:"Skills",mail:"メール",instagram:"Instagram",youtube:"YouTube",
   message:"メッセージ",message_sparkle:"キラキラ演出",trophy_speed:"トロフィーの速さ"};
 function diffList(a,b){
