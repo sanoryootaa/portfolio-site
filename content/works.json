@@ -1,9 +1,9 @@
 {
   "works": [
     {
-      "title": "Between your stars",
+      "title": "Between Your Stars",
       "slug": "between-your-stars",
-      "category": "Projection mapping",
+      "category": "Projection Mapping",
       "year": "2026",
       "award": "",
       "about_ja": "東京都庁舎に合わせて制作。",
@@ -47,9 +47,9 @@
       ]
     },
     {
-      "title": "Threads of life",
+      "title": "Threads of Life",
       "slug": "threads-of-life",
-      "category": "Projection mapping",
+      "category": "Projection Mapping",
       "year": "2025",
       "award": "Expo 2025 Osaka, Kansai, Japan — Shine Hat projection mapping, selected for screening",
       "about_ja": "駅のホームには、多様な人々が行き交います。異なる目的地へ向かいながらも、一瞬の間、同じ空間を共有し、見えない繋がりが生まれます。都市は、国籍や世代、価値観を超えた人々が交差する場であり、その出会いが未来を形作ります。そして、クジラや魚が悠然と泳ぎ、異なる種が共存しながら時を紡ぐ海。2つの世界で過去から未来へと繋がる「いのちのつながり」を描きました。\n人間には人間のためだけの未来ではなく、地球上のあらゆる生命と共に未来を創ることが求められます。\n本作では、すべての生命と共に創る、新たな共生のビジョンを私たちの視点を通して表現しました。",
@@ -73,13 +73,13 @@
           ]
         },
         {
-          "role": "Color grading & edit",
+          "role": "Color Grading & Edit",
           "names": [
             "Ryota Sano"
           ]
         },
         {
-          "role": "Production support",
+          "role": "Production Support",
           "names": [
             "Naoki Sakegawa",
             "Hayato Ubukata"
@@ -90,7 +90,7 @@
     {
       "title": "3",
       "slug": "three",
-      "category": "Video installation",
+      "category": "Video Installation",
       "year": "2025",
       "award": "",
       "about_ja": "3面スクリーンを用いた没入空間である映像スタジオB-Immersive Cubeに対し、フォトリアルな隣接空間の拡張を試みた。実際の視点と3D空間のパースペクティブを同期させることで、平面スクリーン上に奥行きの軸を創出している。また、没入感を損なわずに空間を鑑賞できるよう、静的な美しさを基調とした構成をおこなった。多様な表現が蓄積されたこのスタジオにおいて、本作は新たなアプローチを提案するものである。",
@@ -110,7 +110,7 @@
     {
       "title": "言葉の瓶",
       "slug": "kotoba-no-bin",
-      "category": "Public ad",
+      "category": "Public Ad",
       "year": "2025",
       "award": "AC Japan Ad Student Awards — TV commercial category, Excellence award",
       "about_ja": "自分に対してラベリングをして自らの可能性を狭める行為に問題提起する作品。自分を囲い込む言葉を瓶で視覚化し、大量の瓶はVFXで表現した。",
@@ -126,7 +126,7 @@
           ]
         },
         {
-          "role": "Concept & direction",
+          "role": "Concept & Direction",
           "names": [
             "Ryota Sano"
           ]
@@ -150,7 +150,7 @@
           ]
         },
         {
-          "role": "Props & support",
+          "role": "Props & Support",
           "names": [
             "Hikari Natsui"
           ]
@@ -158,9 +158,9 @@
       ]
     },
     {
-      "title": "Fashion Lab × Photography majors making-of",
+      "title": "Fashion Lab × Photography Majors Making-of",
       "slug": "fashion-lab",
-      "category": "Concept film",
+      "category": "Concept Film",
       "year": "2025",
       "award": "",
       "about_ja": "ファッション専攻 × 写真専攻で行った企画のメイキングとして制作",
@@ -189,7 +189,7 @@
           ]
         },
         {
-          "role": "Department of photography",
+          "role": "Department of Photography",
           "names": [
             "Kiyoka Kumagai",
             "Minori Nozaki",
@@ -202,7 +202,7 @@
     {
       "title": "NID School Fest. - Finale",
       "slug": "nid-school-fest-finale",
-      "category": "Projection mapping",
+      "category": "Projection Mapping",
       "year": "2024",
       "award": "Niigata Digicon Grand Prix — Video category, Grand prix",
       "about_ja": "長岡造形大学の大学祭でフィナーレとして制作。企画立案から制作、上映まで一貫して有志の生徒で行った。\n祭典の終わりに相応しいものとして、エンドクレジットをテーマに、運営生徒の名前をオブジェクトとして使用した。",
@@ -239,7 +239,7 @@
           ]
         },
         {
-          "role": "Opening sound design",
+          "role": "Opening Sound Design",
           "names": [
             "Shouta Takenouchi"
           ]
@@ -251,7 +251,7 @@
           ]
         },
         {
-          "role": "Technical support",
+          "role": "Technical Support",
           "names": [
             "SOLU MEDHIAGE inc."
           ]
@@ -261,7 +261,7 @@
     {
       "title": "Suzuna Kan",
       "slug": "suzuna-kan",
-      "category": "Concept film",
+      "category": "Concept Film",
       "year": "2025",
       "award": "",
       "about_ja": "対象者のパーソナリティーを視覚的に表現した作品。日常のなかにある対比に焦点を当て、グラフィックを交えて構成した。",
@@ -299,7 +299,7 @@
     {
       "title": "かいまみ",
       "slug": "kaimami",
-      "category": "Projection mapping",
+      "category": "Projection Mapping",
       "year": "2025",
       "award": "Tokyo International Projection Mapping Award Vol.10 — selected for screening",
       "about_ja": "テーマ「Voyage」に対し、単なる移動ではなく、「時間の旅」と定義した。 既存のプロジェクションマッピングに散見される、プリミティブな変形や派手な色彩の羅列へのアンチテーゼとして、写実的かつ上品なトーンによる「味わい深い読後感」を目指した。人類史や地球の変化を「旅」と捉え、視点を固定したまま奥行きの世界が変容していく構成を採用した。\nこの際、マッピング特有の「壁面変形」の面白さと、世界観への没入を促す「写実表現」を両立させるため、「ブラインド」の機構を導入した。板の回転による開閉動作が、壁面の物理的な変形として機能しつつ、同時に奥に広がる世界を覗く「窓」としての役割を果たす。この構造が作品の骨格となった。\nブラインドの左側を半透明、右側を不透明としたのは、私たちが歴史を認識する構造そのものの比喩になっている。歴史とは断片的なハイライトの連続であり、その間にある真実や変容は不可視である。垣間見える断片から、その周辺や行間にある物語を想像力で補完すること。タイトル『かいまみ』にはその姿勢を込めている。悠久の時を経て、その最先端に立つ我々が、東京ビッグサイトという巨大な窓を通して何を見据えるのか。その問いをラストシーンで表現した。",
@@ -349,7 +349,7 @@
     {
       "title": "Walk",
       "slug": "walk",
-      "category": "Concept film",
+      "category": "Concept Film",
       "year": "2024",
       "award": "",
       "about_ja": "膨大な量の人が行き交う現代の東京。人それぞれの目的意識が歩くことに現れ、街としてのエネルギーが浮かび上がってくる。\n3DCGとグラフィックを交えて東京のカオスを表現するように構成した。",
@@ -359,7 +359,7 @@
       "video": "https://youtu.be/FJPxvpp6hO0",
       "credits": [
         {
-          "role": "Concept & direction",
+          "role": "Concept & Direction",
           "names": [
             "Ryota Sano"
           ]
@@ -387,7 +387,7 @@
     {
       "title": "幸福論",
       "slug": "kofukuron",
-      "category": "Short film",
+      "category": "Short Film",
       "year": "2024",
       "award": "",
       "about_ja": "第三の眼を持つ主人公を通して、他者の許容や人生の肯定を描いた作品。会話の”間”や、ローキーな画面で心情を表現した。",
@@ -405,7 +405,7 @@
           ]
         },
         {
-          "role": "Writing & direction",
+          "role": "Writing & Direction",
           "names": [
             "Ryota Sano"
           ]
@@ -423,13 +423,13 @@
           ]
         },
         {
-          "role": "Special makeup effect",
+          "role": "Special Makeup Effect",
           "names": [
             "Riko Miyashita"
           ]
         },
         {
-          "role": "Production support",
+          "role": "Production Support",
           "names": [
             "Riko Miyashita",
             "Chinatsu Kudo"
@@ -456,7 +456,7 @@
           ]
         },
         {
-          "role": "Concept & production",
+          "role": "Concept & Production",
           "names": [
             "Manami Kumagai",
             "Mana Kouchi",
@@ -471,7 +471,7 @@
           ]
         },
         {
-          "role": "Special thanks",
+          "role": "Special Thanks",
           "names": [
             "3DR PLACE DESK",
             "Kairi Takahashi",
@@ -497,7 +497,7 @@
       "video": "https://youtu.be/k7Wwvs-I8Mo",
       "credits": [
         {
-          "role": "All words & works",
+          "role": "All Words & Works",
           "names": [
             "Hayato Ubukata"
           ]
@@ -509,7 +509,7 @@
           ]
         },
         {
-          "role": "Cinematography & edit",
+          "role": "Cinematography & Edit",
           "names": [
             "Ryota Sano"
           ]

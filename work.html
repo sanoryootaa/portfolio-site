@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#000000">
-<title>Sano Ryota works archives</title>
+<title>Sano Ryota Works Archives</title>
 <meta property="og:image" content="https://sanoryota.com/media/site/ogp.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="media/site/favicon.png">
@@ -44,7 +44,7 @@ loadContent("site","works").then(([site,data])=>{
   bindClose(document.getElementById("close"));
   const works=data.works||[], w=works.find(w=>w.slug===id), page=document.getElementById("page");
   if(!w){
-    page.innerHTML=`<p class="notfound">Work not found.<br><br><a href="./">Back to works</a></p>`;
+    page.innerHTML=`<p class="notfound">Work not found.<br><br><a href="./">Back to Works</a></p>`;
     return;
   }
   setTitle(w.title,site.title);

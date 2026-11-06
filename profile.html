@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#000000">
-<title>Profile — Sano Ryota works archives</title>
+<title>Profile — Sano Ryota Works Archives</title>
 <meta property="og:image" content="https://sanoryota.com/media/site/ogp.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="media/site/favicon.png">
@@ -52,9 +52,9 @@ loadContent("site","profile").then(([site,p])=>{
        </div>
        ${p.photo?`<img class="p-photo" src="${esc(asset(p.photo))}" alt="${esc(p.name)}">`:""}
      </div>
-     <section class="sec"><h2>(About me)</h2><div class="bi">${p.about_ja?`<p lang="ja">${esc(p.about_ja)}</p>`:""}${p.about_en?`<p lang="en">${esc(p.about_en)}</p>`:""}</div></section>
+     <section class="sec"><h2>(About Me)</h2><div class="bi">${p.about_ja?`<p lang="ja">${esc(p.about_ja)}</p>`:""}${p.about_en?`<p lang="en">${esc(p.about_en)}</p>`:""}</div></section>
      <section class="sec"><h2>(Career)</h2>${rows(p.career)}</section>
-     <section class="sec"><h2>(Awards &amp; screenings)</h2>${rows(p.awards)}</section>
+     <section class="sec"><h2>(Awards &amp; Screenings)</h2>${rows(p.awards)}</section>
      <section class="sec"><h2>(Skills)</h2>${rows(p.skills)}</section>
      <section class="sec p-contact"><h2>(Contact)</h2><div class="p-list">
        ${link("Mail",p.mail&&"mailto:"+p.mail,p.mail,`onclick="gaEv('contact_click',{label:'mail'})"`)}
