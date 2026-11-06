@@ -329,3 +329,10 @@ onContent(["site","works","profile"],([site,data,profile],first)=>{
   if(site.message){fb.hidden=false;fb.querySelector("span").textContent=site.message;}
   document.fonts.ready.then(()=>build(site,data.works||[]));
 });
+
+/* ?debug：検証用（作品 i のサムネ中心が今どこに見えているか）*/
+if(new URLSearchParams(location.search).has("debug"))window.__glass={
+  screenOf(i){const e=EL.find(x=>x.kind==="thumb"&&x.work===i);if(!e)return null;
+    const v=e.mesh.position.clone().project(camera);return {x:(v.x+1)/2*S.vw,y:(1-v.y)/2*S.vh,d:e.d};},
+  state:()=>({scroll:S.scroll,scrollNow:S.scrollNow,hover:S.hover,focus:S.focus,dpr:Q.dpr,taps:Q.taps}),
+};
