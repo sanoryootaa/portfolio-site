@@ -18,7 +18,7 @@ img{display:block;max-width:100%;}
 .page{max-width:1180px;margin:0 auto;padding:120px 40px 120px;animation:pageIn .6s cubic-bezier(.22,1,.36,1) both;}
 @keyframes pageIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
 .home-link{position:fixed;top:30px;left:30px;z-index:20;mix-blend-mode:difference;color:#fff;}
-.page-title{font-size:20px;font-weight:700;line-height:1.3;max-width:calc(100% - 60px);overflow-wrap:break-word;}
+.page-title{font-size:20px;font-weight:700;line-height:1.2;max-width:calc(100% - 60px);overflow-wrap:break-word;}
 
 /* ✕：開いた瞬間は右上。そこから wanderClose()（site.js）でゆっくり回りながら漂う。
    フィルムのちらつきのように不規則に明滅。押しやすいよう当たり判定は印より大きめ */
@@ -37,19 +37,19 @@ img{display:block;max-width:100%;}
 .dragon span{position:absolute;left:0;top:0;white-space:pre;line-height:1;will-change:transform;}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
 
-.sec{margin-top:64px;}
-.sec>h2{font-size:var(--fs);font-weight:400;margin-bottom:16px;}
+.sec{margin-top:44px;}
+.sec>h2{font-size:var(--fs);font-weight:400;margin-bottom:8px;}
 /* About 本文：日本語 → 英語を縦に積む */
 .bi{max-width:680px;}
 .bi p{white-space:pre-line;overflow-wrap:break-word;}
-.bi p+p{margin-top:1.6em;}
+.bi p+p{margin-top:1em;}
 .bi p[lang=ja]{text-align:justify;}
 
 @media (max-width:760px){
   .page{padding:96px 20px 80px;}
   .home-link{top:16px;left:18px;}
   .closeX{--x:24px;top:8px;right:10px;}
-  .sec{margin-top:48px;}
+  .sec{margin-top:40px;}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important;transition:none !important;}

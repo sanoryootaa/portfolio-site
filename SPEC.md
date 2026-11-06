@@ -55,7 +55,7 @@
 | `thumb` | サムネ画像（ホーム・動画のポスター） |
 | `images` | 作品ページに並ぶ画像（複数） |
 | `video` | YouTube URL |
-| `credits` | `[{role, names[]}]`。役職の後ろに ` /` を付けて縦に積む |
+| `credits` | `[{role, names[]}]`。左に役職・右に名前（名前が多いと右側で段組み。スマホは役職の下に2列）|
 
 ### profile.json — プロフィール
 `label`（ホーム右上の文言）, `name`, `role`, `photo`, `about_ja` / `about_en`,

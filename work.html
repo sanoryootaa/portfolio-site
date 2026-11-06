@@ -12,8 +12,10 @@
 <script src="assets/site.js"></script>
 <style>
   /* 構成：タイトル → ジャンル/制作年 → 受賞歴 → about → 画像 → 動画 → クレジット */
-  .w-sub{margin-top:6px;}
-  .w-award{margin-top:6px;}
+  .w-sub{margin-top:2px;}
+  /* 受賞歴はタイトル下の余白に重ねて置く（飛び立っても下の段がガクッと詰まらない）*/
+  .w-head{position:relative;}
+  .w-award{position:absolute;left:0;top:100%;margin-top:4px;white-space:nowrap;}
   .w-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;}
   .w-images img{width:100%;height:auto;}
   .player{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;}
@@ -22,12 +24,18 @@
   .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;border:0;border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
   .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
   .playbtn:after{content:"";border-left:22px solid #000;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:5px;}
-  /* クレジット：役職ごとに縦に積む（役職は末尾に / ）*/
-  .cr+.cr{margin-top:12px;}
+  /* クレジット：左=役職 / 右=名前。名前が多い役職は右側で段組みして縦に伸びすぎないように */
+  .credits{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 40px;max-width:900px;}
+  .credits .nm{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));column-gap:24px;}
+  @media (prefers-reduced-motion:reduce){.w-head{padding-bottom:1.6em;}.w-award{position:static;white-space:normal;margin-top:2px;}}
   .notfound{padding-top:20vh;}
   .notfound a{border-bottom:1px solid currentColor;}
   @media (max-width:760px){
     .w-images{grid-template-columns:1fr;gap:8px;}
+    .credits{grid-template-columns:1fr;row-gap:0;}
+    .credits .role{margin-top:10px;}
+    .credits .role:first-child{margin-top:0;}
+    .credits .nm{grid-template-columns:repeat(2,minmax(0,1fr));}
     .playbtn{width:56px;height:56px;}
     .playbtn:after{border-left-width:17px;border-top-width:10px;border-bottom-width:10px;margin-left:4px;}
   }
@@ -59,13 +67,15 @@ loadContent("site","works").then(([site,data])=>{
   const video=vid
     ?`<section class="sec"><div class="player" id="player"><img src="${esc(asset(w.thumb))}" alt=""><button class="playbtn" aria-label="Play"></button></div></section>`:"";
   const credits=(w.credits||[]).length
-    ?`<section class="sec"><h2>(Credit)</h2>${w.credits.map(c=>
-        `<div class="cr"><div>${esc(c.role)} /</div>${(c.names||[]).map(n=>`<div>${esc(n)}</div>`).join("")}</div>`).join("")}</section>`:"";
+    ?`<section class="sec"><h2>(Credit)</h2><div class="credits">${w.credits.map(c=>
+        `<div class="role">${esc(c.role)}</div><div class="nm">${(c.names||[]).map(n=>`<div>${esc(n)}</div>`).join("")}</div>`).join("")}</div></section>`:"";
 
   page.innerHTML=
-    `<h1 class="page-title">${esc(w.title)}</h1>
-     ${sub?`<div class="w-sub">${esc(sub)}</div>`:""}
-     ${w.award?`<div class="w-award"><span class="emoji">🏆</span> ${esc(w.award)}</div>`:""}
+    `<div class="w-head">
+       <h1 class="page-title">${esc(w.title)}</h1>
+       ${sub?`<div class="w-sub">${esc(sub)}</div>`:""}
+       ${w.award?`<div class="w-award"><span class="emoji">🏆</span> ${esc(w.award)}</div>`:""}
+     </div>
      ${about}${images}${video}${credits}`;
 
   const awardEl=page.querySelector(".w-award");
