@@ -29,6 +29,8 @@ a{color:inherit;}
 .btn.primary:hover:not(:disabled){background:transparent;color:#fff;}
 .btn:disabled{opacity:.3;cursor:default;}
 .btn.small{height:28px;padding:0 10px;font-size:12px;}
+#stageLink{display:inline-flex;align-items:center;text-decoration:none;}
+.btn .s{display:none;}
 .btn.ghost{border-color:var(--line);}
 .btn.danger{border-color:var(--danger);color:var(--danger);}
 .btn.danger:hover{background:var(--danger);color:#000;}
@@ -158,6 +160,8 @@ textarea.in{resize:vertical;min-height:90px;line-height:1.6;}
 .tabs{display:none;}
 @media (max-width:900px){
   :root{--top:52px;}
+  .btn .l{display:none;}.btn .s{display:inline;}
+  .status{font-size:11px;max-width:34vw;}
   body{overflow:auto;}
   .top{padding:0 10px;gap:8px;}
   .top .brand{display:none;}

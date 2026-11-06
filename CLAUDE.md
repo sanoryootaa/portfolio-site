@@ -15,12 +15,15 @@
 - `assets/site.css` … 共通（フォント・黒地ページ・✕・龍・バイリンガル段組み）
 - `assets/site.js` … 共通（`HOME`・`PREVIEW`・GA4・`onContent()`・文字組み `TYPO_AREAS/applyTypography`・`esc/asset/ytId`・✕/龍の動き）
 - `admin/` … 管理画面（`index.html` / `admin.css` / `admin.js`）。外部スクリプトは読まない（トークンを扱うため）
-- `content/{works,profile,site}.json` … 公開データ（main）。下書きは **`draft` ブランチ**の同じパス
+- `content/{works,profile,site}.json` … 本公開データ（main）。確認用は **`renewal` ブランチ**の同じパス（`draft` ブランチは旧・未使用）
+- `stage/index.html` … 確認用ページの入口（ホームを `?stage=1` で開く）
 - `media/works|profile|site/` … 画像 / `CNAME` / `SPEC.md` / `tools/drive-urls.html`（旧スプシ運用の補助。不要）
 
 ## 管理画面の仕組み（admin/admin.js）
 - 認証：Fine-grained PAT（このリポジトリのみ・Contents RW）を localStorage `admin:token` に保存。
-- 3段階：編集中 `W`（localStorage `admin:work` に自動保存）→ 下書き `DRAFT`（draft ブランチ）→ 公開 `LIVE`（main）。
+- 3段階：編集中 `W`（localStorage `admin:work` に自動保存）→ 確認用 `DRAFT`（renewal ブランチ・`/stage/` で見られる）→ 本公開 `LIVE`（main）。
+- 確認用ページ（`?stage=1`、site.js の `STAGE`）：GitHub API で renewal の最新コミット SHA を取り、`raw.githubusercontent.com/<sha>/content/*.json` を読む（同じURLだと raw が5分キャッシュするため SHA 指定）。ログイン済み端末は admin のトークンで問い合わせ（未ログインは60回/時）。GA なし・noindex・左下に目印。
+- **renewal ブランチはもうコード置き場ではない**（管理画面が content を書き込む）。コードは main だけに push し、`main:renewal` を push しないこと。
 - 書き込みは Git Data API で複数ファイル1コミット（`commit()`、422 は取り直して再試行）。draft ブランチが無ければ main から作る。
 - プレビュー：編集のたびに localStorage `preview:<name>` に書き、iframe の `?preview=1` ページが `storage` イベントで描き直す（`onContent()`）。プレビュー・管理画面では GA を送らない。
 - 画像：canvas で長辺2000px JPEG に縮小 → main の `media/` に即コミット。反映前は blob URL で表示（`BLOBS`）。

@@ -4,10 +4,13 @@
 const HOME="home.html";
 /* プレビュー（管理画面の右側に映すとき）：?preview=1。管理画面が localStorage に置いた編集中データで描画する */
 const PREVIEW=new URLSearchParams(location.search).has("preview");
+/* 確認用ページ：?stage=1（入口は /stage/）。本公開前の renewal ブランチの content を表示する */
+const STAGE=!PREVIEW&&new URLSearchParams(location.search).has("stage");
+const REPO="sanoryootaa/portfolio-site", STAGE_BRANCH="renewal";
 
 /* ===== GA4 ===== 測定IDの差し替えはここ1か所だけ。プレビュー・管理画面では計測しない */
 const GA_ID="G-K5GHBEW050";
-const NO_GA=PREVIEW||location.pathname.includes("/admin");
+const NO_GA=PREVIEW||STAGE||location.pathname.includes("/admin");
 window.dataLayer=window.dataLayer||[];
 function gtag(){dataLayer.push(arguments);}
 if(!NO_GA){
@@ -21,7 +24,23 @@ if(!NO_GA){
 function gaEv(name,params){ if(!NO_GA&&typeof gtag==="function") gtag("event",name,params||{}); }
 
 /* ===== content/*.json（管理画面 /admin で編集・公開）===== */
+/* 確認用：renewal の最新コミットを聞いてから、そのコミットのファイルを読む（同じURLだと raw が5分キャッシュするため）。
+   管理画面にログイン済みの端末はその鍵で聞く（未ログインは1時間60回まで）*/
+let _stageSha=null;
+function stageSha(){
+  if(_stageSha)return _stageSha;
+  let tok="";try{tok=localStorage.getItem("admin:token")||"";}catch(e){}
+  return _stageSha=fetch(`https://api.github.com/repos/${REPO}/git/ref/heads/${STAGE_BRANCH}`,
+    {headers:tok?{Authorization:"Bearer "+tok}:{},cache:"no-cache"})
+    .then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(j=>j.object.sha);
+}
 function loadJSON(name){
+  if(STAGE){
+    return stageSha().then(sha=>fetch(`https://raw.githubusercontent.com/${REPO}/${sha}/content/${name}.json`))
+      .then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
+      .catch(()=>{stageBanner("確認用の内容を読み込めませんでした（本公開中の内容を表示）");
+        return fetch(`content/${name}.json`,{cache:"no-cache"}).then(r=>r.ok?r.json():{}).catch(()=>({}));});
+  }
   if(PREVIEW){
     try{const v=localStorage.getItem("preview:"+name);if(v)return Promise.resolve(JSON.parse(v));}catch(e){}
   }
@@ -81,15 +100,27 @@ function workURL(w){return "work.html?id="+encodeURIComponent(w.slug);}
 /* タブ名 */
 function setTitle(...parts){document.title=parts.filter(Boolean).join(" — ");}
 
-/* data-home のリンクをホームへ。プレビュー中はサイト内リンクに ?preview=1 を引き継ぐ */
+/* data-home のリンクをホームへ。プレビュー・確認用ではサイト内リンクに ?preview=1 / ?stage=1 を引き継ぐ */
 document.addEventListener("DOMContentLoaded",()=>{
   document.querySelectorAll("a[data-home]").forEach(a=>a.href=HOME);
+  if(STAGE)stageBanner();
 });
-if(PREVIEW)document.addEventListener("click",e=>{
+const CARRY=PREVIEW?"preview":STAGE?"stage":"";
+if(CARRY)document.addEventListener("click",e=>{
   const a=e.target.closest&&e.target.closest("a[href]");if(!a)return;
   const u=new URL(a.href,location.href);
-  if(u.origin===location.origin&&!u.searchParams.has("preview")){u.searchParams.set("preview","1");a.href=u.href;}
+  if(u.origin===location.origin&&!u.pathname.includes("/admin")&&!u.searchParams.has(CARRY)){u.searchParams.set(CARRY,"1");a.href=u.href;}
 },true);
+/* 確認用の目印（左下）。検索にも出さない */
+function stageBanner(msg){
+  if(!document.body){document.addEventListener("DOMContentLoaded",()=>stageBanner(msg));return;}
+  if(!document.querySelector('meta[name=robots]')){const m=document.createElement("meta");m.name="robots";m.content="noindex";document.head.appendChild(m);}
+  let b=document.getElementById("stageBanner");
+  if(!b){b=document.createElement("a");b.id="stageBanner";b.href=new URL("admin/",new URL(HOME==="./"?"./":HOME,location.href)).href;
+    b.style.cssText="position:fixed;left:12px;bottom:12px;z-index:200;background:#fff;color:#000;font:12px/1.4 var(--sans);padding:6px 12px;border-radius:999px;text-decoration:none;box-shadow:0 4px 20px rgba(0,0,0,.4);";
+    document.body.appendChild(b);}
+  b.textContent=msg||"確認用ページ（未公開）· 本公開は管理画面から";
+}
 
 /* ✕：同じサイトから来たなら「戻る」（ホームのスクロール位置を保つ）、直リンクならホームへ */
 function bindClose(el){

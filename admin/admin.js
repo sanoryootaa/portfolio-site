@@ -1,11 +1,11 @@
 /* ===== 管理画面（sanoryota.com/admin）=====
    GitHub API で content/*.json を直接読み書きする。
    - 編集中（W）    … この端末だけ。localStorage に自動保存。右のプレビューに即反映
-   - 下書き（DRAFT）… draft ブランチの content/*.json。公開サイトには出ない。別端末から続きができる
-   - 公開（LIVE）   … main ブランチの content/*.json。GitHub Pages が1〜2分で反映
+   - 確認用（DRAFT）… renewal ブランチの content/*.json。確認用ページ /stage/ で見られる（本公開サイトには出ない）
+   - 本公開（LIVE） … main ブランチの content/*.json。GitHub Pages が1〜2分で反映
    画像はアップロード時に main の media/ へ直接保存（参照されるまでサイトには出ない）。 */
 
-const GH={owner:"sanoryootaa",repo:"portfolio-site",live:"main",draft:"draft"};
+const GH={owner:"sanoryootaa",repo:"portfolio-site",live:"main",draft:"renewal"};
 const R=`/repos/${GH.owner}/${GH.repo}`;
 const NAMES=["works","profile","site"];
 const TOKEN_URL="https://github.com/settings/personal-access-tokens/new?name=portfolio+admin&description=sanoryota.com+admin&target_name="+GH.owner+"&expires_in=365&contents=write";
@@ -47,7 +47,7 @@ async function commit(branch,files,message){
     try{ref=await gh(`${R}/git/ref/heads/${branch}`);}
     catch(e){
       if(e.status!==404||branch===GH.live)throw e;
-      const m=await gh(`${R}/git/ref/heads/${GH.live}`);                /* draft ブランチが無ければ main から作る */
+      const m=await gh(`${R}/git/ref/heads/${GH.live}`);                /* 確認用ブランチが無ければ main から作る */
       ref=await gh(`${R}/git/refs`,{method:"POST",body:{ref:"refs/heads/"+branch,sha:m.object.sha}});
     }
     const base=await gh(`${R}/git/commits/${ref.object.sha}`);
@@ -100,7 +100,7 @@ async function boot(){
     await gh(R);
     LIVE=normalize(await readContent(GH.live));
     try{DRAFT=normalize(await readContent(GH.draft));}
-    catch(e){if(e.status!==404)throw e;DRAFT=clone(LIVE);}   /* 下書きがまだ無い */
+    catch(e){if(e.status!==404)throw e;DRAFT=clone(LIVE);}   /* 確認用がまだ無い */
   }catch(e){
     if(e.status===401||e.status===404){try{localStorage.removeItem("admin:token");}catch(_){}TOKEN="";return renderLogin(errText(e));}
     $("#app").innerHTML=`<div class="login"><p>${esc(errText(e))}</p><br><button class="btn" onclick="location.reload()">再読み込み</button></div>`;
@@ -112,9 +112,9 @@ async function boot(){
   if(local&&local.data&&!same(local.data,DRAFT)){
     if(local.base&&same(local.base,DRAFT))W=normalize(local.data);
     else{
-      const pick=await ask("保存していない編集があります",
-        "この端末に、下書き保存していない編集が残っています。その後に別の端末で下書きが更新されています。どちらを使いますか？",
-        [["latest","最新の下書き"],["local","この端末の編集",true]]);
+      const pick=await ask("反映していない編集があります",
+        "この端末に、確認用に反映していない編集が残っています。その後に別の端末で確認用が更新されています。どちらを使いますか？",
+        [["latest","最新の確認用"],["local","この端末の編集",true]]);
       if(pick==="local")W=normalize(local.data);
     }
   }
@@ -164,14 +164,16 @@ function renderShell(){
   $("#app").innerHTML=`
   <header class="top">
     <span class="brand">(Admin)</span><span class="status" id="status"></span><span class="sp"></span>
-    <button class="btn" id="save">下書き保存</button>
-    <button class="btn primary" id="pub">公開…</button>
+    <a class="btn ghost" id="stageLink" href="../stage/" target="_blank" rel="noopener"><span class="l">確認用を見る</span><span class="s">確認用</span></a>
+    <button class="btn" id="save"><span class="l">確認用に反映</span><span class="s">反映</span></button>
+    <button class="btn primary" id="pub"><span class="l">本公開…</span><span class="s">本公開</span></button>
   </header>
   <div class="shell">
     <nav class="nav" id="nav">
       ${NAV.map(([k,l])=>`<a href="#${k}" data-nav="${k}">${l}</a>`).join("")}
       <div class="foot">
-        <a href="../${HOME}" target="_blank" rel="noopener">サイトを見る</a>
+        <a href="../stage/" target="_blank" rel="noopener">確認用ページ</a>
+        <a href="../${HOME}" target="_blank" rel="noopener">本公開中のサイト</a>
         <a href="#" id="logout">ログアウト</a>
       </div>
     </nav>
@@ -207,7 +209,7 @@ function updateStatus(){
   const st=$("#status");if(!st)return;
   const dirty=!same(W,DRAFT), unpub=!same(DRAFT,LIVE);
   st.className="status"+(BUSY?" busy":dirty?" dirty":unpub?" unpub":"");
-  st.textContent=BUSY||(dirty?"未保存の変更あり":unpub?"下書きあり（未公開）":"公開中と同じ");
+  st.textContent=BUSY||(dirty?"未反映の変更あり":unpub?"確認用に反映済み（本公開前）":"本公開と同じ");
   $("#save").disabled=!!BUSY||!dirty;
   $("#pub").disabled=!!BUSY||(!dirty&&!unpub);
 }
@@ -616,10 +618,10 @@ async function upload(files,t){
 async function saveDraft(){
   const files=NAMES.filter(n=>!same(W[n],DRAFT[n])).map(n=>jsonFile(n,W[n]));
   if(!files.length)return;
-  setBusy("下書きを保存中…");
+  setBusy("確認用に反映中…");
   try{
-    await commit(GH.draft,files,"Save draft from admin");
-    DRAFT=clone(W);saveLocal();setBusy("");toast("下書きを保存しました（サイトにはまだ出ません）");
+    await commit(GH.draft,files,"Update staging from admin");
+    DRAFT=clone(W);saveLocal();setBusy("");toast("確認用に反映しました。「確認用を見る」で確認できます（本公開サイトにはまだ出ません）");
   }catch(e){setBusy("");toast(errText(e),true);}
 }
 const F_LABEL={title:"タイトル",slug:"URL名",category:"ジャンル",year:"制作年",award:"受賞歴",about_ja:"About（日）",about_en:"About（英）",thumb:"サムネ",images:"画像",gallery:"画像の間隔・切り抜き",video:"動画",credits:"クレジット",
@@ -649,18 +651,19 @@ function diffList(a,b){
 }
 async function publish(){
   const d=diffList(LIVE,W);
-  if(!d.length){toast("公開中と同じです");return;}
-  const go=await ask("公開しますか？",
-    `<p class="note" style="margin-bottom:12px">以下の変更が sanoryota.com に反映されます（1〜2分）。</p><ul class="diff">${d.map(([c,t])=>`<li class="${c}">${esc(t)}</li>`).join("")}</ul>`,
-    [["no","やめる"],["yes","公開する",true]]);
+  if(!d.length){toast("本公開と同じです");return;}
+  const go=await ask("本公開しますか？",
+    `<p class="note" style="margin-bottom:12px">以下の変更が sanoryota.com に反映されます（1〜2分）。${!same(W,DRAFT)?"<br>確認用にまだ反映していない編集も含まれます。":""}</p><ul class="diff">${d.map(([c,t])=>`<li class="${c}">${esc(t)}</li>`).join("")}</ul>`,
+    [["no","やめる"],["stage","先に確認用で見る"],["yes","本公開する",true]]);
+  if(go==="stage"){if(!same(W,DRAFT))await saveDraft();window.open("../stage/","_blank");return;}
   if(go!=="yes")return;
-  setBusy("公開中…");
+  setBusy("本公開中…");
   try{
     const files=NAMES.filter(n=>!same(W[n],LIVE[n])).map(n=>jsonFile(n,W[n]));
-    if(!same(W,DRAFT))await commit(GH.draft,NAMES.filter(n=>!same(W[n],DRAFT[n])).map(n=>jsonFile(n,W[n])),"Save draft from admin");
+    if(!same(W,DRAFT))await commit(GH.draft,NAMES.filter(n=>!same(W[n],DRAFT[n])).map(n=>jsonFile(n,W[n])),"Update staging from admin");
     await commit(GH.live,files,"Publish from admin");
     LIVE=clone(W);DRAFT=clone(W);saveLocal();setBusy("");
-    toast("公開しました。1〜2分でサイトに反映されます");
+    toast("本公開しました。1〜2分で sanoryota.com に反映されます");
   }catch(e){setBusy("");toast(errText(e),true);}
 }
 
