@@ -14,6 +14,7 @@
 - `assets/site.css` … 共通（フォント・黒地ページ・✕・バイリンガル段組み）
 - `assets/site.js` … 共通（GA4読み込み・`loadContent()`・`esc/asset/ytId`・✕の戻る動作）
 - `content/{works,profile,site}.json` … データ / `.pages.yml` … 管理画面の定義
+- `admin/index.html` … 管理画面の入口（`sanoryota.com/admin`）。**`BRANCH` 定数は main へマージしたら "main" に変える**
 - `media/works|profile|site/` … 画像 / `CNAME` / `SPEC.md` / `tools/drive-urls.html`（旧スプシ運用の補助ツール。今は不要）
 
 ## 動作の要点

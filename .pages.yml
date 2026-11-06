@@ -13,9 +13,10 @@ content:
     format: json
     fields:
       - name: works
-        label: 作品一覧（上から順に表示・ドラッグで並べ替え）
+        label: 作品一覧（上から順にホームに並ぶ・ドラッグで並べ替え・クリックで開く）
         type: object
-        list: true
+        list:
+          collapsible: { collapsed: true, summary: "{year}　{title}" }
         fields:
           - { name: title, label: タイトル, type: string, required: true }
           - { name: slug, label: URL名, type: string, required: true, pattern: "^[a-z0-9-]+$", description: "半角英数字とハイフン。作品ページのURLになる（例: kaimami → work.html?id=kaimami）" }
@@ -30,7 +31,8 @@ content:
           - name: credits
             label: クレジット（英語）
             type: object
-            list: true
+            list:
+              collapsible: { collapsed: true, summary: "{role} /" }
             fields:
               - { name: role, label: 役職, type: string }
               - { name: names, label: 名前, type: string, list: true }
@@ -50,14 +52,16 @@ content:
       - name: career
         label: Career
         type: object
-        list: true
+        list:
+          collapsible: { collapsed: true, summary: "{date}　{text}" }
         fields:
           - { name: date, label: 年月, type: string, description: "例: 2023.4（空なら行頭から表示）" }
           - { name: text, label: 内容, type: string }
       - name: awards
         label: Awards & screenings
         type: object
-        list: true
+        list:
+          collapsible: { collapsed: true, summary: "{date}　{text}" }
         fields:
           - { name: date, label: 年月, type: string }
           - { name: text, label: 内容, type: string }

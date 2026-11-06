@@ -52,11 +52,11 @@ loadContent("site","profile").then(([site,p])=>{
        </div>
        ${p.photo?`<img class="p-photo" src="${esc(asset(p.photo))}" alt="${esc(p.name)}">`:""}
      </div>
-     <section class="sec"><h2>About me</h2><div class="bi">${p.about_ja?`<p lang="ja">${esc(p.about_ja)}</p>`:""}${p.about_en?`<p lang="en">${esc(p.about_en)}</p>`:""}</div></section>
-     <section class="sec"><h2>Career</h2>${rows(p.career)}</section>
-     <section class="sec"><h2>Awards &amp; screenings</h2>${rows(p.awards)}</section>
-     <section class="sec"><h2>Skills</h2>${rows(p.skills)}</section>
-     <section class="sec p-contact"><h2>Contact</h2><div class="p-list">
+     <section class="sec"><h2>(About me)</h2><div class="bi">${p.about_ja?`<p lang="ja">${esc(p.about_ja)}</p>`:""}${p.about_en?`<p lang="en">${esc(p.about_en)}</p>`:""}</div></section>
+     <section class="sec"><h2>(Career)</h2>${rows(p.career)}</section>
+     <section class="sec"><h2>(Awards &amp; screenings)</h2>${rows(p.awards)}</section>
+     <section class="sec"><h2>(Skills)</h2>${rows(p.skills)}</section>
+     <section class="sec p-contact"><h2>(Contact)</h2><div class="p-list">
        ${link("Mail",p.mail&&"mailto:"+p.mail,p.mail,`onclick="gaEv('contact_click',{label:'mail'})"`)}
        ${link("Instagram",p.instagram,bare(p.instagram),`onclick="gaEv('sns_click',{platform:'instagram'})"`)}
        ${link("YouTube",p.youtube,bare(p.youtube),`onclick="gaEv('sns_click',{platform:'youtube'})"`)}

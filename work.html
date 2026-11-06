@@ -51,7 +51,7 @@ loadContent("site","works").then(([site,data])=>{
 
   const sub=[w.category,w.year].filter(Boolean).join(", ");   /* 片方欠けてもカンマが浮かない */
   const about=(w.about_ja||w.about_en)
-    ?`<section class="sec"><h2>About</h2><div class="bi">${w.about_ja?`<p lang="ja">${esc(w.about_ja)}</p>`:""}${w.about_en?`<p lang="en">${esc(w.about_en)}</p>`:""}</div></section>`:"";
+    ?`<section class="sec"><h2>(About)</h2><div class="bi">${w.about_ja?`<p lang="ja">${esc(w.about_ja)}</p>`:""}${w.about_en?`<p lang="en">${esc(w.about_en)}</p>`:""}</div></section>`:"";
   const imgs=(w.images||[]).filter(Boolean);
   const images=imgs.length
     ?`<section class="sec w-images">${imgs.map(s=>`<img src="${esc(asset(s))}" alt="${esc(w.title)}" loading="lazy">`).join("")}</section>`:"";
@@ -59,7 +59,7 @@ loadContent("site","works").then(([site,data])=>{
   const video=vid
     ?`<section class="sec"><div class="player" id="player"><img src="${esc(asset(w.thumb))}" alt=""><button class="playbtn" aria-label="Play"></button></div></section>`:"";
   const credits=(w.credits||[]).length
-    ?`<section class="sec"><h2>Credit</h2>${w.credits.map(c=>
+    ?`<section class="sec"><h2>(Credit)</h2>${w.credits.map(c=>
         `<div class="cr"><div>${esc(c.role)} /</div>${(c.names||[]).map(n=>`<div>${esc(n)}</div>`).join("")}</div>`).join("")}</section>`:"";
 
   page.innerHTML=
