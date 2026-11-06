@@ -1,50 +1,22 @@
 <!DOCTYPE html>
-<html lang="ja" class="dark">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Admin">
 <title>Admin — Sano Ryota Works Archives</title>
 <link rel="icon" href="../media/site/favicon.png">
 <link rel="apple-touch-icon" href="../media/site/favicon.png">
-<link rel="stylesheet" href="../assets/site.css">
-<style>
-  /* 管理画面（Pages CMS）の入口。各画面へ直接飛ぶ */
-  .page{max-width:560px;}
-  .menu{margin-top:40px;display:grid;gap:10px;}
-  .menu a{display:flex;justify-content:space-between;align-items:baseline;padding:18px 20px;border:1px solid #fff;transition:background .15s ease,color .15s ease;}
-  .menu a:hover{background:#fff;color:#000;}
-  .menu small{font-size:12px;}
-  .note{margin-top:40px;font-size:13px;line-height:1.8;}
-  .note a{border-bottom:1px solid currentColor;}
-</style>
+<link rel="stylesheet" href="admin.css">
+<!-- 文字組みの定義（TYPO_AREAS）をサイトと共有する -->
+<script src="../assets/site.js"></script>
 </head>
 <body>
-<a class="home-link" href="../">Sano Ryota Works Archives</a>
-<main class="page">
-  <h1 class="page-title">(Admin)</h1>
-  <nav class="menu" id="menu"></nav>
-  <p class="note">
-    保存すると約1〜2分でサイトに反映されます（ブランチ: <span id="branch"></span>）。<br>
-    初回だけ GitHub でログインが必要です。<br>
-    スマホは「ホーム画面に追加」しておくとアプリのように開けます。<br>
-    <a href="../">サイトを見る</a>
-  </p>
-</main>
-<script>
-/* 編集先のブランチ。公開（main へマージ）したら "main" に変える */
-const BRANCH="renewal";
-const BASE=`https://app.pagescms.org/sanoryootaa/portfolio-site/${BRANCH}`;
-const items=[
-  ["作品","works","file/works"],
-  ["プロフィール","profile","file/profile"],
-  ["サイト設定","site","file/site"],
-  ["画像","media","media/default"],
-];
-document.getElementById("branch").textContent=BRANCH;
-document.getElementById("menu").innerHTML=items.map(([ja,en,path])=>
-  `<a href="${BASE}/${path}"><span>${ja}</span><small>${en} →</small></a>`).join("");
-</script>
+<div id="app"></div>
+<script src="admin.js"></script>
 </body>
 </html>

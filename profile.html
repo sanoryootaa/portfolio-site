@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 公開前は検索に出さない。公開時に削除 -->
+<meta name="robots" content="noindex">
 <meta name="theme-color" content="#000000">
 <title>Profile — Sano Ryota Works Archives</title>
 <meta property="og:image" content="https://sanoryota.com/media/site/ogp.jpg">
@@ -29,13 +31,13 @@
 </style>
 </head>
 <body>
-<a class="home-link" id="homeLink" href="./"></a>
-<a class="closeX" id="close" href="./" aria-label="Close"></a>
+<a class="home-link" id="homeLink" data-home href="./"></a>
+<a class="closeX" id="close" data-home href="./" aria-label="Close"></a>
 <main class="page" id="page"></main>
 <script>
-loadContent("site","profile").then(([site,p])=>{
+bindClose(document.getElementById("close"));
+onContent(["site","profile"],([site,p],first)=>{
   document.getElementById("homeLink").textContent=site.title||"";
-  bindClose(document.getElementById("close"));
   setTitle("Profile",site.title);
 
   /* 年月が無い行は行頭から */
@@ -60,7 +62,7 @@ loadContent("site","profile").then(([site,p])=>{
        ${link("YouTube",p.youtube,bare(p.youtube),`onclick="gaEv('sns_click',{platform:'youtube'})"`)}
      </div></section>
      </div>${p.photo?`<div class="p-photo-wrap"><img class="p-photo" src="${esc(asset(p.photo))}" alt="${esc(p.name)}"></div>`:""}</div>`;
-  gaEv("about_open");
+  if(first)gaEv("about_open");
 });
 </script>
 </body>

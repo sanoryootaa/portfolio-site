@@ -1,22 +1,72 @@
-/* ===== 全ページ共通：GA4・データ読み込み・ヘルパー ===== */
+/* ===== 全ページ共通：GA4・データ読み込み・文字組み・プレビュー・ヘルパー ===== */
 
-/* ===== GA4 ===== 測定IDの差し替えはここ1か所だけ */
+/* ホームのURL。公開前は隠しURL（home.html）、公開時に index.html へ差し替えて "./" にする */
+const HOME="home.html";
+/* プレビュー（管理画面の右側に映すとき）：?preview=1。管理画面が localStorage に置いた編集中データで描画する */
+const PREVIEW=new URLSearchParams(location.search).has("preview");
+
+/* ===== GA4 ===== 測定IDの差し替えはここ1か所だけ。プレビュー・管理画面では計測しない */
 const GA_ID="G-K5GHBEW050";
+const NO_GA=PREVIEW||location.pathname.includes("/admin");
 window.dataLayer=window.dataLayer||[];
 function gtag(){dataLayer.push(arguments);}
-gtag("js",new Date());
-/* IP匿名化（互換のため明示）・Google信号は無効。Cookie同意バナーは付けない */
-gtag("config",GA_ID,{anonymize_ip:true,allow_google_signals:false});
-(function(){const s=document.createElement("script");s.async=true;
-  s.src="https://www.googletagmanager.com/gtag/js?id="+GA_ID;document.head.appendChild(s);})();
+if(!NO_GA){
+  gtag("js",new Date());
+  /* IP匿名化（互換のため明示）・Google信号は無効。Cookie同意バナーは付けない */
+  gtag("config",GA_ID,{anonymize_ip:true,allow_google_signals:false});
+  const s=document.createElement("script");s.async=true;
+  s.src="https://www.googletagmanager.com/gtag/js?id="+GA_ID;document.head.appendChild(s);
+}
 /* 送信は必ずこれ経由（gtag未読込でも落ちない）*/
-function gaEv(name,params){ if(typeof gtag==="function") gtag("event",name,params||{}); }
+function gaEv(name,params){ if(!NO_GA&&typeof gtag==="function") gtag("event",name,params||{}); }
 
-/* ===== content/*.json（管理画面 Pages CMS で編集）===== */
+/* ===== content/*.json（管理画面 /admin で編集・公開）===== */
 function loadJSON(name){
+  if(PREVIEW){
+    try{const v=localStorage.getItem("preview:"+name);if(v)return Promise.resolve(JSON.parse(v));}catch(e){}
+  }
   return fetch(`content/${name}.json`,{cache:"no-cache"}).then(r=>r.ok?r.json():{}).catch(()=>({}));
 }
 function loadContent(...names){return Promise.all(names.map(loadJSON));}
+/* 読み込んで描画。names の先頭は必ず "site"（文字組みを先に当てる）。
+   プレビュー中は管理画面で編集されるたびに描画し直す（first=false のときは計測などの一回きりの処理をしない）*/
+function onContent(names,render){
+  let busy=false,again=false;
+  const run=first=>{
+    if(busy){again=true;return;}busy=true;
+    loadContent(...names).then(d=>{applyTypography(d[0]);render(d,first);})
+      .finally(()=>{busy=false;if(again){again=false;run(false);}});
+  };
+  run(true);
+  if(PREVIEW)addEventListener("storage",e=>{if(e.key&&e.key.startsWith("preview:"))run(false);});
+}
+
+/* ===== 文字組み（管理画面の「文字組み」で編集。イラレ/インデザインと同じ単位）=====
+   size=px / leading=行送り％（160=1.6倍）/ tracking=1/1000em / kerning: metrics=メトリクス, none=0 / palt=プロポーショナルメトリクス */
+const TYPO_AREAS={
+  header:     {label:"サイト名・ヘッダー",       page:"home",    sel:"header, .home-link, .botmsg",   d:{size:15,weight:400,leading:150,tracking:0,kerning:"metrics",palt:false}},
+  home_label: {label:"ホーム：年・ジャンル",     page:"home",    sel:".label",                         d:{size:15,weight:400,leading:100,tracking:0,kerning:"metrics",palt:false}},
+  title:      {label:"作品名・氏名",             page:"work",    sel:".page-title",                    d:{size:20,weight:700,leading:120,tracking:0,kerning:"metrics",palt:false}},
+  meta:       {label:"ジャンル/制作年・受賞・肩書き",page:"work", sel:".w-sub, .w-award, .dragon, .p-role", d:{size:15,weight:400,leading:160,tracking:0,kerning:"metrics",palt:false}},
+  heading:    {label:"見出し（(About) など）",   page:"work",    sel:".sec > h2",                      d:{size:15,weight:400,leading:160,tracking:0,kerning:"metrics",palt:false}},
+  about_ja:   {label:"About 本文（日本語）",     page:"work",    sel:".bi p[lang=ja]",                 d:{size:15,weight:400,leading:160,tracking:0,kerning:"metrics",palt:false}},
+  about_en:   {label:"About 本文（英語）",       page:"work",    sel:".bi p[lang=en]",                 d:{size:15,weight:400,leading:160,tracking:0,kerning:"metrics",palt:false}},
+  credit:     {label:"クレジット",               page:"work",    sel:".credits",                       d:{size:15,weight:400,leading:160,tracking:0,kerning:"metrics",palt:false}},
+  profile:    {label:"プロフィールの経歴・連絡先",page:"profile", sel:".p-list",                        d:{size:15,weight:400,leading:160,tracking:0,kerning:"metrics",palt:false}},
+};
+function typoValue(site,key){return Object.assign({},TYPO_AREAS[key].d,((site||{}).typography||{})[key]||{});}
+function applyTypography(site){
+  let css="";
+  for(const key in TYPO_AREAS){
+    const t=typoValue(site,key), sel=TYPO_AREAS[key].sel.split(",").map(x=>"html "+x.trim()).join(",");
+    css+=`${sel}{font-size:${+t.size}px;font-weight:${+t.weight};line-height:${(+t.leading)/100};`+
+      `letter-spacing:${(+t.tracking)/1000}em;font-kerning:${t.kerning==="none"?"none":"normal"};`+
+      `font-feature-settings:${t.palt?'"palt" 1':"normal"};}`;
+  }
+  let st=document.getElementById("typo");
+  if(!st){st=document.createElement("style");st.id="typo";document.head.appendChild(st);}
+  st.textContent=css;
+}
 
 /* ===== helpers ===== */
 function esc(s){return (s==null?"":String(s)).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -30,6 +80,16 @@ function workURL(w){return "work.html?id="+encodeURIComponent(w.slug);}
 
 /* タブ名 */
 function setTitle(...parts){document.title=parts.filter(Boolean).join(" — ");}
+
+/* data-home のリンクをホームへ。プレビュー中はサイト内リンクに ?preview=1 を引き継ぐ */
+document.addEventListener("DOMContentLoaded",()=>{
+  document.querySelectorAll("a[data-home]").forEach(a=>a.href=HOME);
+});
+if(PREVIEW)document.addEventListener("click",e=>{
+  const a=e.target.closest&&e.target.closest("a[href]");if(!a)return;
+  const u=new URL(a.href,location.href);
+  if(u.origin===location.origin&&!u.searchParams.has("preview")){u.searchParams.set("preview","1");a.href=u.href;}
+},true);
 
 /* ✕：同じサイトから来たなら「戻る」（ホームのスクロール位置を保つ）、直リンクならホームへ */
 function bindClose(el){
@@ -76,11 +136,14 @@ function wanderClose(el){
 
 /* 受賞歴：文字列が龍のように連なって飛びまわる。
    最初は元の位置に一列で並んでいて、先頭（文末）から飛び立ち、残りの文字が軌跡をなぞって付いていく */
+let _dragonStop=null;
 function flyDragon(el){
+  if(_dragonStop)_dragonStop();                                 /* プレビューで描き直すとき前の龍を消す */
   const text=el.textContent.trim();
   if(REDUCED||!text)return;
   const r=el.getBoundingClientRect(), y0=r.top+r.height/2, x0=r.left;
   const layer=document.createElement("div");layer.className="dragon";layer.setAttribute("aria-hidden","true");
+  let alive=true;_dragonStop=()=>{alive=false;layer.remove();_dragonStop=null;};
   const spans=[...text].map(ch=>{const s=document.createElement("span");s.textContent=ch;
     if(/\p{Extended_Pictographic}/u.test(ch))s.className="emoji";layer.appendChild(s);return s;});
   document.body.appendChild(layer);
@@ -117,7 +180,7 @@ function flyDragon(el){
       const p=at(D-(L-c.at));
       c.s.style.transform=`translate(${p.x-c.w/2}px,${p.y-c.h/2}px) rotate(${p.a}rad)`;
     }
-    requestAnimationFrame(frame);
+    if(alive)requestAnimationFrame(frame);
   };
   requestAnimationFrame(frame);
 }

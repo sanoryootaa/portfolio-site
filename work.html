@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 公開前は検索に出さない。公開時に削除 -->
+<meta name="robots" content="noindex">
 <meta name="theme-color" content="#000000">
 <title>Sano Ryota Works Archives</title>
 <meta property="og:image" content="https://sanoryota.com/media/site/ogp.jpg">
@@ -42,17 +44,17 @@
 </style>
 </head>
 <body>
-<a class="home-link" id="homeLink" href="./"></a>
-<a class="closeX" id="close" href="./" aria-label="Close"></a>
+<a class="home-link" id="homeLink" data-home href="./"></a>
+<a class="closeX" id="close" data-home href="./" aria-label="Close"></a>
 <main class="page" id="page"></main>
 <script>
 const id=new URLSearchParams(location.search).get("id");
-loadContent("site","works").then(([site,data])=>{
+bindClose(document.getElementById("close"));
+onContent(["site","works"],([site,data],first)=>{
   document.getElementById("homeLink").textContent=site.title||"";
-  bindClose(document.getElementById("close"));
   const works=data.works||[], w=works.find(w=>w.slug===id), page=document.getElementById("page");
   if(!w){
-    page.innerHTML=`<p class="notfound">Work not found.<br><br><a href="./">Back to Works</a></p>`;
+    page.innerHTML=`<p class="notfound">Work not found.<br><br><a href="${HOME}">Back to Works</a></p>`;
     return;
   }
   setTitle(w.title,site.title);
@@ -91,6 +93,7 @@ loadContent("site","works").then(([site,data])=>{
   });
 
   /* GA4: 作品別閲覧数 + 1訪問で2作品目を開いたら engaged_browsing を1回だけ */
+  if(!first)return;
   gaEv("work_open",{work_title:w.title,work_category:w.category,work_date:w.year});
   try{
     const n=+(sessionStorage.getItem("workOpens")||0)+1;sessionStorage.setItem("workOpens",n);
