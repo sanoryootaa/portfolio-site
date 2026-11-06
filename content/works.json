@@ -6,14 +6,22 @@
       "category": "Projection Mapping",
       "year": "2026",
       "award": "",
-      "about_ja": "東京都庁舎に合わせて制作。",
-      "about_en": "Created for the Tokyo Metropolitan Government Building.",
+      "about_ja": "1minute Projection Mapping Competition 2026 [Dialogue/対話] に向けて制作した作品。\n対話ほど、簡単に人生を変えてしまうものはない。私たちは人生の転機が訪れるたびに、一人で考えを散らかし、行き詰まっていく。そんなとき、ふと誰かと交わした会話が、絡まっていた思考をほどき、迷いながらも自分なりに決心がつくことがある。きっと誰にでも、そんな経験があるのではないかと思った。変化は起きることもあれば、起きないこともある。それでも、一人で唸って積み上げたものがある私たちにだけ話せることがある。孤独と対話のどちらが欠けても、私たちは前に進めない。広い星空の中に現れる二つの存在は、やがて形を失い、粒子となって引き合い、混ざり合い、離れていく。年に一度、必ず対話を繰り返す彼らのように、私たちもまた、何度でも同じ場所へ戻ってこなければならない。",
+      "about_en": "A work created for the theme of the 1 minute Projection Mapping Competition 2026, “Dialogue.”\nNothing changes a life as easily as a conversation. Whenever a turning point arrives in our lives, we scatter our thoughts alone and end up stuck. At such times, a conversation we happen to have with someone can untangle those knotted thoughts and, though we may still hesitate, help us reach a decision of our own. I thought that surely everyone has had an experience like this. Change may or may not come. Even so, there are things that only we can say, having struggled alone and built something up. If either solitude or dialogue is missing, we cannot move forward. Two beings appear in a vast starry sky, soon lose their forms, and become particles that attract one another, mix together, and drift apart. Like them, who never fail to repeat their dialogue once a year, we too must return to the same place again and again.",
       "thumb": "/media/works/between-your-stars.jpg",
       "images": [
-        "/media/works/between-your-stars-mw4nbl66t1x.jpg",
-        "/media/works/between-your-stars-mw4nbl7aemj.jpg",
-        "/media/works/between-your-stars-mw4nbl8bofy.jpg",
-        "/media/works/between-your-stars-mw4nblatggf.jpg"
+        {
+          "src": "/media/works/between-your-stars-mw4nbl7aemj.jpg",
+          "size": "full"
+        },
+        {
+          "src": "/media/works/between-your-stars-mw4nbl66t1x.jpg",
+          "size": "full"
+        },
+        {
+          "src": "/media/works/between-your-stars-mw4nblatggf.jpg",
+          "size": "full"
+        }
       ],
       "video": "https://youtu.be/15gAot3p14A",
       "credits": [
@@ -102,9 +110,18 @@
       "about_en": "For B-Immersive Cube, an immersive studio built from three screens, I attempted a photorealistic extension of the adjoining space. By synchronizing the viewer's actual viewpoint with the perspective of the 3D space, the piece creates an axis of depth on flat screens. So that visitors can take in the space without breaking immersion, the composition is grounded in a quiet, static beauty. In a studio where many forms of expression have accumulated, this work proposes a new approach.",
       "thumb": "/media/works/three.jpg",
       "images": [
-        "/media/works/three-mw4n7st4w7c.jpg",
-        "/media/works/three-mw4n74kz9w7.jpg",
-        "/media/works/three-mw4n876f4my.jpg"
+        {
+          "src": "/media/works/three-mw4n7st4w7c.jpg",
+          "size": "full"
+        },
+        {
+          "src": "/media/works/three-mw4n74kz9w7.jpg",
+          "size": "full"
+        },
+        {
+          "src": "/media/works/three-mw4n876f4my.jpg",
+          "size": "full"
+        }
       ],
       "video": "https://youtu.be/Th4yUgXUXV8",
       "credits": [
@@ -217,13 +234,7 @@
       "about_ja": "長岡造形大学の大学祭でフィナーレとして制作。企画立案から制作、上映まで一貫して有志の生徒で行った。\n祭典の終わりに相応しいものとして、エンドクレジットをテーマに、運営生徒の名前をオブジェクトとして使用した。",
       "about_en": "Created as the finale of the Nagaoka Institute of Design school festival. Volunteer students carried out everything from planning and production to the screening.\nAs a fitting close to the festival, we took end credits as the theme and used the names of the student organizers as objects.",
       "thumb": "/media/works/nid-school-fest-finale.jpg",
-      "images": [
-        "/media/works/nid-school-fest-finale-mw4nidl4flj.jpg",
-        "/media/works/nid-school-fest-finale-mw4nizu48c5.jpg",
-        "/media/works/nid-school-fest-finale-mw4nja45d4c.jpg",
-        "/media/works/nid-school-fest-finale-mw4njncaqoq.jpg",
-        "/media/works/nid-school-fest-finale-mw4njs3yh46.jpg"
-      ],
+      "images": [],
       "video": "https://youtu.be/okjAvoyKADQ",
       "credits": [
         {
