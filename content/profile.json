@@ -1,60 +1,45 @@
 {
   "label": "My profile",
-  "name_en": "Sano Ryota",
-  "name_ja": "佐野涼太",
-  "role_en": "Video artist",
-  "role_ja": "映像作家",
+  "name": "Sano Ryota",
+  "role": "Video artist",
   "photo": "/media/profile/photo.jpg",
   "about_ja": "実写映像からプロジェクションマッピング等のフル3DCGまで横断した幅広い映像制作を行う。企画・演出から、編集・カラーグレーディング・サウンドデザインなどポストプロダクションまで一貫して担当し、最終的な作品のクオリティ担保を行う。チーム制作ではディレクターとしてプロジェクト全体の監修を行う。",
   "about_en": "Works across a broad range of moving image, from live action to fully 3DCG pieces such as projection mapping. Handles everything from planning and direction through post-production — editing, color grading and sound design — to secure the quality of the final work. In team productions, oversees the entire project as director.",
   "career": [
     {
       "date": "2004.8",
-      "ja": "新潟県新潟市生まれ",
-      "en": "Born in Niigata, Japan"
+      "text": "Born in Niigata, Japan"
     },
     {
       "date": "2020.4",
-      "ja": "万代高等学校 英語理数科 入学",
-      "en": "Entered Bandai High School, English, Science and Mathematics course"
+      "text": "Entered Bandai High School, English, Science and Mathematics course"
     },
     {
       "date": "2023.4",
-      "ja": "長岡造形大学 デザイン学科 入学",
-      "en": "Entered Nagaoka Institute of Design, Department of Design"
+      "text": "Entered Nagaoka Institute of Design, Department of Design"
     }
   ],
   "awards": [
     {
       "date": "2025.4",
-      "ja": "大阪・関西万博 シャインハットプロジェクションマッピング 上映作品選出",
-      "en": "Expo 2025 Osaka, Kansai, Japan — Shine Hat projection mapping, selected for screening"
+      "text": "Expo 2025 Osaka, Kansai, Japan — Shine Hat projection mapping, selected for screening"
     },
     {
       "date": "2025.11",
-      "ja": "東京国際プロジェクションマッピングアワードVol.10 上映作品選出",
-      "en": "Tokyo International Projection Mapping Award Vol.10 — selected for screening"
+      "text": "Tokyo International Projection Mapping Award Vol.10 — selected for screening"
     },
     {
       "date": "2025.11",
-      "ja": "にいがたデジコングランプリ 動画部門 グランプリ受賞",
-      "en": "Niigata Digicon Grand Prix — Video category, Grand prix"
+      "text": "Niigata Digicon Grand Prix — Video category, Grand prix"
     },
     {
       "date": "2026.4",
-      "ja": "ACジャパン広告学生賞 CM映像部門 優秀賞受賞",
-      "en": "AC Japan Ad Student Awards — TV commercial category, Excellence award"
+      "text": "AC Japan Ad Student Awards — TV commercial category, Excellence award"
     }
   ],
   "skills": [
-    {
-      "en": "DaVinci Resolve / Blender / Premiere Pro / Illustrator / Lightroom",
-      "ja": ""
-    },
-    {
-      "en": "Language: English (TOEIC L&R 820, Eiken Grade Pre-1)",
-      "ja": "言語：英語（TOEIC L&R 820、英検準1級）"
-    }
+    "DaVinci Resolve / Blender / Premiere Pro / Illustrator / Lightroom",
+    "Language: English (TOEIC L&R 820, Eiken Grade Pre-1)"
   ],
   "mail": "sanoryootaa@gmail.com",
   "instagram": "https://www.instagram.com/sanoryootaa/",

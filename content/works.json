@@ -1,19 +1,16 @@
 {
   "works": [
     {
-      "slug": "between-your-stars",
       "title": "Between your stars",
-      "category_en": "Projection mapping",
-      "category_ja": "プロジェクションマッピング",
+      "slug": "between-your-stars",
+      "category": "Projection mapping",
       "year": "2026",
-      "award_en": "",
-      "award_ja": "",
+      "award": "",
       "about_ja": "東京都庁舎に合わせて制作。",
       "about_en": "Created for the Tokyo Metropolitan Government Building.",
       "thumb": "/media/works/between-your-stars.jpg",
       "images": [],
       "video": "https://youtu.be/15gAot3p14A",
-      "color": "#851AFF",
       "credits": [
         {
           "role": "Concept",
@@ -50,19 +47,16 @@
       ]
     },
     {
-      "slug": "threads-of-life",
       "title": "Threads of life",
-      "category_en": "Projection mapping",
-      "category_ja": "プロジェクションマッピング",
+      "slug": "threads-of-life",
+      "category": "Projection mapping",
       "year": "2025",
-      "award_en": "Expo 2025 Osaka, Kansai, Japan — Shine Hat projection mapping, selected for screening",
-      "award_ja": "大阪・関西万博 シャインハットプロジェクションマッピング 上映作品選出",
+      "award": "Expo 2025 Osaka, Kansai, Japan — Shine Hat projection mapping, selected for screening",
       "about_ja": "駅のホームには、多様な人々が行き交います。異なる目的地へ向かいながらも、一瞬の間、同じ空間を共有し、見えない繋がりが生まれます。都市は、国籍や世代、価値観を超えた人々が交差する場であり、その出会いが未来を形作ります。そして、クジラや魚が悠然と泳ぎ、異なる種が共存しながら時を紡ぐ海。2つの世界で過去から未来へと繋がる「いのちのつながり」を描きました。\n人間には人間のためだけの未来ではなく、地球上のあらゆる生命と共に未来を創ることが求められます。\n本作では、すべての生命と共に創る、新たな共生のビジョンを私たちの視点を通して表現しました。",
       "about_en": "Train platforms are crossed by all kinds of people. Though headed for different destinations, they share the same space for a moment, and invisible connections form. The city is a place where people intersect beyond nationality, generation and values, and those encounters shape the future. And then there is the sea, where whales and fish swim at their leisure and different species coexist, weaving time together. Across these two worlds, we depicted the threads of life that connect the past to the future.\nHumanity is called on to create a future not for humans alone, but together with every form of life on Earth.\nThrough our own perspective, this work expresses a new vision of coexistence, created together with all living things.",
       "thumb": "/media/works/threads-of-life.jpg",
       "images": [],
       "video": "https://youtu.be/FEqgXuUvYSc",
-      "color": "#DF0901",
       "credits": [
         {
           "role": "Concept",
@@ -94,19 +88,16 @@
       ]
     },
     {
-      "slug": "three",
       "title": "3",
-      "category_en": "Video installation",
-      "category_ja": "映像インスタレーション",
+      "slug": "three",
+      "category": "Video installation",
       "year": "2025",
-      "award_en": "",
-      "award_ja": "",
+      "award": "",
       "about_ja": "3面スクリーンを用いた没入空間である映像スタジオB-Immersive Cubeに対し、フォトリアルな隣接空間の拡張を試みた。実際の視点と3D空間のパースペクティブを同期させることで、平面スクリーン上に奥行きの軸を創出している。また、没入感を損なわずに空間を鑑賞できるよう、静的な美しさを基調とした構成をおこなった。多様な表現が蓄積されたこのスタジオにおいて、本作は新たなアプローチを提案するものである。",
       "about_en": "For B-Immersive Cube, an immersive studio built from three screens, I attempted a photorealistic extension of the adjoining space. By synchronizing the viewer's actual viewpoint with the perspective of the 3D space, the piece creates an axis of depth on flat screens. So that visitors can take in the space without breaking immersion, the composition is grounded in a quiet, static beauty. In a studio where many forms of expression have accumulated, this work proposes a new approach.",
       "thumb": "/media/works/three.jpg",
       "images": [],
       "video": "https://youtu.be/Th4yUgXUXV8",
-      "color": "#00E62E",
       "credits": [
         {
           "role": "All",
@@ -117,19 +108,16 @@
       ]
     },
     {
-      "slug": "kotoba-no-bin",
       "title": "言葉の瓶",
-      "category_en": "Public ad",
-      "category_ja": "公共広告",
+      "slug": "kotoba-no-bin",
+      "category": "Public ad",
       "year": "2025",
-      "award_en": "AC Japan Ad Student Awards — TV commercial category, Excellence award",
-      "award_ja": "ACジャパン広告学生賞 CM映像部門 優秀賞受賞",
+      "award": "AC Japan Ad Student Awards — TV commercial category, Excellence award",
       "about_ja": "自分に対してラベリングをして自らの可能性を狭める行為に問題提起する作品。自分を囲い込む言葉を瓶で視覚化し、大量の瓶はVFXで表現した。",
       "about_en": "A work that questions the act of labeling ourselves and narrowing our own possibilities. The words that confine us are visualized as bottles, and the vast number of bottles was created with VFX.",
       "thumb": "/media/works/kotoba-no-bin.jpg",
       "images": [],
       "video": "https://youtu.be/bOadL8Hf7_w",
-      "color": "#001AE0",
       "credits": [
         {
           "role": "Cast",
@@ -170,19 +158,16 @@
       ]
     },
     {
-      "slug": "fashion-lab",
       "title": "Fashion Lab × Photography majors making-of",
-      "category_en": "Concept film",
-      "category_ja": "コンセプトフィルム",
+      "slug": "fashion-lab",
+      "category": "Concept film",
       "year": "2025",
-      "award_en": "",
-      "award_ja": "",
+      "award": "",
       "about_ja": "ファッション専攻 × 写真専攻で行った企画のメイキングとして制作",
       "about_en": "A making-of film for a joint project between fashion and photography majors.",
       "thumb": "/media/works/fashion-lab-photography-majors-making-of.jpg",
       "images": [],
       "video": "https://youtu.be/RniGpoXr4as",
-      "color": "#FF6C00",
       "credits": [
         {
           "role": "Director",
@@ -215,19 +200,16 @@
       ]
     },
     {
-      "slug": "nid-school-fest-finale",
       "title": "NID School Fest. - Finale",
-      "category_en": "Projection mapping",
-      "category_ja": "プロジェクションマッピング",
+      "slug": "nid-school-fest-finale",
+      "category": "Projection mapping",
       "year": "2024",
-      "award_en": "Niigata Digicon Grand Prix — Video category, Grand prix",
-      "award_ja": "にいがたデジコングランプリ 動画部門 グランプリ受賞",
+      "award": "Niigata Digicon Grand Prix — Video category, Grand prix",
       "about_ja": "長岡造形大学の大学祭でフィナーレとして制作。企画立案から制作、上映まで一貫して有志の生徒で行った。\n祭典の終わりに相応しいものとして、エンドクレジットをテーマに、運営生徒の名前をオブジェクトとして使用した。",
       "about_en": "Created as the finale of the Nagaoka Institute of Design school festival. Volunteer students carried out everything from planning and production to the screening.\nAs a fitting close to the festival, we took end credits as the theme and used the names of the student organizers as objects.",
       "thumb": "/media/works/nid-school-fest-finale.jpg",
       "images": [],
       "video": "https://youtu.be/okjAvoyKADQ",
-      "color": "#FFC900",
       "credits": [
         {
           "role": "Direction",
@@ -277,19 +259,16 @@
       ]
     },
     {
-      "slug": "suzuna-kan",
       "title": "Suzuna Kan",
-      "category_en": "Concept film",
-      "category_ja": "コンセプトフィルム",
+      "slug": "suzuna-kan",
+      "category": "Concept film",
       "year": "2025",
-      "award_en": "",
-      "award_ja": "",
+      "award": "",
       "about_ja": "対象者のパーソナリティーを視覚的に表現した作品。日常のなかにある対比に焦点を当て、グラフィックを交えて構成した。",
       "about_en": "A work that visualizes the personality of its subject. Focusing on the contrasts found in everyday life, it is composed with graphics woven in.",
       "thumb": "/media/works/suzuna-kan.jpg",
       "images": [],
       "video": "https://youtu.be/VWwDfWWTXGE",
-      "color": "#001AE0",
       "credits": [
         {
           "role": "Cast",
@@ -318,19 +297,16 @@
       ]
     },
     {
-      "slug": "kaimami",
       "title": "かいまみ",
-      "category_en": "Projection mapping",
-      "category_ja": "プロジェクションマッピング",
+      "slug": "kaimami",
+      "category": "Projection mapping",
       "year": "2025",
-      "award_en": "Tokyo International Projection Mapping Award Vol.10 — selected for screening",
-      "award_ja": "東京国際プロジェクションマッピングアワードVol.10 上映作品選出",
+      "award": "Tokyo International Projection Mapping Award Vol.10 — selected for screening",
       "about_ja": "テーマ「Voyage」に対し、単なる移動ではなく、「時間の旅」と定義した。 既存のプロジェクションマッピングに散見される、プリミティブな変形や派手な色彩の羅列へのアンチテーゼとして、写実的かつ上品なトーンによる「味わい深い読後感」を目指した。人類史や地球の変化を「旅」と捉え、視点を固定したまま奥行きの世界が変容していく構成を採用した。\nこの際、マッピング特有の「壁面変形」の面白さと、世界観への没入を促す「写実表現」を両立させるため、「ブラインド」の機構を導入した。板の回転による開閉動作が、壁面の物理的な変形として機能しつつ、同時に奥に広がる世界を覗く「窓」としての役割を果たす。この構造が作品の骨格となった。\nブラインドの左側を半透明、右側を不透明としたのは、私たちが歴史を認識する構造そのものの比喩になっている。歴史とは断片的なハイライトの連続であり、その間にある真実や変容は不可視である。垣間見える断片から、その周辺や行間にある物語を想像力で補完すること。タイトル『かいまみ』にはその姿勢を込めている。悠久の時を経て、その最先端に立つ我々が、東京ビッグサイトという巨大な窓を通して何を見据えるのか。その問いをラストシーンで表現した。",
       "about_en": "Given the theme \"Voyage\", we defined it not as mere travel but as a journey through time. As an antithesis to the primitive deformations and flashy displays of color often seen in projection mapping, we aimed for a rich, lingering aftertaste through a realistic and refined tone. Treating human history and the changes of the Earth as a voyage, we adopted a structure in which the world in the depths transforms while the viewpoint stays fixed.\nTo combine the thrill of wall deformation unique to mapping with realistic imagery that draws viewers into the world, we introduced the mechanism of a blind. As its slats rotate open and closed, they act as a physical deformation of the wall while also serving as a window onto the world beyond. This structure became the backbone of the work.\nThe left side of the blind is translucent and the right side opaque, a metaphor for the very way we perceive history. History is a series of fragmentary highlights, and the truths and changes in between remain invisible. From the fragments we glimpse, we use our imagination to fill in the stories around and between them — the title Kaimami (\"a glimpse\") carries that stance. Standing at the leading edge of countless ages, what do we see through the giant window that is Tokyo Big Sight? The final scene poses that question.",
       "thumb": "/media/works/kaimami.jpg",
       "images": [],
       "video": "https://youtu.be/QXx9yu3ifrc",
-      "color": "#DF0901",
       "credits": [
         {
           "role": "Concept",
@@ -371,19 +347,16 @@
       ]
     },
     {
-      "slug": "walk",
       "title": "Walk",
-      "category_en": "Concept film",
-      "category_ja": "コンセプトフィルム",
+      "slug": "walk",
+      "category": "Concept film",
       "year": "2024",
-      "award_en": "",
-      "award_ja": "",
+      "award": "",
       "about_ja": "膨大な量の人が行き交う現代の東京。人それぞれの目的意識が歩くことに現れ、街としてのエネルギーが浮かび上がってくる。\n3DCGとグラフィックを交えて東京のカオスを表現するように構成した。",
       "about_en": "Present-day Tokyo, where vast numbers of people come and go. Each person's sense of purpose shows in the way they walk, and the energy of the city as a whole emerges.\nCombining 3DCG and graphics, the piece is composed to express the chaos of Tokyo.",
       "thumb": "/media/works/walk.jpg",
       "images": [],
       "video": "https://youtu.be/FJPxvpp6hO0",
-      "color": "#001AE0",
       "credits": [
         {
           "role": "Concept & direction",
@@ -412,19 +385,16 @@
       ]
     },
     {
-      "slug": "kofukuron",
       "title": "幸福論",
-      "category_en": "Short film",
-      "category_ja": "ショートフィルム",
+      "slug": "kofukuron",
+      "category": "Short film",
       "year": "2024",
-      "award_en": "",
-      "award_ja": "",
+      "award": "",
       "about_ja": "第三の眼を持つ主人公を通して、他者の許容や人生の肯定を描いた作品。会話の”間”や、ローキーな画面で心情を表現した。",
       "about_en": "Through a protagonist with a third eye, the film depicts accepting others and affirming life. Pauses in conversation and low-key images express the characters' emotions.",
       "thumb": "/media/works/kofukuron.jpg",
       "images": [],
       "video": "https://youtu.be/zaMlUL9mslI",
-      "color": "#851AFF",
       "credits": [
         {
           "role": "Cast",
@@ -468,19 +438,16 @@
       ]
     },
     {
-      "slug": "koryu-to-chosen",
       "title": "交流と挑戦",
-      "category_en": "Documentary",
-      "category_ja": "ドキュメンタリー",
+      "slug": "koryu-to-chosen",
+      "category": "Documentary",
       "year": "2024",
-      "award_en": "",
-      "award_ja": "",
+      "award": "",
       "about_ja": "髙橋佳李の考える、交流をする意味と挑戦を続ける理由。インタビューから見えてくる思いを表現したドキュメンタリー。",
       "about_en": "What connecting with others means to Kairi Takahashi, and the reasons for continuing to take on challenges. A documentary expressing the feelings that surface through an interview.",
       "thumb": "/media/works/koryu-to-chosen.jpg",
       "images": [],
       "video": "https://youtu.be/eOH_RdG8eCs",
-      "color": "#FF6C00",
       "credits": [
         {
           "role": "Starring",
@@ -518,19 +485,16 @@
       ]
     },
     {
-      "slug": "tsukuruhito",
       "title": "ツクルヒト",
-      "category_en": "Documentary",
-      "category_ja": "ドキュメンタリー",
+      "slug": "tsukuruhito",
+      "category": "Documentary",
       "year": "2025",
-      "award_en": "",
-      "award_ja": "",
+      "award": "",
       "about_ja": "クリエイティブコーディングという手法を用いて表現を行っている生方隼人のビジョンを、1分のドキュメンタリーとしてまとめた。",
       "about_en": "A one-minute documentary capturing the vision of Hayato Ubukata, who creates through creative coding.",
       "thumb": "/media/works/tsukuruhito.jpg",
       "images": [],
       "video": "https://youtu.be/k7Wwvs-I8Mo",
-      "color": "#00E62E",
       "credits": [
         {
           "role": "All words & works",

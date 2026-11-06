@@ -12,69 +12,61 @@
 <script src="assets/site.js"></script>
 <style>
   /* 構成：タイトル → ジャンル/制作年 → 受賞歴 → about → 画像 → 動画 → クレジット */
-  .w-title{font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.1;color:var(--wc);max-width:calc(100% - 120px);overflow-wrap:break-word;}
-  .w-sub{margin-top:16px;display:flex;flex-wrap:wrap;gap:4px 1.2em;}
-  .w-award{margin-top:22px;display:grid;grid-template-columns:auto 1fr;column-gap:.6em;}
-  .w-award .emoji{grid-row:span 2;}
+  .w-sub{margin-top:6px;}
+  .w-award{margin-top:6px;}
   .w-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;}
   .w-images img{width:100%;height:auto;}
-  .player{position:relative;width:100%;aspect-ratio:16/9;background:#111;overflow:hidden;}
+  .player{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;}
   .player img{width:100%;height:100%;object-fit:cover;}
   .player iframe{width:100%;height:100%;border:0;display:block;}
-  .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82px;height:82px;border:0;border-radius:50%;background:var(--wc);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
+  .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;border:0;border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s ease;}
   .playbtn:hover{transform:translate(-50%,-50%) scale(1.08);}
-  .playbtn:after{content:"";border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;}
-  /* クレジット：役職ごとのブロックを段組みで */
-  .credits{columns:3 220px;column-gap:48px;}
-  .cr{break-inside:avoid;margin-bottom:22px;}
-  .cr .role{color:var(--sub);}
+  .playbtn:after{content:"";border-left:22px solid #000;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:5px;}
+  /* クレジット：役職ごとに縦に積む（役職は末尾に / ）*/
+  .cr+.cr{margin-top:12px;}
   .notfound{padding-top:20vh;}
   .notfound a{border-bottom:1px solid currentColor;}
   @media (max-width:760px){
-    .w-title{max-width:calc(100% - 64px);}
     .w-images{grid-template-columns:1fr;gap:8px;}
-    .playbtn{width:64px;height:64px;}
-    .playbtn:after{border-left-width:20px;border-top-width:12px;border-bottom-width:12px;}
+    .playbtn{width:56px;height:56px;}
+    .playbtn:after{border-left-width:17px;border-top-width:10px;border-bottom-width:10px;margin-left:4px;}
   }
 </style>
 </head>
 <body>
 <a class="home-link" id="homeLink" href="./"></a>
-<a class="closeX" id="close" href="./" aria-label="Close / 閉じる"></a>
+<a class="closeX" id="close" href="./" aria-label="Close"></a>
 <main class="page" id="page"></main>
 <script>
 const id=new URLSearchParams(location.search).get("id");
 loadContent("site","works").then(([site,data])=>{
-  applyColors(site,{dark:true});
   document.getElementById("homeLink").textContent=site.title||"";
   bindClose(document.getElementById("close"));
-  const works=data.works||[], idx=works.findIndex(w=>w.slug===id), page=document.getElementById("page");
-  if(idx<0){
-    page.innerHTML=`<p class="notfound">Work not found.<br><span class="sub-ja">作品が見つかりませんでした。</span><br><br><a href="./">Back to works / 作品一覧へ</a></p>`;
+  const works=data.works||[], w=works.find(w=>w.slug===id), page=document.getElementById("page");
+  if(!w){
+    page.innerHTML=`<p class="notfound">Work not found.<br><br><a href="./">Back to works</a></p>`;
     return;
   }
-  const w=works[idx], col=colorFor(site,works,idx);
-  document.body.style.setProperty("--wc",col);
   setTitle(w.title,site.title);
 
-  const award=(w.award_en||w.award_ja)
-    ?`<div class="w-award"><span class="emoji">🏆</span><span>${esc(w.award_en)}</span><span class="sub-ja">${esc(w.award_ja)}</span></div>`:"";
+  const sub=[w.category,w.year].filter(Boolean).join(", ");   /* 片方欠けてもカンマが浮かない */
   const about=(w.about_ja||w.about_en)
-    ?`<section class="sec"><h2>About<span class="ja">概要</span></h2><div class="bi"><p lang="ja">${esc(w.about_ja)}</p><p lang="en">${esc(w.about_en)}</p></div></section>`:"";
+    ?`<section class="sec"><h2>About</h2><div class="bi">${w.about_ja?`<p lang="ja">${esc(w.about_ja)}</p>`:""}${w.about_en?`<p lang="en">${esc(w.about_en)}</p>`:""}</div></section>`:"";
   const imgs=(w.images||[]).filter(Boolean);
   const images=imgs.length
     ?`<section class="sec w-images">${imgs.map(s=>`<img src="${esc(asset(s))}" alt="${esc(w.title)}" loading="lazy">`).join("")}</section>`:"";
   const vid=ytId(w.video);
   const video=vid
-    ?`<section class="sec"><div class="player" id="player"><img src="${esc(asset(w.thumb))}" alt=""><button class="playbtn" aria-label="Play / 再生"></button></div></section>`:"";
+    ?`<section class="sec"><div class="player" id="player"><img src="${esc(asset(w.thumb))}" alt=""><button class="playbtn" aria-label="Play"></button></div></section>`:"";
   const credits=(w.credits||[]).length
-    ?`<section class="sec"><h2>Credit</h2><div class="credits">${w.credits.map(c=>
-        `<div class="cr"><div class="role">${esc(c.role)}</div>${(c.names||[]).map(n=>`<div>${esc(n)}</div>`).join("")}</div>`).join("")}</div></section>`:"";
+    ?`<section class="sec"><h2>Credit</h2>${w.credits.map(c=>
+        `<div class="cr"><div>${esc(c.role)} /</div>${(c.names||[]).map(n=>`<div>${esc(n)}</div>`).join("")}</div>`).join("")}</section>`:"";
 
   page.innerHTML=
-    `<h1 class="w-title">${esc(w.title)}</h1>
-     <div class="w-sub"><span>${esc(w.category_en)}</span><span class="sub-ja">${esc(w.category_ja)}</span><span>${esc(w.year)}</span></div>
-     ${award}${about}${images}${video}${credits}`;
+    `<h1 class="page-title">${esc(w.title)}</h1>
+     ${sub?`<div class="w-sub">${esc(sub)}</div>`:""}
+     ${w.award?`<div class="w-award"><span class="emoji">🏆</span> ${esc(w.award)}</div>`:""}
+     ${about}${images}${video}${credits}`;
 
   const btn=page.querySelector(".playbtn");
   if(btn)btn.addEventListener("click",()=>{
@@ -85,7 +77,7 @@ loadContent("site","works").then(([site,data])=>{
   });
 
   /* GA4: 作品別閲覧数 + 1訪問で2作品目を開いたら engaged_browsing を1回だけ */
-  gaEv("work_open",{work_title:w.title,work_category:w.category_en,work_date:w.year});
+  gaEv("work_open",{work_title:w.title,work_category:w.category,work_date:w.year});
   try{
     const n=+(sessionStorage.getItem("workOpens")||0)+1;sessionStorage.setItem("workOpens",n);
     if(n===2)gaEv("engaged_browsing");

@@ -151,11 +151,11 @@ function buildArchive(site,works){
     el.style.setProperty("--mleft",c.mleft+"%");
     el.setAttribute("aria-label",w.title||"");
     const thumb=asset(w.thumb);
-    const award=w.award_en||w.award_ja;
+    const award=w.award;
     el.innerHTML=
       `<div class="thumb">${thumb?`<img src="${esc(thumb)}" alt="${esc(w.title)}" loading="lazy">`:""}</div>`+
       `<span class="label year e-${c.yr.e}" style="--p:${c.yr.p}%">${esc(w.year)}</span>`+
-      `<span class="label cat e-${c.ca.e}" style="--p:${c.ca.p}%">${esc(w.category_en)}</span>`+
+      `<span class="label cat e-${c.ca.e}" style="--p:${c.ca.p}%">${esc(w.category)}</span>`+
       (award?`<span class="label trophy emoji" style="animation:t-roam-${i} ${(c.trophy.dur/tSpeed).toFixed(2)}s linear infinite;animation-delay:${(c.trophy.delay/tSpeed).toFixed(2)}s" title="${esc(award)}">🏆</span>`:"");
     stage.appendChild(el);
   });
@@ -204,9 +204,7 @@ loadContent("site","works","profile").then(([site,data,profile])=>{
   /* 旧URL #work-N → 作品ページ */
   const m=location.hash.match(/^#work-(\d+)$/);
   if(m&&works[+m[1]-1]){location.replace(workURL(works[+m[1]-1]));return;}
-  applyColors(site);
   SPARKLE=!!site.message_sparkle;
-  rememberColors(works,workColors(site,works));   /* 作品ページで同じ色を使う */
   buildArchive(site,works);
   buildHeader(site,profile);
 });

@@ -12,16 +12,16 @@
 - `index.html` … ホーム（散らばり配置・ラベル・トロフィー・最下部メッセージ）
 - `work.html?id=<slug>` … 作品ページ / `profile.html` … プロフィールページ（どちらも黒地・`<html class="dark">`）
 - `assets/site.css` … 共通（フォント・黒地ページ・✕・バイリンガル段組み）
-- `assets/site.js` … 共通（GA4読み込み・`loadContent()`・`esc/asset/ytId`・作品色）
+- `assets/site.js` … 共通（GA4読み込み・`loadContent()`・`esc/asset/ytId`・✕の戻る動作）
 - `content/{works,profile,site}.json` … データ / `.pages.yml` … 管理画面の定義
 - `media/works|profile|site/` … 画像 / `CNAME` / `SPEC.md` / `tools/drive-urls.html`（旧スプシ運用の補助ツール。今は不要）
 
 ## 動作の要点
 - **データ追加/変更**＝ JSON のキー ＋ `.pages.yml` の field ＋ 描画箇所 ＋ `SPEC.md` をセットで更新。
-- **表記ルール**: 基本バイリンガル（`_en`/`_ja`）。例外は作品タイトルとクレジット（英語のみ）。英語は sentence case（固有名詞・略語を除く）。
+- **表記ルール**: 日英バイリンガルは About 本文だけ（日→英で縦積み）。他は英語のみ・sentence case（固有名詞・略語を除く）。
+- **色**: 作品・プロフィールページは黒地に #ffffff のみ（作品色・グレー・アクセント色は撤去済み）。ホームは白地に黒文字。
 - **タイポは一般的な組みで固定**（トラッキング・行間・ウェイトのキーやpalt等は全部撤去済み。調整はCSSで）。フォントは `--sans`（Helvetica → 游ゴシック）。
 - **画像パス**は JSON では `/media/...`。表示時に `asset()` で相対化（github.io/portfolio-site 配下でも切れないように）。
-- **作品色**: `workColors()`（random=重複最小 / fixed=`color`）。ホームで決めた色を sessionStorage に入れ、作品ページは `colorFor()` で同じ色を使う。
 - **ホーム配置**: `layout` 12枠。13件目以降は同パターンを下に繰り返し、`#stage` の aspect-ratio を伸ばす。
 - **旧URL互換**: `/#work-N` → `work.html?id=`、`/#profile` → `profile.html`（index.html）。
 - **GA4**: `assets/site.js` の `GA_ID` 1か所。送信は必ず `gaEv()`。イベント一覧は SPEC.md §4。

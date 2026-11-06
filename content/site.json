@@ -2,19 +2,5 @@
   "title": "Sano Ryota works archives",
   "message": "Hire me maybe🙂",
   "message_sparkle": false,
-  "trophy_speed": 0.2,
-  "colors": {
-    "background": "#ffffff",
-    "text": "#0a0a0a",
-    "accent": "#00E62E",
-    "work_palette": [
-      "#00E62E",
-      "#001AE0",
-      "#DF0901",
-      "#FFC900",
-      "#851AFF",
-      "#FF6C00"
-    ],
-    "mode": "fixed"
-  }
+  "trophy_speed": 0.2
 }

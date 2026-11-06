@@ -14,7 +14,8 @@
 - 保存ごとに履歴（git）が残るので元に戻せる。
 
 ### 表記ルール
-- **基本すべて日英バイリンガル**（`_ja` / `_en` の2項目）。例外：**作品タイトル**（1つだけ）、**クレジット**（英語のみ）。
+- **日英バイリンガルは About 本文だけ**（`about_ja` → `about_en` の順に縦に積む）。他は英語のみ。
+- 色は作品・プロフィールとも **#ffffff（白）のみ**。作品ごとの色・グレーは使わない。
 - 英語は**頭文字だけ大文字、他は小文字**（固有名詞・略語は除く。例: `Projection mapping`, `Color grading & edit`, `3DCG`）。
 - 文字詰め・行間・ウェイトの設定は無し（一般的な組みで固定。調整はCSS側で行う）。
 
@@ -25,11 +26,12 @@
 | ページ | URL | 内容 |
 |---|---|---|
 | ホーム | `/` | 作品サムネの散らばり配置＋年/ジャンルのラベル＋受賞作のトロフィー。最下部にメッセージ |
-| 作品 | `/work.html?id=<URL名>` | 黒背景・白文字。タイトル → ジャンル/制作年 → 受賞歴 → About → 画像 → 動画 → クレジット |
-| プロフィール | `/profile.html` | 黒背景・白文字。氏名・肩書き・写真 → About → Career → Awards → Skills → Contact |
+| 作品 | `/work.html?id=<URL名>` | 黒背景・白文字のみ。タイトル → ジャンル/制作年 → 受賞歴 → About → 画像 → 動画 → クレジット |
+| プロフィール | `/profile.html` | 黒背景・白文字のみ。氏名・肩書き・写真 → About → Career → Awards → Skills → Contact |
 
 - 旧URL `/#work-N`・`/#profile` は新ページへ自動転送。
 - フォント：英字=Helvetica、日本語=游ゴシック（全ページ共通 `assets/site.css`）。
+- ✕（右上・ホームへ戻る）は小さめの白で、フィルムのちらつきのように不規則に明滅する。
 
 ---
 
@@ -40,19 +42,18 @@
 |---|---|
 | `title` | タイトル（バイリンガル不要） |
 | `slug` | URL名（半角英数字とハイフン） |
-| `category_en` / `category_ja` | ジャンル |
+| `category` | ジャンル |
 | `year` | 制作年 |
-| `award_en` / `award_ja` | 受賞歴。入力した作品だけホームでトロフィーが漂う |
-| `about_ja` / `about_en` | About（PCでは左右に並ぶ） |
+| `award` | 受賞歴。入力した作品だけホームでトロフィーが漂う |
+| `about_ja` / `about_en` | About 本文（日→英の順に縦積み） |
 | `thumb` | サムネ画像（ホーム・動画のポスター） |
 | `images` | 作品ページに並ぶ画像（複数） |
 | `video` | YouTube URL |
-| `color` | 作品色（カラーモード fixed のとき） |
-| `credits` | `[{role, names[]}]`（英語） |
+| `credits` | `[{role, names[]}]`。役職の後ろに ` /` を付けて縦に積む |
 
 ### profile.json — プロフィール
-`label`（ホーム右上の文言）, `name_en/_ja`, `role_en/_ja`, `photo`, `about_ja/_en`,
-`career` / `awards`: `[{date, en, ja}]`（date 空なら行頭から）, `skills`: `[{en, ja}]`（ja 空可）, `mail`, `instagram`, `youtube`
+`label`（ホーム右上の文言）, `name`, `role`, `photo`, `about_ja` / `about_en`,
+`career` / `awards`: `[{date, text}]`（date 空なら行頭から）, `skills`: 文字列のリスト, `mail`, `instagram`, `youtube`
 
 ### site.json — サイト設定
 | キー | 内容 |
@@ -60,12 +61,6 @@
 | `title` | サイトタイトル |
 | `message` / `message_sparkle` | ホーム最下部のメッセージ / キラキラ演出 on/off |
 | `trophy_speed` | トロフィーの速さ（1=標準） |
-| `colors.background` / `colors.text` | ホームの背景色・文字色（作品・プロフィールは黒地固定） |
-| `colors.accent` | 基調色（プロフィールの見出し・✕など） |
-| `colors.work_palette` | 作品色の候補（random用） |
-| `colors.mode` | `random`＝候補から重複最小でランダム / `fixed`＝作品ごとの `color` |
-
-- random の色はホームで決めて sessionStorage に保存 → 作品ページの見出し・✕・再生ボタンが同じ色になる。
 
 ### 固定ファイル
 - `media/site/favicon.png`（タブのアイコン・ホーム右上の点滅アイコン）、`media/site/ogp.jpg`（リンク共有時のプレビュー）。差し替えは同名で上書き。
