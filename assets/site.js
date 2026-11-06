@@ -1,7 +1,17 @@
 /* ===== 全ページ共通：GA4・データ読み込み・文字組み・プレビュー・ヘルパー ===== */
 
-/* ホームのURL。公開前は隠しURL（home.html）、公開時に index.html へ差し替えて "./" にする */
-const HOME="home.html";
+/* ===== lab ブランチ（実験場）=====
+   sanoryota.com/lab/ で公開（.github/workflows/lab-publish.yml が main の lab/ にコピー）。
+   - GA は送らない・全ページ noindex（robots.txt ではブロックしない）
+   - 作品データ・画像は本番と同じもの（/content/, /media/）を使う。lab/ 配下では一つ上を見る */
+const LAB=true;
+const ROOT=location.pathname.includes("/lab/")?"../":"";
+if(LAB&&!document.querySelector('meta[name=robots]')){
+  const m=document.createElement("meta");m.name="robots";m.content="noindex";document.head.appendChild(m);
+}
+
+/* ホームのURL。lab ではすりガラスの実験ホーム（index.html）*/
+const HOME="./";
 /* プレビュー（管理画面の右側に映すとき）：?preview=1。管理画面が localStorage に置いた編集中データで描画する */
 const PREVIEW=new URLSearchParams(location.search).has("preview");
 /* 確認用ページ：?stage=1（入口は /stage/）。本公開前の renewal ブランチの content を表示する */
@@ -10,7 +20,7 @@ const REPO="sanoryootaa/portfolio-site", STAGE_BRANCH="renewal";
 
 /* ===== GA4 ===== 測定IDの差し替えはここ1か所だけ。プレビュー・管理画面では計測しない */
 const GA_ID="G-K5GHBEW050";
-const NO_GA=PREVIEW||STAGE||location.pathname.includes("/admin");
+const NO_GA=LAB||PREVIEW||STAGE||location.pathname.includes("/admin");
 window.dataLayer=window.dataLayer||[];
 function gtag(){dataLayer.push(arguments);}
 if(!NO_GA){
@@ -39,12 +49,12 @@ function loadJSON(name){
     return stageSha().then(sha=>fetch(`https://raw.githubusercontent.com/${REPO}/${sha}/content/${name}.json`))
       .then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
       .catch(()=>{stageBanner("確認用の内容を読み込めませんでした（本公開中の内容を表示）");
-        return fetch(`content/${name}.json`,{cache:"no-cache"}).then(r=>r.ok?r.json():{}).catch(()=>({}));});
+        return fetch(`${ROOT}content/${name}.json`,{cache:"no-cache"}).then(r=>r.ok?r.json():{}).catch(()=>({}));});
   }
   if(PREVIEW){
     try{const v=localStorage.getItem("preview:"+name);if(v)return Promise.resolve(JSON.parse(v));}catch(e){}
   }
-  return fetch(`content/${name}.json`,{cache:"no-cache"}).then(r=>r.ok?r.json():{}).catch(()=>({}));
+  return fetch(`${ROOT}content/${name}.json`,{cache:"no-cache"}).then(r=>r.ok?r.json():{}).catch(()=>({}));
 }
 function loadContent(...names){return Promise.all(names.map(loadJSON));}
 /* 読み込んで描画。names の先頭は必ず "site"（文字組みを先に当てる）。
@@ -90,7 +100,7 @@ function applyTypography(site){
 /* ===== helpers ===== */
 function esc(s){return (s==null?"":String(s)).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 /* "/media/..." → "media/..."（github.io/portfolio-site 配下でも画像が切れないよう相対パスに）*/
-function asset(p){return (p||"").trim().replace(/^\//,"");}
+function asset(p){p=(p||"").trim();return /^(blob:|data:|https?:)/.test(p)?p:ROOT+p.replace(/^\//,"");}
 function ytId(s){
   s=(s||"").trim();
   const m=s.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{6,})/);return m?m[1]:s;

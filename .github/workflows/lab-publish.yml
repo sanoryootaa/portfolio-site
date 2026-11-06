@@ -1,0 +1,45 @@
+# lab ブランチに push → main の lab/ にコピー → sanoryota.com/lab/ で公開
+# GitHub Pages の設定（main / ルートから配信）は変えない。本番のファイルには触らず lab/ だけを書き換える。
+name: Publish lab
+on:
+  push:
+    branches: [lab]
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: lab-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: lab, path: lab }
+      - uses: actions/checkout@v4
+        with: { ref: main, path: main, fetch-depth: 0 }
+      - name: Copy lab into main/lab
+        # 作品データ・画像は本番（/content/, /media/）を使うのでコピーしない。管理画面・確認用・メモも除外
+        run: |
+          mkdir -p main/lab
+          rsync -a --delete \
+            --exclude '.git' --exclude '.github' --exclude '/content/' --exclude '/media/' \
+            --exclude '/admin/' --exclude '/stage/' --exclude '/tools/' --exclude '/CNAME' --exclude '*.md' \
+            lab/ main/lab/
+      - name: Commit and push to main
+        working-directory: main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A lab
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          git commit -m "Publish lab @ ${GITHUB_SHA::7}"
+          for i in 1 2 3 4; do git push origin HEAD:main && exit 0; git pull --rebase origin main; done
+          exit 1
+      - name: Request Pages build
+        # GITHUB_TOKEN の push では Pages の再ビルドが走らないので明示的に依頼する
+        run: |
+          curl -sS -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages/builds"
