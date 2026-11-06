@@ -68,6 +68,10 @@ loadContent("site","works").then(([site,data])=>{
      ${w.award?`<div class="w-award"><span class="emoji">🏆</span> ${esc(w.award)}</div>`:""}
      ${about}${images}${video}${credits}`;
 
+  const awardEl=page.querySelector(".w-award");
+  /* ページのフェードイン（位置がずれる）が終わってから元の位置を測って飛ばす */
+  if(awardEl)Promise.all(page.getAnimations().map(a=>a.finished)).then(()=>flyDragon(awardEl));
+
   const btn=page.querySelector(".playbtn");
   if(btn)btn.addEventListener("click",()=>{
     document.getElementById("player").innerHTML=

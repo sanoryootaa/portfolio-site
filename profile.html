@@ -11,7 +11,9 @@
 <link rel="stylesheet" href="assets/site.css">
 <script src="assets/site.js"></script>
 <style>
-  .p-head{display:grid;grid-template-columns:1fr 300px;gap:48px;align-items:start;}
+  /* 左=本文（名前から About 以降まで続けて流す）/ 右=写真（スクロールしても付いてくる）*/
+  .p-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:64px;align-items:start;}
+  .p-photo-wrap{position:sticky;top:120px;}
   .p-role{margin-top:6px;}
   .p-photo{width:100%;aspect-ratio:3/4;object-fit:cover;background:#000;}
   /* 年月＋内容の行 */
@@ -20,8 +22,8 @@
   .p-list .full{grid-column:1/-1;}
   .p-contact a{border-bottom:1px solid currentColor;overflow-wrap:anywhere;}
   @media (max-width:760px){
-    .p-head{grid-template-columns:1fr;gap:32px;}
-    .p-photo{order:-1;max-width:240px;}
+    .p-wrap{grid-template-columns:1fr;gap:32px;}
+    .p-photo-wrap{position:static;order:-1;max-width:240px;}
     .p-list{column-gap:16px;}
   }
 </style>
@@ -45,13 +47,9 @@ loadContent("site","profile").then(([site,p])=>{
   const bare=u=>(u||"").replace(/^https?:\/\/(www\.)?/,"").replace(/\/$/,"");
 
   document.getElementById("page").innerHTML=
-    `<div class="p-head">
-       <div>
-         <h1 class="page-title">${esc(p.name)}</h1>
-         ${p.role?`<div class="p-role">${esc(p.role)}</div>`:""}
-       </div>
-       ${p.photo?`<img class="p-photo" src="${esc(asset(p.photo))}" alt="${esc(p.name)}">`:""}
-     </div>
+    `<div class="p-wrap"><div>
+     <h1 class="page-title">${esc(p.name)}</h1>
+     ${p.role?`<div class="p-role">${esc(p.role)}</div>`:""}
      <section class="sec"><h2>(About Me)</h2><div class="bi">${p.about_ja?`<p lang="ja">${esc(p.about_ja)}</p>`:""}${p.about_en?`<p lang="en">${esc(p.about_en)}</p>`:""}</div></section>
      <section class="sec"><h2>(Career)</h2>${rows(p.career)}</section>
      <section class="sec"><h2>(Awards &amp; Screenings)</h2>${rows(p.awards)}</section>
@@ -60,7 +58,8 @@ loadContent("site","profile").then(([site,p])=>{
        ${link("Mail",p.mail&&"mailto:"+p.mail,p.mail,`onclick="gaEv('contact_click',{label:'mail'})"`)}
        ${link("Instagram",p.instagram,bare(p.instagram),`onclick="gaEv('sns_click',{platform:'instagram'})"`)}
        ${link("YouTube",p.youtube,bare(p.youtube),`onclick="gaEv('sns_click',{platform:'youtube'})"`)}
-     </div></section>`;
+     </div></section>
+     </div>${p.photo?`<div class="p-photo-wrap"><img class="p-photo" src="${esc(asset(p.photo))}" alt="${esc(p.name)}"></div>`:""}</div>`;
   gaEv("about_open");
 });
 </script>

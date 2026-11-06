@@ -12,7 +12,8 @@
 - `index.html` … ホーム（散らばり配置・ラベル・トロフィー・最下部メッセージ）
 - `work.html?id=<slug>` … 作品ページ / `profile.html` … プロフィールページ（どちらも黒地・`<html class="dark">`）
 - `assets/site.css` … 共通（フォント・黒地ページ・✕・バイリンガル段組み）
-- `assets/site.js` … 共通（GA4読み込み・`loadContent()`・`esc/asset/ytId`・✕の戻る動作）
+- `assets/site.js` … 共通（GA4読み込み・`loadContent()`・`esc/asset/ytId`・✕の戻る動作・動き `wanderClose()`（漂う✕）/ `flyDragon()`（受賞歴の龍））
+  - 動きは rAF 依存なので headless Chrome のスクショでは止まって見える（仮想時間が進まない）。検証は Node で rAF/performance をスタブしてシミュレートした
 - `content/{works,profile,site}.json` … データ / `.pages.yml` … 管理画面の定義
 - `admin/index.html` … 管理画面の入口（`sanoryota.com/admin`）。**`BRANCH` 定数は main へマージしたら "main" に変える**
 - `media/works|profile|site/` … 画像 / `CNAME` / `SPEC.md` / `tools/drive-urls.html`（旧スプシ運用の補助ツール。今は不要）
