@@ -6,10 +6,23 @@
       "category": "Projection Mapping",
       "year": "2026",
       "award": "",
-      "about_ja": "東京都庁舎に合わせて制作。",
-      "about_en": "Created for the Tokyo Metropolitan Government Building.",
+      "about_ja": "1minute Projection Mapping Competition 2026 [Dialogue/対話] に向けて制作した作品。\n対話ほど、簡単に人生を変えてしまうものはない。私たちは人生の転機が訪れるたびに、一人で考えを散らかし、行き詰まっていく。そんなとき、ふと誰かと交わした会話が、絡まっていた思考をほどき、迷いながらも自分なりに決心がつくことがある。きっと誰にでも、そんな経験があるのではないかと思った。変化は起きることもあれば、起きないこともある。それでも、一人で唸って積み上げたものがある私たちにだけ話せることがある。孤独と対話のどちらが欠けても、私たちは前に進めない。広い星空の中に現れる二つの存在は、やがて形を失い、粒子となって引き合い、混ざり合い、離れていく。年に一度、必ず対話を繰り返す彼らのように、私たちもまた、何度でも同じ場所へ戻ってこなければならない。",
+      "about_en": "A work created for the theme of the 1 minute Projection Mapping Competition 2026, “Dialogue.”\nNothing changes a life as easily as a conversation. Whenever a turning point arrives in our lives, we scatter our thoughts alone and end up stuck. At such times, a conversation we happen to have with someone can untangle those knotted thoughts and, though we may still hesitate, help us reach a decision of our own. I thought that surely everyone has had an experience like this. Change may or may not come. Even so, there are things that only we can say, having struggled alone and built something up. If either solitude or dialogue is missing, we cannot move forward. Two beings appear in a vast starry sky, soon lose their forms, and become particles that attract one another, mix together, and drift apart. Like them, who never fail to repeat their dialogue once a year, we too must return to the same place again and again.",
       "thumb": "/media/works/between-your-stars.jpg",
-      "images": [],
+      "images": [
+        {
+          "src": "/media/works/between-your-stars-mw4nbl7aemj.jpg",
+          "size": "full"
+        },
+        {
+          "src": "/media/works/between-your-stars-mw4nbl66t1x.jpg",
+          "size": "full"
+        },
+        {
+          "src": "/media/works/between-your-stars-mw4nblatggf.jpg",
+          "size": "full"
+        }
+      ],
       "video": "https://youtu.be/15gAot3p14A",
       "credits": [
         {
@@ -96,7 +109,20 @@
       "about_ja": "3面スクリーンを用いた没入空間である映像スタジオB-Immersive Cubeに対し、フォトリアルな隣接空間の拡張を試みた。実際の視点と3D空間のパースペクティブを同期させることで、平面スクリーン上に奥行きの軸を創出している。また、没入感を損なわずに空間を鑑賞できるよう、静的な美しさを基調とした構成をおこなった。多様な表現が蓄積されたこのスタジオにおいて、本作は新たなアプローチを提案するものである。",
       "about_en": "For B-Immersive Cube, an immersive studio built from three screens, I attempted a photorealistic extension of the adjoining space. By synchronizing the viewer's actual viewpoint with the perspective of the 3D space, the piece creates an axis of depth on flat screens. So that visitors can take in the space without breaking immersion, the composition is grounded in a quiet, static beauty. In a studio where many forms of expression have accumulated, this work proposes a new approach.",
       "thumb": "/media/works/three.jpg",
-      "images": [],
+      "images": [
+        {
+          "src": "/media/works/three-mw4n7st4w7c.jpg",
+          "size": "full"
+        },
+        {
+          "src": "/media/works/three-mw4n74kz9w7.jpg",
+          "size": "full"
+        },
+        {
+          "src": "/media/works/three-mw4n876f4my.jpg",
+          "size": "full"
+        }
+      ],
       "video": "https://youtu.be/Th4yUgXUXV8",
       "credits": [
         {

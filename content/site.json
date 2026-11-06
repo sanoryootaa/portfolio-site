@@ -1,6 +1,16 @@
 {
   "title": "Sano Ryota Works Archives",
-  "message": "Hire me maybe🙂",
+  "message": "",
   "message_sparkle": false,
-  "trophy_speed": 0.2
+  "trophy_speed": 0.2,
+  "typography": {
+    "header": {
+      "size": 15,
+      "weight": 400,
+      "leading": 150,
+      "tracking": 0,
+      "kerning": "none",
+      "palt": false
+    }
+  }
 }
